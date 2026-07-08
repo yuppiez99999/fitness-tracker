@@ -10,6 +10,16 @@ data/*.json
 *.log
 *.tmp
 
+# 个人健康数据（体重、体脂、Excel 记录等）
+*.xlsx
+*.xls
+体脂*.txt
+*体重*.txt
+*体脂*.txt
+*减脂*.xlsx
+*全量数据*.xlsx
+*变化记录*.xlsx
+
 # ── 2. Python 缓存与虚拟环境 ──────────────────────────
 __pycache__/
 *.py[cod]
