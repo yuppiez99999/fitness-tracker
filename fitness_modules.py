@@ -85,7 +85,7 @@ class BodyDataModel:
 
     def __init__(self):
         self.df = self._load()
-        self.target_weight = 68.5  # 新目标(增肌)
+        self.target_weight = 67.0  # 目标体重(kg)
         self.target_bodyfat = 16.5
 
     def _load(self) -> pd.DataFrame:
@@ -146,16 +146,20 @@ class BodyDataModel:
         cur_fat = latest['体脂率(%)'] if pd.notna(latest['体脂率(%)']) else (
             has_fat.iloc[-1] if len(has_fat) > 0 else np.nan)
 
+        # 体脂变化：用第一个有体脂数据的记录作为起点，当前 - 初始，降低为负
+        init_fat = has_fat.iloc[0] if len(has_fat) > 0 else np.nan
+        fat_change = (cur_fat - init_fat) if pd.notna(init_fat) and pd.notna(cur_fat) else np.nan
+
         # 瘦体重
         lean = cur_w * (1 - cur_fat / 100) if pd.notna(cur_fat) else np.nan
-        init_lean = init_w * (1 - (first['体脂率(%)'] if pd.notna(first['体脂率(%)']) else cur_fat) / 100)
+        init_lean = init_w * (1 - (first['体脂率(%)'] if pd.notna(first['体脂率(%)']) else cur_fat) / 100) if pd.notna(init_w) else np.nan
 
         return {
             'count': n, 'days': days,
             'init_weight': init_w, 'cur_weight': cur_w,
             'weight_change': cur_w - init_w,
             'cur_fat': cur_fat,
-            'fat_change': (first['体脂率(%)'] - cur_fat) if pd.notna(first['体脂率(%)']) and pd.notna(cur_fat) else np.nan,
+            'fat_change': fat_change,
             'cur_lean': lean, 'lean_change': lean - init_lean if pd.notna(init_lean) else np.nan,
             'to_target_w': cur_w - self.target_weight,
             'to_target_f': cur_fat - self.target_bodyfat if pd.notna(cur_fat) else np.nan,
@@ -1135,16 +1139,15 @@ class TrainingPlanPage(QWidget):
         btn.setMinimumHeight(45)
 
         # 点击跳转详情
-        if media_id:
-            ex_data = self.lib.get_by_media_id(media_id)
-            if ex_data is None:
-                ex_data = {
-                    'name_cn': name, 'name_en': '', 'target': target,
-                    'muscle_group': '', 'secondary_muscles': [],
-                    'equipment': '', 'instructions_zh': '', 'instruction_steps_zh': [],
-                    'media_id': media_id, 'matched': False,
-                }
-            btn.clicked.connect(lambda checked, e=ex_data: self._show_exercise(e))
+        ex_data = self.lib.get_by_media_id(media_id) if media_id else None
+        if ex_data is None:
+            ex_data = {
+                'name_cn': name, 'name_en': '', 'target': target,
+                'muscle_group': '', 'secondary_muscles': [],
+                'equipment': '', 'instructions_zh': '', 'instruction_steps_zh': [],
+                'media_id': media_id, 'matched': False,
+            }
+        btn.clicked.connect(lambda *args, e=ex_data: self._show_exercise(e))
         return btn
 
     def _show_exercise(self, ex: Dict):

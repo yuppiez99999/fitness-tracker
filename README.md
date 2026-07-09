@@ -14,9 +14,23 @@
 - PySide6 + matplotlib + pandas + Pillow
 - 数据源：exercises-dataset（GitHub: yuppiez99999/exercises-dataset）
 
-## 本地运行
+## 环境要求
+
+- Python 3.8+
+- 建议使用虚拟环境运行，避免全局包冲突
 
 ```bash
+# 创建虚拟环境
+python -m venv .venv
+
+# 激活虚拟环境
+# Windows PowerShell:
+.venv\Scripts\Activate.ps1
+
+# 安装依赖
+pip install PySide6 matplotlib pandas Pillow
+
+# 运行
 python 体脂体重监控_完整版.py
 ```
 
@@ -26,14 +40,24 @@ python 体脂体重监控_完整版.py
 06_个人辅助工具/
 ├── 体脂体重监控_完整版.py          # 主程序入口
 ├── fitness_modules.py              # 核心模块
+├── .venv/                          # 虚拟环境（不提交）
 ├── 体重体脂监控/                   # 训练计划与资源
 │   ├── 8周增肌塑形计划.md
 │   ├── exercises_gif/              # 动作示范 GIF
-│   └── exercises_matched.json
-└── 体脂体重监控全系列脚本/         # 历史脚本备份
+│   ├── exercises_matched.json
+│   └── 体脂体重.txt                # 体测数据（示例）
+└── README.md
 ```
+
+## 数据说明
+
+- 体测数据存储在 `体重体脂监控/体脂体重.txt`
+- 支持 12 项指标：日期、体重、体脂率、肌肉量、内脏脂肪等级、基础代谢率、体水分率、骨量、BMI、骨骼肌率、腰围、臀围
+- 目标体重默认 67.0 kg，目标体脂率默认 16.5%
+- 变化值以“当前 - 初始”计算，降低会显示为负数
 
 ## 注意事项
 
 - 本项目为个人健身工具，数据存储在本地
 - 敏感个人信息文件已排除在版本控制之外
+- 虚拟环境目录 `.venv` 不提交到仓库
