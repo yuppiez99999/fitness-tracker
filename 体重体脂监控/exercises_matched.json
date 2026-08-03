@@ -756,18 +756,29 @@
     "matched": true
   },
   {
-    "id": null,
+    "id": "3543",
     "name_cn": "自重深蹲",
-    "name_en": null,
-    "category": null,
-    "target": null,
-    "muscle_group": null,
-    "secondary_muscles": [],
-    "equipment": null,
-    "instructions_zh": null,
-    "instruction_steps_zh": [],
-    "media_id": null,
-    "matched": false
+    "name_en": "bodyweight drop jump squat",
+    "category": "upper legs",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "双脚分开与肩同宽站立。 弯曲膝盖并将臀部向后推，将身体降低至蹲姿。 爆发性地跳起来，伸展臀部、膝盖和脚踝。 在半空中时，快速将双脚并拢。 脚掌轻轻着地，然后立即回到蹲姿。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立。",
+      "弯曲膝盖并将臀部向后推，将身体降低至蹲姿。",
+      "爆发性地跳起来，伸展臀部、膝盖和脚踝。",
+      "在半空中时，快速将双脚并拢。",
+      "脚掌轻轻着地，然后立即回到蹲姿。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "wfotm7S",
+    "matched": true
   },
   {
     "id": "1460",
@@ -847,18 +858,26 @@
     "matched": true
   },
   {
-    "id": null,
+    "id": "3224",
     "name_cn": "开合跳",
-    "name_en": null,
-    "category": null,
-    "target": null,
-    "muscle_group": null,
-    "secondary_muscles": [],
-    "equipment": null,
-    "instructions_zh": null,
-    "instruction_steps_zh": [],
-    "media_id": null,
-    "matched": false
+    "name_en": "jack jump (male)",
+    "category": "cardio",
+    "target": "cardiovascular system",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "calves"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "双脚并拢站立，双臂放在身体两侧。 跳起来，分开双脚，将手臂举过头顶。 当你落地时，迅速跳回起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚并拢站立，双臂放在身体两侧。",
+      "跳起来，分开双脚，将手臂举过头顶。",
+      "当你落地时，迅速跳回起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "1g5bPpA",
+    "matched": true
   },
   {
     "id": "3636",
@@ -885,6 +904,289 @@
       "重复所需的持续时间或重复次数。"
     ],
     "media_id": "ealLwvX",
+    "matched": true
+  },
+  {
+    "id": "0319",
+    "name_cn": "上斜哑铃飞鸟",
+    "name_en": "dumbbell incline fly",
+    "category": "chest",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "instructions_zh": "将上斜凳设置为 45 度角。 坐在长凳上，双手各握一个哑铃，手掌相对。 仰卧在长凳上，将哑铃推至起始位置，位于胸部正上方。 将哑铃以宽弧线向两侧放低，直到感觉到胸部有拉伸感。 暂停片刻，然后挤压胸部肌肉，将哑铃拉回起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "将上斜凳设置为 45 度角。",
+      "坐在长凳上，双手各握一个哑铃，手掌相对。",
+      "仰卧在长凳上，将哑铃推至起始位置，位于胸部正上方。",
+      "将哑铃以宽弧线向两侧放低，直到感觉到胸部有拉伸感。",
+      "暂停片刻，然后挤压胸部肌肉，将哑铃拉回起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "ESOd5Pl",
+    "matched": true
+  },
+  {
+    "id": "3287",
+    "name_cn": "双杠臂屈伸",
+    "name_en": "elbow dips",
+    "category": "upper arms",
+    "target": "triceps",
+    "muscle_group": "chest",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "坐在长凳或椅子的边缘，双手抓住臀部旁边的边缘。 将臀部向前滑离长凳，伸直双腿，保持脚后跟着地。 弯曲肘部，将身体放低至地面，保持背部靠近长凳。 在底部停顿片刻，然后双手用力伸直手臂，将身体抬回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "坐在长凳或椅子的边缘，双手抓住臀部旁边的边缘。",
+      "将臀部向前滑离长凳，伸直双腿，保持脚后跟着地。",
+      "弯曲肘部，将身体放低至地面，保持背部靠近长凳。",
+      "在底部停顿片刻，然后双手用力伸直手臂，将身体抬回到起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "LkoAWAE",
+    "matched": true
+  },
+  {
+    "id": "0861",
+    "name_cn": "坐姿绳索划船",
+    "name_en": "cable seated row",
+    "category": "back",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "equipment": "cable",
+    "instructions_zh": "坐在电缆划船机上，双脚平放在脚踏板上，膝盖稍微弯曲。 正手握住手柄，保持背部挺直，肩膀放松。 将手柄拉向身体，将肩胛骨挤压在一起。 在动作的最高点暂停片刻，然后慢慢松开手柄回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "坐在电缆划船机上，双脚平放在脚踏板上，膝盖稍微弯曲。",
+      "正手握住手柄，保持背部挺直，肩膀放松。",
+      "将手柄拉向身体，将肩胛骨挤压在一起。",
+      "在动作的最高点暂停片刻，然后慢慢松开手柄回到起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "fUBheHs",
+    "matched": true
+  },
+  {
+    "id": "0472",
+    "name_cn": "悬挂举腿",
+    "name_en": "hanging leg raise",
+    "category": "waist",
+    "target": "abs",
+    "muscle_group": "hip flexors",
+    "secondary_muscles": [
+      "hip flexors"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "悬挂在引体向上杆上，双臂完全伸展，手掌背向自己。 启动你的核心并将双腿抬起到你面前，保持伸直。 继续抬起，直到双腿与地面平行或达到您可以舒适地达到的高度。 在顶部暂停片刻，然后慢慢将双腿放回起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "悬挂在引体向上杆上，双臂完全伸展，手掌背向自己。",
+      "启动你的核心并将双腿抬起到你面前，保持伸直。",
+      "继续抬起，直到双腿与地面平行或达到您可以舒适地达到的高度。",
+      "在顶部暂停片刻，然后慢慢将双腿放回起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "I3tsCnC",
+    "matched": true
+  },
+  {
+    "id": "0585",
+    "name_cn": "腿伸展",
+    "name_en": "lever leg extension",
+    "category": "upper legs",
+    "target": "quads",
+    "muscle_group": "hamstrings",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "equipment": "leverage machine",
+    "instructions_zh": "调整机器的座椅高度和靠背以适合您的身体。 坐在机器上，背部靠在靠背上，双脚放在脚垫上。 抓住手柄或侧杆以保持稳定性。 伸直膝盖，举起重物，向前伸展双腿。 在顶部暂停片刻，然后慢慢将重量放回起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "调整机器的座椅高度和靠背以适合您的身体。",
+      "坐在机器上，背部靠在靠背上，双脚放在脚垫上。",
+      "抓住手柄或侧杆以保持稳定性。",
+      "伸直膝盖，举起重物，向前伸展双腿。",
+      "在顶部暂停片刻，然后慢慢将重量放回起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "my33uHU",
+    "matched": true
+  },
+  {
+    "id": "0549",
+    "name_cn": "壶铃摆荡",
+    "name_en": "kettlebell swing",
+    "category": "upper legs",
+    "target": "glutes",
+    "muscle_group": "hamstrings",
+    "secondary_muscles": [
+      "hamstrings",
+      "core"
+    ],
+    "equipment": "kettlebell",
+    "instructions_zh": "双脚分开与肩同宽站立，脚趾稍微向外。 双手握住壶铃放在身体前方，双臂伸展。 稍微弯曲膝盖并铰接臀部，将臀部向后推。 将壶铃在两腿之间向后摆动，保持手臂伸直并保持背部平坦。 利用臀部产生的动量，向前推动臀部并将壶铃摆动到肩膀高度。 让壶铃在双腿之间向下摆动，然后重复该动作达到所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立，脚趾稍微向外。",
+      "双手握住壶铃放在身体前方，双臂伸展。",
+      "稍微弯曲膝盖并铰接臀部，将臀部向后推。",
+      "将壶铃在两腿之间向后摆动，保持手臂伸直并保持背部平坦。",
+      "利用臀部产生的动量，向前推动臀部并将壶铃摆动到肩膀高度。",
+      "让壶铃在双腿之间向下摆动，然后重复该动作达到所需的重复次数。"
+    ],
+    "media_id": "UHJlbu3",
+    "matched": true
+  },
+  {
+    "id": "0514",
+    "name_cn": "深蹲跳",
+    "name_en": "jump squat",
+    "category": "upper legs",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "双脚分开与肩同宽站立。 弯曲膝盖并将臀部向后推，将身体降低至蹲姿。 爆发性地跳离地面，伸展臀部、膝盖和脚踝。 在半空中时，快速将手臂向前伸以保持平衡。 脚掌轻轻落地，然后立即进入下一个重复动作。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立。",
+      "弯曲膝盖并将臀部向后推，将身体降低至蹲姿。",
+      "爆发性地跳离地面，伸展臀部、膝盖和脚踝。",
+      "在半空中时，快速将手臂向前伸以保持平衡。",
+      "脚掌轻轻落地，然后立即进入下一个重复动作。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "LIlE5Tn",
+    "matched": true
+  },
+  {
+    "id": "2612",
+    "name_cn": "跳绳",
+    "name_en": "jump rope",
+    "category": "cardio",
+    "target": "cardiovascular system",
+    "muscle_group": "calves",
+    "secondary_muscles": [
+      "calves",
+      "quadriceps",
+      "hamstrings",
+      "glutes"
+    ],
+    "equipment": "rope",
+    "instructions_zh": "双手握住跳绳的手柄，掌心向内。 站立，双脚分开与肩同宽，膝盖稍微弯曲。 将绳子甩过头顶，当绳子靠近你的脚时跳过它。 轻轻地用脚掌着地，当绳子再次绕回时重复跳跃。 继续跳跃所需的持续时间或重复次数。",
+    "instruction_steps_zh": [
+      "双手握住跳绳的手柄，掌心向内。",
+      "站立，双脚分开与肩同宽，膝盖稍微弯曲。",
+      "将绳子甩过头顶，当绳子靠近你的脚时跳过它。",
+      "轻轻地用脚掌着地，当绳子再次绕回时重复跳跃。",
+      "继续跳跃所需的持续时间或重复次数。"
+    ],
+    "media_id": "e1e76I2",
+    "matched": true
+  },
+  {
+    "id": "0858",
+    "name_cn": "冲刺跑",
+    "name_en": "wind sprints",
+    "category": "waist",
+    "target": "abs",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "找一个空地或跑道来进行练习。 首先站立，双脚分开与肩同宽。 开始尽可能快地跑步，挥动手臂并抬起膝盖。 继续冲刺特定的距离或时间。 休息并重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "找一个空地或跑道来进行练习。",
+      "首先站立，双脚分开与肩同宽。",
+      "开始尽可能快地跑步，挥动手臂并抬起膝盖。",
+      "继续冲刺特定的距离或时间。",
+      "休息并重复所需的重复次数。"
+    ],
+    "media_id": "Qoujh3Q",
+    "matched": true
+  },
+  {
+    "id": "0360",
+    "name_cn": "哑铃推举",
+    "name_en": "dumbbell one arm shoulder press v. 2",
+    "category": "shoulders",
+    "target": "delts",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "upper back"
+    ],
+    "equipment": "dumbbell",
+    "instructions_zh": "双脚分开与肩同宽站立，一只手握住哑铃，与肩同高，手掌朝前。 启动核心肌群，将哑铃垂直推过头顶，充分伸展手臂。 在顶部停顿片刻，然后慢慢将哑铃放回肩部水平。 重复所需的重复次数，然后换到另一只手臂。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立，一只手握住哑铃，与肩同高，手掌朝前。",
+      "启动核心肌群，将哑铃垂直推过头顶，充分伸展手臂。",
+      "在顶部停顿片刻，然后慢慢将哑铃放回肩部水平。",
+      "重复所需的重复次数，然后换到另一只手臂。"
+    ],
+    "media_id": "1TkiAFK",
+    "matched": true
+  },
+  {
+    "id": "3582",
+    "name_cn": "弓步跳",
+    "name_en": "lunge with jump",
+    "category": "upper legs",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "首先站立，双脚分开与肩同宽。 右脚向前迈出一步，将身体降低至弓步位置。 右脚蹬地，跳到空中，在空中改变脚的位置。 左脚向前轻柔落地，并立即将身体降低至弓步位置。 继续在弓步和跳跃之间交替进行所需的重复次数。",
+    "instruction_steps_zh": [
+      "首先站立，双脚分开与肩同宽。",
+      "右脚向前迈出一步，将身体降低至弓步位置。",
+      "右脚蹬地，跳到空中，在空中改变脚的位置。",
+      "左脚向前轻柔落地，并立即将身体降低至弓步位置。",
+      "继续在弓步和跳跃之间交替进行所需的重复次数。"
+    ],
+    "media_id": "PM1PZjg",
+    "matched": true
+  },
+  {
+    "id": "0233",
+    "name_cn": "绳索面拉",
+    "name_en": "cable standing rear delt row (with rope)",
+    "category": "shoulders",
+    "target": "delts",
+    "muscle_group": "trapezius",
+    "secondary_muscles": [
+      "trapezius",
+      "rhomboids",
+      "biceps"
+    ],
+    "equipment": "cable",
+    "instructions_zh": "面向缆绳机站立，双脚与肩同宽。 用双手握住电缆附件，手掌相对，然后后退以在电缆中产生张力。 保持背部挺直，核心肌群参与。 将电缆拉向您的身体，将肩胛骨挤压在一起。 在运动的最高点停顿片刻，然后慢慢松开绳索回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "面向缆绳机站立，双脚与肩同宽。",
+      "用双手握住电缆附件，手掌相对，然后后退以在电缆中产生张力。",
+      "保持背部挺直，核心肌群参与。",
+      "将电缆拉向您的身体，将肩胛骨挤压在一起。",
+      "在运动的最高点停顿片刻，然后慢慢松开绳索回到起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "ZfyAGhK",
     "matched": true
   }
 ]
