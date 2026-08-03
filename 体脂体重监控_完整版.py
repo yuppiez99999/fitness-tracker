@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-体脂体重监控 + 健身计划软件 v7.0 — PySide6 重构版
+体脂体重监控 + 健身计划软件 v8.0 — PySide6 重构版
 基于市场主流健身软件(Keep/Fitbod/Hevy/Strong)特性优化
 
 功能模块:
   1. 📊 体测仪表盘 — 12项体测指标 + 快速录入 + 历史记录
   2. 📈 趋势分析 — 7日EMA平滑曲线 + 目标达标日预测 + 体成分饼图
   3. 🏋️ 动作示范库 — 38个动作 GIF动画 + 中文步骤教学 + 肌群信息
-  4. 📅 训练计划 — 8周增肌塑形计划 + 周历视图 + 点击动作看示范
+  4. 📅 训练计划 — 20周塑形冲刺 + 三阶段周期化 + 点击动作看示范
+  5. 🍽 饮食与补剂 — 三阶段营养方案 + 五餐明细 + 补剂表 + 饮水指南
 
 技术栈: PySide6 + matplotlib + pandas + Pillow
 数据源: exercises-dataset (GitHub: yuppiez99999/exercises-dataset)
@@ -25,8 +26,8 @@ from PySide6.QtWidgets import (
 # 确保能导入同目录模块
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fitness_modules import (
-    BodyDataModel, ExerciseLibrary, TrainingPlanParser,
-    DashboardPage, TrendChartPage, ExerciseLibraryPage, TrainingPlanPage,
+    BodyDataModel, ExerciseLibrary, TrainingPlanParser, NutritionParser,
+    DashboardPage, TrendChartPage, ExerciseLibraryPage, TrainingPlanPage, NutritionPage,
     COLORS,
 )
 
@@ -36,7 +37,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('健身监控 v7.0 — 体测数据 + 动作示范 + 训练计划')
+        self.setWindowTitle('健身监控 v8.0 — 20周塑形冲刺 · 体测数据 + 动作示范 + 训练计划')
         self.setMinimumSize(1200, 800)
         self.resize(1400, 900)
         self._apply_global_style()
@@ -77,12 +78,12 @@ class MainWindow(QMainWindow):
         hl = QHBoxLayout(header)
         hl.setContentsMargins(16, 8, 16, 8)
 
-        title = QLabel('💪 健身监控 v7.0')
+        title = QLabel('💪 健身监控 v8.0')
         title.setFont(QFont('Microsoft YaHei', 14, QFont.Bold))
         title.setStyleSheet(f"color: {COLORS['primary']};")
         hl.addWidget(title)
 
-        subtitle = QLabel('体测数据 · 动作示范 · 训练计划 一体化')
+        subtitle = QLabel('体测数据 · 动作示范 · 训练计划 · 饮食补剂 一体化')
         subtitle.setStyleSheet(f"color: {COLORS['subtext']};")
         hl.addWidget(subtitle)
         hl.addStretch()
@@ -113,10 +114,14 @@ class MainWindow(QMainWindow):
 
         # 页面4: 训练计划
         self.page_plan = TrainingPlanPage(self.training_plan, self.exercise_lib)
-        self.tabs.addTab(self.page_plan, '📅 训练计划')
+        self.tabs.addTab(self.page_plan, '📅 训练计划(20周)')
+
+        # 页面5: 饮食与补剂
+        self.page_nutrition = NutritionPage()
+        self.tabs.addTab(self.page_nutrition, '🍽 饮食与补剂')
 
         # 状态栏
-        self.statusBar().showMessage('就绪 · 4个模块已加载')
+        self.statusBar().showMessage('就绪 · 5个模块已加载')
 
     def _update_status(self):
         """更新顶部快速统计"""

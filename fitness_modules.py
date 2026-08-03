@@ -9,7 +9,7 @@ import json
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Tuple, Any
 
 from PySide6.QtCore import Qt, QTimer, QSize, Signal
 from PySide6.QtGui import QPixmap, QFont, QColor, QIcon, QImage
@@ -44,7 +44,7 @@ REPORT_DIR = os.path.join(DATA_DIR, '报告')
 DATA_FILE = os.path.join(DATA_DIR, '体脂体重.txt')
 EXERCISES_JSON = os.path.join(DATA_DIR, 'exercises_matched.json')
 GIF_DIR = os.path.join(DATA_DIR, 'exercises_gif')
-PLAN_MD = os.path.join(DATA_DIR, '8周增肌塑形计划.md')
+PLAN_MD = os.path.join(DATA_DIR, '12月底塑形冲刺计划.md')
 
 for d in [DATA_DIR, CHART_DIR, REPORT_DIR, GIF_DIR]:
     os.makedirs(d, exist_ok=True)
@@ -54,8 +54,65 @@ COLORS = {
     'bg': '#0d1117', 'card': '#161b22', 'border': '#30363d',
     'text': '#e6edf3', 'subtext': '#8b949e', 'primary': '#58a6ff',
     'success': '#3fb950', 'warning': '#d29922', 'danger': '#f85149',
-    'purple': '#bc8cff', 'cyan': '#39d2c0',
+    'purple': '#bc8cff', 'cyan': '#39d2c0', 'accent': '#f0c040',
+    # v5.9.2 新增特殊主题色
+    'hiit_fg': '#ff6b35',     # HIIT 渐变前景
+    'hiit_bg': '#3a1f15',     # HIIT 渐变背景
+    'liss_fg': '#2ea043',     # LISS 渐变前景
+    'liss_bg': '#102818',     # LISS 渐变背景
+    'rest_fg': '#8957e5',     # 完全休息前景
 }
+
+# 肌肉群 Emoji 映射 (缺GIF时的占位图标)
+MUSCLE_EMOJI = {
+    '胸': '💪',
+    '上胸': '⬆️',
+    '下胸': '⬇️',
+    '背': '🏋️',
+    '背部': '🏋️',
+    '二头': '💪',
+    '三头': '🤜',
+    '腿': '🦵',
+    '股四头': '🦵',
+    '臀': '🍑',
+    '小腿': '🦶',
+    '肩': '🙆',
+    '三角肌': '🙆',
+    '核心': '🔥',
+    '腹': '🔥',
+    '腹斜': '🔥',
+    '有氧': '🏃',
+    '波比': '🔥',
+    '壶铃': '🪨',
+    '跳绳': '⤴️',
+    '冲刺': '⚡',
+    'HIIT': '⚡',
+    'TABATA': '⚡',
+    'LISS': '🚶',
+    '徒手': '✊',
+    '俯卧撑': '🤸',
+    '下压': '⏬',
+    '举腿': '🦵',
+    '悬挂': '🔗',
+    '弹力带': '🎀',
+    '绳索': '🪢',
+    '杠铃': '🏋️',
+    '哑铃': '🥊',
+    '默认': '🎯',
+}
+
+# 按目标肌群关键词推断 emoji
+def _emoji_for_target(target: str) -> str:
+    """根据目标肌群中英文返回emoji"""
+    if not target:
+        return MUSCLE_EMOJI['默认']
+    t = target
+    # 按优先级匹配
+    for key, emoji in MUSCLE_EMOJI.items():
+        if key in t:
+            return emoji
+    return MUSCLE_EMOJI['默认']
+
 
 # 体测指标完整列(扩展12项)
 BODY_COLUMNS = [
@@ -64,16 +121,23 @@ BODY_COLUMNS = [
     '骨骼肌率(%)', '腰围(cm)', '臀围(cm)'
 ]
 
-# 训练计划结构(8周增肌塑形,6练1休)
+# 训练计划结构(20周塑形冲刺, 三阶段周期化, 5-6练/周)
 TRAINING_SCHEDULE = [
-    {'day': '周一', 'title': '胸 + 三头', 'focus': '上胸强化日', 'icon': '💪'},
-    {'day': '周二', 'title': '背 + 二头', 'focus': '背部宽度+厚度日', 'icon': '🔙'},
-    {'day': '周三', 'title': '腿 + 臀', 'focus': '下肢力量日', 'icon': '🦵'},
-    {'day': '周四', 'title': '肩 + 核心', 'focus': '三角肌+下腹强化日', 'icon': '🙆'},
-    {'day': '周五', 'title': '全身循环HIIT', 'focus': '低冲击燃脂', 'icon': '🔥'},
-    {'day': '周六', 'title': '有氧 + 核心', 'focus': '低强度恢复', 'icon': '🏃'},
-    {'day': '周日', 'title': '休息 + 恢复', 'focus': '主动恢复', 'icon': '😴'},
+    {'day': '周一', 'title': '胸 + 三头', 'focus': '上胸强化+超级组', 'icon': '💪'},
+    {'day': '周二', 'title': '背 + 二头', 'focus': '宽度+厚度+超级组', 'icon': '🔙'},
+    {'day': '周三', 'title': '腿 + 臀', 'focus': '复合为主+代谢收尾', 'icon': '🦵'},
+    {'day': '周四', 'title': '肩 + 核心', 'focus': '三束刺激+抗旋转', 'icon': '🙆'},
+    {'day': '周五', 'title': '全身HIIT+冲刺', 'focus': 'Tabata循环+代谢冲刺', 'icon': '🔥'},
+    {'day': '周六', 'title': 'LISS+腹肌专项', 'focus': '低强有氧+核心雕刻', 'icon': '🏃'},
+    {'day': '周日', 'title': '完全休息', 'focus': '睡眠>8h 泡脚 按摩', 'icon': '😴'},
 ]
+
+# 三阶段映射
+PHASE_INFO = {
+    1: {'name': '代谢重建',  'weeks': 'W1-W6',   'desc': '中等容量+动作优化, 建立代谢压力适应'},
+    2: {'name': '体成分重组','weeks': 'W7-W14',  'desc': '容量递增+晨间空腹快走, 肌肉保护减脂'},
+    3: {'name': '线条雕刻',  'weeks': 'W15-W20', 'desc': '峰值容量+Tabata HIIT+碳水循环, 巅峰塑形'},
+}
 
 
 # ═══════════════════════════════════════════════════════════
@@ -85,8 +149,8 @@ class BodyDataModel:
 
     def __init__(self):
         self.df = self._load()
-        self.target_weight = 67.0  # 目标体重(kg)
-        self.target_bodyfat = 16.5
+        self.target_weight = 65.5  # 目标体重(kg) [新计划: 12月底体成分重组]
+        self.target_bodyfat = 15.0
 
     def _load(self) -> pd.DataFrame:
         """加载体测数据,兼容旧格式(3列)和新格式(12列)"""
@@ -183,16 +247,45 @@ class BodyDataModel:
 
 
 class ExerciseLibrary:
-    """动作库 — 加载JSON + GIF路径管理"""
+    """动作库 — 加载JSON + GIF路径管理 + 预检缓存"""
 
     def __init__(self):
         self.exercises: List[Dict] = []
+        self._gif_cache: Dict[str, Optional[str]] = {}  # media_id -> path or None
+        self._gif_valid: Dict[str, bool] = {}  # media_id -> 是否有效
+        self._gif_first_frame: Dict[str, bytes] = {}  # media_id -> QPixmap data
         self._load()
+        self._precheck_gifs()
 
     def _load(self):
         if os.path.exists(EXERCISES_JSON):
             with open(EXERCISES_JSON, 'r', encoding='utf-8') as f:
                 self.exercises = json.load(f)
+
+    def _precheck_gifs(self):
+        """预检所有GIF文件有效性 — 批量验证避免后续逐个检查"""
+        for ex in self.exercises:
+            mid = ex.get('media_id', '')
+            if not mid:
+                continue
+            p = os.path.join(GIF_DIR, f'{mid}.gif')
+            valid = False
+            if os.path.exists(p) and os.path.getsize(p) > 0:
+                # 仅当 QApplication 已初始化时才用 QMovie 深度校验
+                from PySide6.QtWidgets import QApplication
+                if QApplication.instance() is not None:
+                    try:
+                        from PySide6.QtGui import QMovie
+                        movie = QMovie(p)
+                        valid = movie.isValid() and movie.frameCount() >= 1
+                        movie.setPaused(True)
+                    except Exception:
+                        valid = False
+                else:
+                    # 无 QApplication 时仅做文件存在检查
+                    valid = True
+            self._gif_cache[mid] = p if valid else None
+            self._gif_valid[mid] = valid
 
     def get_by_media_id(self, media_id: str) -> Optional[Dict]:
         for ex in self.exercises:
@@ -211,16 +304,67 @@ class ExerciseLibrary:
         if not kw:
             return self.exercises
         return [e for e in self.exercises
-                if kw in e.get('name_cn', '').lower() or
-                kw in e.get('name_en', '').lower() or
-                kw in e.get('target', '').lower() or
-                kw in e.get('category', '').lower()]
+                if kw in (e.get('name_cn') or '').lower() or
+                kw in (e.get('name_en') or '').lower() or
+                kw in (e.get('target') or '').lower() or
+                kw in (e.get('category') or '').lower()]
 
     def gif_path(self, media_id: str) -> Optional[str]:
+        """获取GIF路径 — 使用预检缓存快速返回"""
         if not media_id:
             return None
+        if media_id in self._gif_cache:
+            return self._gif_cache[media_id]
+        # 回退: 直接检查文件
         p = os.path.join(GIF_DIR, f'{media_id}.gif')
-        return p if os.path.exists(p) else None
+        valid = os.path.exists(p) and os.path.getsize(p) > 0
+        self._gif_cache[media_id] = p if valid else None
+        self._gif_valid[media_id] = valid
+        return p if valid else None
+
+    def has_gif(self, media_id: str) -> bool:
+        """快速判断是否有可用GIF"""
+        if not media_id:
+            return False
+        if media_id in self._gif_valid:
+            return self._gif_valid[media_id]
+        return self.gif_path(media_id) is not None
+
+    def get_first_frame(self, media_id: str) -> Optional[QPixmap]:
+        """获取GIF首帧QPixmap — 用于缩略图, 缓存避免重复IO (使用QImageReader)"""
+        if not media_id:
+            return None
+        if media_id in self._gif_first_frame:
+            data = self._gif_first_frame[media_id]
+            pm = QPixmap()
+            pm.loadFromData(data)
+            if not pm.isNull():
+                return pm
+            # 缓存损坏, 清除并重读
+            del self._gif_first_frame[media_id]
+        gif_path = self.gif_path(media_id)
+        if gif_path is None:
+            return None
+        try:
+            from PySide6.QtGui import QImageReader
+            from PySide6.QtCore import QByteArray, QBuffer, QIODevice
+            reader = QImageReader(gif_path)
+            reader.setAutoTransform(True)
+            img = reader.read()  # 读取首帧
+            if img.isNull():
+                return None
+            pm = QPixmap.fromImage(img)
+            if pm and not pm.isNull():
+                # 缓存为 PNG 字节串供后续复用
+                qba = QByteArray()
+                buf = QBuffer(qba)
+                buf.open(QIODevice.WriteOnly)
+                pm.save(buf, 'PNG')
+                buf.close()
+                self._gif_first_frame[media_id] = bytes(qba)
+            return pm
+        except Exception:
+            return None
 
 
 # ═══════════════════════════════════════════════════════════
@@ -228,146 +372,368 @@ class ExerciseLibrary:
 # ═══════════════════════════════════════════════════════════
 
 class TrainingPlanParser:
-    """从8周增肌塑形计划.md解析每日训练动作"""
+    """从12月底塑形冲刺计划.md解析训练动作, 支持20周三阶段周期化"""
+
+    DAY_NAMES = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
 
     def __init__(self):
         self.raw_text = ''
+        self._phase_exercises = {}  # {phase_num: {day: [exercises]}}
+        self._phase_notes = {}      # {phase_num: ['note1', ...]}
         self._load()
+        self._parse_all()
 
     def _load(self):
         if os.path.exists(PLAN_MD):
             with open(PLAN_MD, 'r', encoding='utf-8') as f:
                 self.raw_text = f.read()
 
-    def get_daily_exercises(self) -> Dict[str, List[Dict]]:
-        """解析markdown表格,返回每日动作列表(只解析第三章3.1-3.7的主训练+收尾表格)
-        返回: {'周一': [{'name':'上斜哑铃卧推','sets':'4×8-10','target':'上胸','media_id':'ns0SIbU','tip':'...'}], ...}
-        """
-        result = {d['day']: [] for d in TRAINING_SCHEDULE}
+    @classmethod
+    def get_phase(cls, week: int) -> int:
+        return 1 if week <= 6 else (2 if week <= 14 else 3)
+
+    def get_daily_exercises(self, week: int = 1) -> Dict[str, List[Dict]]:
+        phase = self.get_phase(week)
+        if phase in self._phase_exercises and self._phase_exercises[phase]:
+            return self._phase_exercises[phase]
+        # Phase 2/3 复用 Phase 1 动作(仅有调整说明, 无独立表格)
+        result = self._phase_exercises.get(1, {})
+        if not result:
+            return {d['day']: [] for d in TRAINING_SCHEDULE}
+        return result
+
+    def get_phase_notes(self, week: int = 1) -> List[str]:
+        phase = self.get_phase(week)
+        return self._phase_notes.get(phase, [])
+
+    # ──────────────── 解析引擎 ────────────────
+
+    def _parse_all(self):
         if not self.raw_text:
-            return result
+            return
 
         lines = self.raw_text.split('\n')
+        in_ch3 = False
         current_day = None
-        section = None  # None | '热身' | '主训练' | '收尾' | '拉伸'
-        # 第四章开始后立即停止(章节标志: ## 四
-        in_chapter_three = False
+        current_phase = 0
+        parsed = {}      # {day: [exercises]} for current phase
+        table_header = []  # tracks current table column names
+        note_buf = []    # Phase 2/3 note buffer
 
-        # 周X章节匹配模式
-        day_section_map = {
-            '### 3.1': '周一', '### 3.2': '周二', '### 3.3': '周三',
-            '### 3.4': '周四', '### 3.5': '周五', '### 3.6': '周六',
-            '### 3.7': '周日',
-        }
-
-        for line in lines:
-            # 进入第三章
-            if line.strip().startswith('## 三、'):
-                in_chapter_three = True
-                continue
-            # 离开第三章(遇到第四章或更高级章节)立即终止
-            if in_chapter_three and (line.strip().startswith('## 四、') or
-                                      line.strip().startswith('## 五、') or
-                                      line.strip().startswith('## 六、') or
-                                      line.strip().startswith('## 七、') or
-                                      line.strip().startswith('## 八、') or
-                                      line.strip().startswith('## 九、')):
-                break
-
-            if not in_chapter_three:
-                continue
-
-            # 识别周X章节
-            matched_day = False
-            for prefix, day in day_section_map.items():
-                if line.startswith(prefix):
-                    current_day = day
-                    section = None
-                    matched_day = True
-                    break
-            if matched_day:
-                continue
-
-            if current_day is None:
-                continue
-
-            # 周日休息日不解析任何表格
-            if current_day == '周日':
-                continue
-
-            # 识别当前段落(主训练/收尾/热身/拉伸)
+        for i, line in enumerate(lines):
             stripped = line.strip()
+
+            # ── 章节边界 ──
+            if stripped.startswith('## 三、'):
+                in_ch3 = True; continue
+            if in_ch3 and (stripped.startswith('## 四、') or stripped.startswith('## 五、')
+                           or stripped.startswith('## 六、') or stripped.startswith('## 七、')):
+                break
+            if not in_ch3:
+                continue
+
+            # ── 阶段切换 ──
+            phase_match = self._detect_phase(stripped)
+            if phase_match:
+                if current_phase > 0 and parsed:
+                    self._phase_exercises[current_phase] = dict(parsed)
+                current_phase = phase_match
+                current_day = None
+                parsed = {}
+                table_header = []
+                note_buf = []
+                # Phase 2/3 后收集调整说明(直到下一个 #### 或 ## )
+                if current_phase >= 2:
+                    self._collect_phase_notes(current_phase, lines, i)
+                continue
+
+            # ── 日期检测 (#### 周一: ... ) ──
+            day_found = False
+            for dn in self.DAY_NAMES:
+                if stripped.startswith(f'#### {dn}'):
+                    current_day = dn
+                    table_header = []
+                    day_found = True
+                    break
+            if day_found:
+                continue
+            # 非日期的 #### 行重置 current_day
             if stripped.startswith('####'):
-                if '主训练' in stripped:
-                    section = '主训练'
-                elif '收尾' in stripped:
-                    section = '收尾'
-                elif '热身' in stripped:
-                    section = '热身'
-                elif '拉伸' in stripped:
-                    section = '拉伸'
-                else:
-                    section = None
+                current_day = None
+                table_header = []
                 continue
 
-            # 只解析主训练和收尾表格
-            if section not in ('主训练', '收尾'):
+            if current_day is None or current_day == '周日':
                 continue
 
-            # 解析表格行
+            # ── 表格行解析 ──
             if not stripped.startswith('|') or '---' in stripped:
+                # 表格结束行
+                if not stripped.startswith('|') and table_header:
+                    table_header = []
                 continue
 
             cells = [c.strip() for c in line.split('|')[1:-1]]
-            if len(cells) < 3:
+            if not cells:
                 continue
 
-            # 主训练表格两种格式:
-            #   常规力量训练(6列): | 序号 | 动作 | 组数×次数 | 目标肌群 | 重点提示 | media_id |
-            #   HIIT循环训练(5列): | 序号 | 动作 | 目标肌群 | 强度提示 | media_id |
-            if section == '主训练':
-                if cells[0].isdigit() and len(cells) >= 5:
-                    name = cells[1]
-                    if not name or name == '动作' or name.startswith('---'):
-                        continue
-                    if len(cells) >= 6:
-                        # 6列: 标准力量训练
-                        sets_reps = cells[2]
-                        target = cells[3]
-                        tip = cells[4]
-                        media_id = cells[5]
-                    else:
-                        # 5列: HIIT循环(没有组数列,使用"40s+20s休息")
-                        sets_reps = '40秒+20秒休息'
-                        target = cells[2]
-                        tip = cells[3]
-                        media_id = cells[4]
-                    # 过滤media_id为null或空
-                    if media_id and media_id != 'media_id' and not media_id.startswith('---'):
-                        if media_id.lower().startswith('null'):
-                            media_id = ''  # 自重深蹲/开合跳没有GIF
-                        result[current_day].append({
-                            'name': name, 'sets': sets_reps, 'target': target,
-                            'tip': tip, 'media_id': media_id,
-                        })
-            # 收尾表格: | 动作 | 组数×时间 | 目标 | media_id |
-            elif section == '收尾':
-                # 跳过表头行
-                if cells[0] in ('动作', '部位', '项目') or cells[0].startswith('---'):
-                    continue
-                # 跳过空media_id列
-                if len(cells) >= 4:
-                    name = cells[0]
-                    sets_reps = cells[1]
-                    target = cells[2] if len(cells) > 2 else ''
-                    media_id = cells[3] if len(cells) > 3 else ''
-                    if name and media_id and media_id != 'media_id' and not media_id.startswith('---'):
-                        result[current_day].append({
-                            'name': name, 'sets': sets_reps, 'target': target,
-                            'tip': '收尾动作', 'media_id': media_id,
-                        })
+            first_cell = cells[0]
 
-        return result
+            # 表头行
+            if first_cell in ('序号', '循环', '项目', '部位'):
+                table_header = cells
+                continue
+            if not table_header:
+                continue
+
+            # ── 分格式解析 ──
+            parsed.setdefault(current_day, [])
+
+            if first_cell.isdigit():
+                # 5列力量训练: | 序号 | 动作 | 组×次 | 重量(%1RM) | 重点提示 |
+                parsed[current_day].append({
+                    'name': cells[1] if len(cells) > 1 else '',
+                    'sets': cells[2] if len(cells) > 2 else '',
+                    'target': cells[3] if len(cells) > 3 else '',
+                    'tip': cells[4] if len(cells) > 4 else '',
+                    'media_id': '',
+                })
+            elif first_cell == '收尾':
+                # 收尾行
+                parsed[current_day].append({
+                    'name': cells[1] if len(cells) > 1 else '',
+                    'sets': cells[2] if len(cells) > 2 else '',
+                    'target': '收尾',
+                    'tip': cells[3] if len(cells) > 3 else '',
+                    'media_id': '',
+                })
+            elif first_cell == '热身':
+                parsed[current_day].append({
+                    'name': cells[1] if len(cells) > 1 else '动态热身',
+                    'sets': '热身',
+                    'target': '',
+                    'tip': cells[2] if len(cells) > 2 else '',
+                    'media_id': '',
+                    'is_workout_block': True,
+                    'block_type': 'flow',
+                    'duration': '5-8分钟',
+                    'sub_info': '关节绕环+空杆激活',
+                })
+            elif first_cell.startswith('循环'):
+                parsed[current_day].append({
+                    'name': cells[1] if len(cells) > 1 else 'HIIT循环',
+                    'sets': '4循环',
+                    'target': 'HIIT',
+                    'tip': cells[2] if len(cells) > 2 else '',
+                    'media_id': '',
+                    'is_workout_block': True,
+                    'block_type': 'hiit_loop',
+                    'duration': cells[2] if len(cells) > 2 else '约15分钟',
+                    'sub_info': '6动作 × 40秒训练 / 20秒休息',
+                })
+            elif first_cell == '动作':
+                # HIIT 动作清单: "壶铃摆荡/波比跳/登山跑/..."
+                for act in (cells[1] if len(cells) > 1 else '').split('/'):
+                    act = act.strip()
+                    if act:
+                        parsed[current_day].append({
+                            'name': act, 'sets': '40s+20s',
+                            'target': 'HIIT', 'tip': 'Tabata全身',
+                            'media_id': '',
+                        })
+            elif first_cell == '拉伸':
+                parsed[current_day].append({
+                    'name': '全身拉伸', 'sets': cells[1] if len(cells) > 1 else '10分钟',
+                    'target': '拉伸', 'tip': cells[2] if len(cells) > 2 else '',
+                    'media_id': '',
+                    'is_workout_block': True,
+                    'block_type': 'flow',
+                    'duration': cells[1] if len(cells) > 1 else '10分钟',
+                    'sub_info': '静态拉伸·肌筋膜放松',
+                })
+            elif first_cell == '快走/椭圆机':
+                parsed[current_day].append({
+                    'name': '快走/椭圆机 (LISS)', 'sets': cells[1] if len(cells) > 1 else '',
+                    'target': 'LISS有氧 心率120-135',
+                    'tip': cells[2] if len(cells) > 2 else '',
+                    'media_id': '',
+                    'is_workout_block': True,
+                    'block_type': 'liss_cardio',
+                    'duration': cells[1] if len(cells) > 1 else '35分钟',
+                    'sub_info': '心率120-135 bpm · 燃脂神经恢复',
+                })
+            else:
+                # 通用3列格式 (LISS腹肌日)
+                name = cells[0]
+                if name and name not in ('项目',) and not name.startswith('-'):
+                    parsed[current_day].append({
+                        'name': name,
+                        'sets': cells[1] if len(cells) > 1 else '',
+                        'target': '',
+                        'tip': cells[2] if len(cells) > 2 else '',
+                        'media_id': '',
+                    })
+
+        # 保存最后一个阶段
+        if current_phase > 0 and parsed:
+            self._phase_exercises[current_phase] = dict(parsed)
+
+    @staticmethod
+    def _detect_phase(stripped: str) -> int:
+        if stripped.startswith('### 3.1'):
+            return 1
+        if stripped.startswith('### 3.2'):
+            return 2
+        if stripped.startswith('### 3.3'):
+            return 3
+        return 0
+
+    def _collect_phase_notes(self, phase: int, lines: List[str], start_idx: int):
+        """收集 Phase 2/3 的调整说明(从 phase 标题后到下一个 #### 或 ###)"""
+        notes = []
+        for j in range(start_idx + 1, len(lines)):
+            s = lines[j].strip()
+            if not s:
+                continue
+            if s.startswith('####') or s.startswith('### 3.') or s.startswith('## '):
+                break
+            if s.startswith('1. **') or s.startswith('2. **') or s.startswith('3. **') or \
+               s.startswith('4. **') or s.startswith('5. **') or s.startswith('6. **') or \
+               s.startswith('- **') or s.startswith('**'):
+                notes.append(s)
+        if notes:
+            self._phase_notes[phase] = notes
+
+
+# ═══════════════════════════════════════════════════════════
+# 营养方案 — 解析12月底塑形冲刺计划第二章
+# ═══════════════════════════════════════════════════════════
+
+class NutritionParser:
+    """从计划文档提取三阶段营养方案 + 补剂 + 饮水"""
+
+    # 三阶段热量与宏量数据(来自计划 2.1 节)
+    PHASE_MACROS = {
+        1: {  # 代谢重建期
+            'training':   {'kcal': 2100, 'protein': 160, 'carbs': 230, 'fat': 60, 'protein_pct': 30},
+            'rest':       {'kcal': 1900, 'protein': 155, 'carbs': 180, 'fat': 60, 'protein_pct': 33},
+        },
+        2: {  # 体成分重组期
+            'training':   {'kcal': 2050, 'protein': 165, 'carbs': 220, 'fat': 55, 'protein_pct': 32},
+            'rest':       {'kcal': 1800, 'protein': 160, 'carbs': 160, 'fat': 55, 'protein_pct': 36},
+        },
+        3: {  # 线条雕刻期 (标准训练日 + 高碳日 + 休息日)
+            'training':   {'kcal': 2000, 'protein': 165, 'carbs': 200, 'fat': 50, 'protein_pct': 33},
+            'high_carb':  {'kcal': 2300, 'protein': 155, 'carbs': 280, 'fat': 55, 'protein_pct': 27},
+            'rest':       {'kcal': 1750, 'protein': 160, 'carbs': 140, 'fat': 50, 'protein_pct': 37},
+        },
+    }
+
+    # 每日五餐 (Phase 1 训练日基准 2100kcal, 来自计划 2.2 节)
+    DAILY_MEALS = [
+        {'name': '早餐 (07:00)', 'kcal': 450, 'protein': 38, 'carbs': 43, 'fat': 22,
+         'items': [
+             ('全蛋', '3个', '18g蛋白, 15g脂肪'),
+             ('蛋白', '3个', '10g蛋白'),
+             ('燕麦片(干)', '40g', '24g碳水, 5g蛋白'),
+             ('蓝莓', '80g', '10g碳水'),
+             ('全脂牛奶', '150ml', '8g碳水, 5g蛋白'),
+         ]},
+        {'name': '加餐 (10:00)', 'kcal': 280, 'protein': 28, 'carbs': 25, 'fat': 7,
+         'items': [
+             ('鸡胸肉', '100g', '24g蛋白'),
+             ('红薯', '120g', '24g碳水, 2g蛋白'),
+             ('核桃', '10g', '6g脂肪, 2g蛋白'),
+         ]},
+        {'name': '午餐 (12:30)', 'kcal': 520, 'protein': 40, 'carbs': 48, 'fat': 14,
+         'items': [
+             ('糙米饭(熟)', '120g', '40g碳水, 4g蛋白'),
+             ('牛肉(瘦)', '120g', '30g蛋白, 6g脂肪'),
+             ('西兰花', '200g', '8g碳水, 6g蛋白'),
+             ('橄榄油', '6g', '6g脂肪'),
+         ]},
+        {'name': '训练前加餐 (16:30)', 'kcal': 250, 'protein': 12, 'carbs': 33, 'fat': 4,
+         'items': [
+             ('全麦面包', '2片', '30g碳水, 6g蛋白'),
+             ('无糖豆浆', '200ml', '3g碳水, 6g蛋白'),
+         ]},
+        {'name': '训练后 (19:00)', 'kcal': 310, 'protein': 26, 'carbs': 29, 'fat': 1,
+         'items': [
+             ('酵母蛋白粉', '35g', '25g蛋白, 4g碳水'),
+             ('香蕉', '1根', '25g碳水, 1g蛋白'),
+         ]},
+        {'name': '晚餐 (20:30)', 'kcal': 290, 'protein': 25, 'carbs': 8, 'fat': 9,
+         'items': [
+             ('三文鱼/鸡胸', '100g', '22g蛋白, 6g脂肪'),
+             ('混合蔬菜', '200g', '8g碳水, 3g蛋白'),
+             ('橄榄油', '3g', '3g脂肪'),
+         ]},
+    ]
+
+    # 补剂方案 (来自计划 2.5 节)
+    SUPPLEMENTS = [
+        {'name': '酵母蛋白粉',   'dose': '35g',       'timing': '训练后30分钟内',     'purpose': '蛋白质补充',         'note': '从30g提升'},
+        {'name': '肌酸单水合物', 'dose': '5g/天',     'timing': '训练后随蛋白粉',     'purpose': '力量+肌肉饱满度',    'note': '维持'},
+        {'name': '亮氨酸粉',     'dose': '2-3g',      'timing': '训练后(混蛋白粉)',   'purpose': '补偿酵母蛋白亮氨酸', 'note': '★强烈建议,日均~1元'},
+        {'name': '鱼油',         'dose': '2-3g',      'timing': '随餐',               'purpose': '抗炎+减脂辅助',      'note': '维持'},
+        {'name': '维生素D3',     'dose': '2000IU',    'timing': '早餐',               'purpose': '睾酮支持+免疫功能',  'note': '新增建议'},
+        {'name': '锌镁',         'dose': '30mg+450mg','timing': '睡前1h',             'purpose': '睡眠+恢复',          'note': '维持'},
+    ]
+
+    # 饮水与控盐 (来自计划 2.6 节)
+    HYDRATION = [
+        ('总饮水量',     '3.5-4.0L/天', '训练日偏多'),
+        ('晨起',          '500ml温水',   '代谢唤醒'),
+        ('训练中',        '600-800ml',   '每15分钟150-200ml'),
+        ('肌酸补水',      '额外+300ml/天', '肌酸需充足水合'),
+        ('盐摄入',        '4-5g/天',     '比原计划降低1g,减少皮下水分'),
+        ('睡前2h',        '限水',         '避免夜起'),
+        ('钠控制',        '避免加工食品', '肌肉线条显现关键'),
+    ]
+
+    # Phase 3 高碳日说明
+    HIGH_CARB_INFO = (
+        '高碳日安排: 腿日和背日(大肌群训练日)\n'
+        '调整: 早餐燕麦→60g / 午餐糙米饭→180g / '
+        '训练后+葡萄糖粉15g+额外香蕉1根 / 晚餐+红薯100g'
+    )
+
+    @classmethod
+    def get_phase(cls, week: int) -> int:
+        return 1 if week <= 6 else (2 if week <= 14 else 3)
+
+    @classmethod
+    def get_macros(cls, week: int, day_type: str = 'training') -> Dict:
+        """day_type: 'training' | 'rest' | 'high_carb'"""
+        phase = cls.get_phase(week)
+        data = cls.PHASE_MACROS.get(phase, {}).get(day_type)
+        if data is None:
+            data = cls.PHASE_MACROS[phase]['training']
+        return dict(data)
+
+    @classmethod
+    def get_meals(cls) -> List[Dict]:
+        return list(cls.DAILY_MEALS)
+
+    @classmethod
+    def get_supplements(cls) -> List[Dict]:
+        return list(cls.SUPPLEMENTS)
+
+    @classmethod
+    def get_hydration(cls) -> List[Tuple]:
+        return list(cls.HYDRATION)
+
+    @classmethod
+    def get_daily_totals(cls, meals: List[Dict] = None) -> Dict:
+        """汇总五餐合计(Phase 1 训练日基准: 169p/186c/57f/2100kcal)"""
+        if meals is None:
+            meals = cls.DAILY_MEALS
+        return {
+            'protein': sum(m['protein'] for m in meals),
+            'carbs': sum(m['carbs'] for m in meals),
+            'fat': sum(m['fat'] for m in meals),
+            'kcal': sum(m['kcal'] for m in meals),
+        }
 
 
 # ═══════════════════════════════════════════════════════════
@@ -375,76 +741,110 @@ class TrainingPlanParser:
 # ═══════════════════════════════════════════════════════════
 
 class ExerciseDetailDialog(QDialog):
-    """动作详情弹窗 — QMovie播GIF + 步骤教学 + 肌群信息"""
+    """动作详情弹窗 — QMovie播GIF + 循环控制 + 速度选择 + 自适应缩放"""
 
     def __init__(self, exercise: Dict, exercise_lib: ExerciseLibrary, parent=None):
         super().__init__(parent)
         self.exercise = exercise
         self.lib = exercise_lib
         self.movie = None
+        self._speed = 100  # 百分比, 100=原速
         self._build_ui()
 
     def _build_ui(self):
         name = self.exercise.get('name_cn', '未知动作')
         self.setWindowTitle(f'动作示范 — {name}')
-        self.setMinimumSize(700, 600)
+        self.setMinimumSize(780, 620)
         self.setStyleSheet(f"background-color: {COLORS['bg']}; color: {COLORS['text']};")
 
         layout = QVBoxLayout(self)
 
         # 标题
-        title = QLabel(f'🏋️  {name}')
+        title = QLabel(f'  {name}')
         title.setFont(QFont('Microsoft YaHei', 18, QFont.Bold))
-        title.setStyleSheet(f"color: {COLORS['primary']}; padding: 10px;")
+        title.setStyleSheet(f"color: {COLORS['primary']}; padding: 8px 10px;")
         layout.addWidget(title)
 
         # 英文名 + 器材
         en_name = self.exercise.get('name_en', '')
         equip = self.exercise.get('equipment', '')
-        info = QLabel(f'English: {en_name}    |    器材: {equip}')
-        info.setStyleSheet(f"color: {COLORS['subtext']}; padding: 0 10px;")
+        target = self.exercise.get('target', '')
+        info_parts = [f'English: {en_name}'] if en_name else []
+        if equip:
+            info_parts.append(f'器材: {equip}')
+        if target:
+            info_parts.append(f'目标: {target}')
+        info = QLabel('    |    '.join(info_parts))
+        info.setStyleSheet(f"color: {COLORS['subtext']}; padding: 0 10px; font-size: 11px;")
         layout.addWidget(info)
 
         # 主体: 左GIF + 右信息
         body = QHBoxLayout()
+        body.setSpacing(12)
 
-        # 左侧GIF
+        # 左侧GIF区域
         gif_frame = QFrame()
-        gif_frame.setStyleSheet(f"background-color: {COLORS['card']}; border-radius: 8px;")
-        gif_frame.setMinimumSize(320, 320)
+        gif_frame.setStyleSheet(
+            f"background-color: {COLORS['card']}; border-radius: 10px; "
+            f"border: 1px solid {COLORS['border']};"
+        )
+        gif_frame.setMinimumSize(340, 340)
         gif_layout = QVBoxLayout(gif_frame)
-        self.gif_label = QLabel('加载中...')
-        self.gif_label.setAlignment(Qt.AlignCenter)
-        self.gif_label.setMinimumSize(300, 300)
-        gif_layout.addWidget(self.gif_label)
-        body.addWidget(gif_frame)
+        gif_layout.setContentsMargins(8, 8, 8, 8)
 
-        # 右侧信息
+        self.gif_label = QLabel()
+        self.gif_label.setAlignment(Qt.AlignCenter)
+        self.gif_label.setMinimumSize(320, 280)
+        self.gif_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.gif_label.setStyleSheet(
+            f"background-color: transparent; color: {COLORS['subtext']}; font-size: 13px;"
+        )
+        gif_layout.addWidget(self.gif_label)
+
+        # 帧信息标签
+        self.frame_info = QLabel('')
+        self.frame_info.setAlignment(Qt.AlignCenter)
+        self.frame_info.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px;")
+        gif_layout.addWidget(self.frame_info)
+
+        body.addWidget(gif_frame, stretch=4)
+
+        # 右侧信息面板
         info_frame = QFrame()
-        info_frame.setStyleSheet(f"background-color: {COLORS['card']}; border-radius: 8px;")
+        info_frame.setStyleSheet(f"background-color: {COLORS['card']}; border-radius: 10px;")
         info_layout = QVBoxLayout(info_frame)
+        info_layout.setContentsMargins(12, 12, 12, 12)
+        info_layout.setSpacing(6)
 
         # 肌群信息
-        target = self.exercise.get('target', '')
         muscle = self.exercise.get('muscle_group', '')
         secondary = self.exercise.get('secondary_muscles', [])
         sec_str = ', '.join(secondary) if isinstance(secondary, list) else str(secondary)
 
-        for label, value, color in [
-            ('🎯 目标肌群', target, COLORS['primary']),
-            ('💪 主肌群', muscle, COLORS['success']),
-            ('🔄 协同肌群', sec_str, COLORS['warning']),
-        ]:
-            row = QLabel(f'{label}: {value}')
-            row.setFont(QFont('Microsoft YaHei', 10))
-            row.setStyleSheet(f"color: {color}; padding: 4px;")
-            row.setWordWrap(True)
-            info_layout.addWidget(row)
+        musc_title = QLabel('肌群信息')
+        musc_title.setFont(QFont('Microsoft YaHei', 12, QFont.Bold))
+        musc_title.setStyleSheet(f"color: {COLORS['primary']};")
+        info_layout.addWidget(musc_title)
 
-        info_layout.addSpacing(10)
+        for label, value, color in [
+            ('主肌群', muscle, COLORS['success']),
+            ('协同肌群', sec_str, COLORS['warning']),
+        ]:
+            if value:
+                row = QLabel(f'{label}: {value}')
+                row.setFont(QFont('Microsoft YaHei', 10))
+                row.setStyleSheet(f"color: {color}; padding: 2px 4px;")
+                row.setWordWrap(True)
+                info_layout.addWidget(row)
+
+        # 分隔
+        sep1 = QFrame()
+        sep1.setFrameShape(QFrame.HLine)
+        sep1.setStyleSheet(f"color: {COLORS['border']}; margin: 4px 0;")
+        info_layout.addWidget(sep1)
 
         # 步骤标题
-        steps_title = QLabel('📋 动作步骤')
+        steps_title = QLabel('动作步骤')
         steps_title.setFont(QFont('Microsoft YaHei', 12, QFont.Bold))
         steps_title.setStyleSheet(f"color: {COLORS['purple']};")
         info_layout.addWidget(steps_title)
@@ -454,60 +854,208 @@ class ExerciseDetailDialog(QDialog):
         if not steps:
             instructions = self.exercise.get('instructions_zh', '')
             if instructions:
-                steps = [s.strip() for s in instructions.split('。') if s.strip()]
+                steps = [s.strip() for s in instructions.replace('\n', '。').split('。') if s.strip()]
 
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setStyleSheet("QScrollArea { border: none; }")
-        steps_widget = QWidget()
-        steps_layout = QVBoxLayout(steps_widget)
+        step_scroll = QScrollArea()
+        step_scroll.setWidgetResizable(True)
+        step_scroll.setStyleSheet(
+            f"QScrollArea {{ border: none; background-color: transparent; }}"
+        )
+        step_widget = QWidget()
+        step_layout = QVBoxLayout(step_widget)
+        step_layout.setSpacing(4)
+        step_layout.setContentsMargins(0, 0, 0, 0)
         for i, step in enumerate(steps, 1):
-            step_label = QLabel(f'{i}. {step}')
-            step_label.setWordWrap(True)
-            step_label.setStyleSheet(f"color: {COLORS['text']}; padding: 3px;")
-            steps_layout.addWidget(step_label)
-        steps_layout.addStretch()
-        scroll.setWidget(steps_widget)
-        info_layout.addWidget(scroll)
+            sl = QLabel(f'{i}. {step}')
+            sl.setWordWrap(True)
+            sl.setStyleSheet(f"color: {COLORS['text']}; padding: 2px 4px; font-size: 10px;")
+            step_layout.addWidget(sl)
+        step_layout.addStretch()
+        step_scroll.setWidget(step_widget)
+        info_layout.addWidget(step_scroll, stretch=1)
 
-        body.addWidget(info_frame)
+        body.addWidget(info_frame, stretch=3)
         layout.addLayout(body, stretch=1)
 
-        # GIF播放控制
+        # 底部控制栏
         ctrl = QHBoxLayout()
-        self.btn_play = QPushButton('⏸ 暂停')
+        ctrl.setSpacing(8)
+
+        # 播放/暂停
+        self.btn_play = QPushButton('暂停')
+        self.btn_play.setFixedHeight(28)
         self.btn_play.clicked.connect(self._toggle_play)
+        self.btn_play.setStyleSheet(self._ctrl_btn_style(COLORS['primary']))
         ctrl.addWidget(self.btn_play)
+
+        # 重新播放
+        btn_restart = QPushButton('重播')
+        btn_restart.setFixedHeight(28)
+        btn_restart.clicked.connect(self._restart)
+        btn_restart.setStyleSheet(self._ctrl_btn_style(COLORS['success']))
+        ctrl.addWidget(btn_restart)
+
+        ctrl.addSpacing(16)
+
+        # 速度控制标签
+        speed_label = QLabel('速度:')
+        speed_label.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 10px;")
+        ctrl.addWidget(speed_label)
+
+        for pct, lbl in [(50, '0.5x'), (75, '0.75x'), (100, '1x'), (150, '1.5x'), (200, '2x')]:
+            btn = QPushButton(lbl)
+            btn.setFixedHeight(26)
+            btn.setFixedWidth(42)
+            active = (pct == 100)
+            btn.setCheckable(True)
+            btn.setChecked(active)
+            btn.clicked.connect(lambda checked, s=pct: self._set_speed(s))
+            btn.setStyleSheet(
+                f"QPushButton {{ background-color: {'#2ea043' if active else COLORS['card']}; "
+                f"color: {'#fff' if active else COLORS['text']}; border: 1px solid {COLORS['border']}; "
+                f"border-radius: 3px; padding: 2px 4px; font-size: 9px; }}"
+                f"QPushButton:checked {{ background-color: #2ea043; color: #fff; }}"
+                f"QPushButton:hover {{ border: 1px solid {COLORS['primary']}; }}"
+            )
+            btn.setProperty('speed_btn', True)
+            ctrl.addWidget(btn)
+
         ctrl.addStretch()
+
+        # 帧计数
+        self.lbl_frame_count = QLabel('')
+        self.lbl_frame_count.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px;")
+        ctrl.addWidget(self.lbl_frame_count)
+
         layout.addLayout(ctrl)
 
         self._load_gif()
 
+    @staticmethod
+    def _ctrl_btn_style(color: str) -> str:
+        return (
+            f"QPushButton {{ background-color: {COLORS['card']}; color: {COLORS['text']}; "
+            f"border: 1px solid {COLORS['border']}; border-radius: 4px; "
+            f"padding: 4px 12px; font-size: 11px; }}"
+            f"QPushButton:hover {{ border: 1px solid {color}; }}"
+        )
+
     def _load_gif(self):
-        """加载GIF动画"""
+        """加载GIF动画 — 带错误恢复和帧缓存"""
         media_id = self.exercise.get('media_id', '')
         gif_path = self.lib.gif_path(media_id)
         if gif_path is None:
-            self.gif_label.setText('🎬\n无GIF资源\n\n(该动作未匹配到\n动作示范数据)')
-            self.gif_label.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 14px;")
+            self.gif_label.setText(
+                '无动作示范GIF\n\n(该动作未匹配到示范数据)'
+            )
+            self.gif_label.setStyleSheet(
+                f"background-color: {COLORS['card']}; color: {COLORS['subtext']}; "
+                f"font-size: 13px; border-radius: 8px; padding: 20px;"
+            )
             self.btn_play.setEnabled(False)
+            self.lbl_frame_count.setText('')
             return
 
         from PySide6.QtGui import QMovie
-        self.movie = QMovie(gif_path)
-        self.movie.setScaledSize(QSize(300, 300))
-        self.gif_label.setMovie(self.movie)
-        self.movie.start()
+        try:
+            self.movie = QMovie(gif_path)
+            if not self.movie.isValid():
+                raise ValueError('无效GIF文件')
+
+            # 缓存所有帧以提高播放流畅度
+            self.movie.setCacheMode(QMovie.CacheAll)
+            # 自适应缩放到label大小
+            gif_size = self.movie.currentImage().size()
+            display_size = min(340, max(280, gif_size.width()))
+            self.movie.setScaledSize(QSize(display_size, display_size))
+
+            self.movie.frameChanged.connect(self._on_frame_changed)
+            self.movie.finished.connect(self._on_loop_complete)
+            self.movie.stateChanged.connect(self._on_state_changed)
+
+            self.gif_label.setMovie(self.movie)
+            self.movie.start()
+
+            total = self.movie.frameCount()
+            self.lbl_frame_count.setText(f'共 {total} 帧')
+            self.frame_info.setText(
+                f'分辨率: {gif_size.width()}x{gif_size.height()}'
+            )
+
+        except Exception as e:
+            self.gif_label.setText(
+                f'GIF加载失败\n\n(文件可能已损坏)\n\n{str(e)[:80]}'
+            )
+            self.gif_label.setStyleSheet(
+                f"background-color: {COLORS['card']}; color: {COLORS['danger']}; "
+                f"font-size: 11px; border-radius: 8px; padding: 20px;"
+            )
+            self.btn_play.setEnabled(False)
+            self.lbl_frame_count.setText('')
+            if self.movie:
+                self.movie = None
+
+    def _on_frame_changed(self, frame: int):
+        if self.movie:
+            total = self.movie.frameCount()
+            if total > 0:
+                self.frame_info.setText(f'帧: {frame + 1}/{total}')
+
+    def _on_loop_complete(self):
+        """循环结束自动重播"""
+        if self.movie:
+            self.movie.start()
+
+    def _on_state_changed(self, state):
+        from PySide6.QtGui import QMovie
+        if state == QMovie.Running:
+            self.btn_play.setText('暂停')
+        elif state == QMovie.NotRunning:
+            self.btn_play.setText('播放')
 
     def _toggle_play(self):
         if self.movie is None:
             return
+        from PySide6.QtGui import QMovie
         if self.movie.state() == QMovie.Running:
-            self.movie.stop()
-            self.btn_play.setText('▶ 播放')
+            self.movie.setPaused(True)
+            self.btn_play.setText('播放')
         else:
-            self.movie.start()
-            self.btn_play.setText('⏸ 暂停')
+            self.movie.setPaused(False)
+            self.btn_play.setText('暂停')
+
+    def _restart(self):
+        if self.movie is None:
+            return
+        self.movie.stop()
+        self.movie.start()
+
+    def _set_speed(self, pct: int):
+        """设置播放速度"""
+        if self.movie is None:
+            return
+        self._speed = pct
+        self.movie.setSpeed(pct)
+        # 更新所有速度按钮状态
+        for child in self.findChildren(QPushButton):
+            if child.property('speed_btn'):
+                child.setChecked(child.text() in [
+                    '0.5x', '0.75x', '1x', '1.5x', '2x'
+                ] and False)  # reset
+        self.frame_info.setText(
+            f'速度: {pct / 100:.2f}x' if pct != 100 else (
+                f'{self.movie.currentFrameNumber() + 1}/{self.movie.frameCount()}'
+            )
+        )
+
+    def closeEvent(self, event):
+        """关闭窗口时清理QMovie资源"""
+        if self.movie:
+            self.movie.stop()
+            self.gif_label.clear()
+            self.movie.deleteLater()
+            self.movie = None
+        super().closeEvent(event)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -973,29 +1521,27 @@ class ExerciseLibraryPage(QWidget):
         """)
         cl = QVBoxLayout(card)
 
-        # GIF缩略图(静态首帧)
+        # GIF缩略图 — 使用 QMovie 首帧提取 (无需 PIL)
         media_id = ex.get('media_id', '')
-        gif_path = self.lib.gif_path(media_id)
         thumb = QLabel()
         thumb.setAlignment(Qt.AlignCenter)
         thumb.setFixedSize(180, 130)
-        thumb.setStyleSheet(f"background-color: {COLORS['bg']}; border-radius: 4px;")
-        if gif_path:
-            from PIL import Image
-            try:
-                img = Image.open(gif_path)
-                img.seek(0)
-                img = img.convert('RGBA')
-                img.thumbnail((180, 130))
-                from PySide6.QtGui import QImage
-                data = img.tobytes('raw', 'RGBA')
-                qimg = QImage(data, img.width, img.height, QImage.Format_RGBA8888)
-                thumb.setPixmap(QPixmap.fromImage(qimg).scaled(180, 130, Qt.KeepAspectRatio, Qt.SmoothTransformation))
-            except Exception:
-                thumb.setText('🎬')
+        thumb.setStyleSheet(
+            f"background-color: {COLORS['bg']}; border-radius: 4px; "
+            f"border: 1px solid {COLORS['border']};"
+        )
+        pixmap = self.lib.get_first_frame(media_id)
+        if pixmap and not pixmap.isNull():
+            scaled = pixmap.scaled(
+                178, 128, Qt.KeepAspectRatio, Qt.SmoothTransformation
+            )
+            thumb.setPixmap(scaled)
         else:
-            thumb.setText('🎬')
-            thumb.setStyleSheet(f"background-color: {COLORS['bg']}; color: {COLORS['subtext']}; font-size: 28px; border-radius: 4px;")
+            thumb.setText('')
+            thumb.setStyleSheet(
+                f"background-color: {COLORS['bg']}; color: {COLORS['subtext']}; "
+                f"font-size: 36px; border-radius: 4px; border: 1px solid {COLORS['border']};"
+            )
         cl.addWidget(thumb)
 
         # 动作名
@@ -1030,13 +1576,14 @@ class ExerciseLibraryPage(QWidget):
 # ═══════════════════════════════════════════════════════════
 
 class TrainingPlanPage(QWidget):
-    """训练计划 — 周历视图 + 每日动作列表 + 点击跳转详情"""
+    """训练计划 — 20周塑形冲刺, 周历视图 + 阶段切换 + 每日动作列表"""
 
     def __init__(self, plan: TrainingPlanParser, lib: ExerciseLibrary):
         super().__init__()
         self.plan = plan
         self.lib = lib
-        self.daily_exercises = plan.get_daily_exercises()
+        self.current_week = 1
+        self.daily_exercises = plan.get_daily_exercises(self.current_week)
         self._build_ui()
 
     def _build_ui(self):
@@ -1045,21 +1592,34 @@ class TrainingPlanPage(QWidget):
 
         # 顶部
         top = QHBoxLayout()
-        title = QLabel('📅 8周增肌塑形训练计划')
+        title = QLabel('📅 20周塑形冲刺 — 三阶段周期化')
         title.setFont(QFont('Microsoft YaHei', 16, QFont.Bold))
         title.setStyleSheet(f"color: {COLORS['primary']};")
         top.addWidget(title)
         top.addStretch()
 
-        # 周次选择
+        # 周次选择 (20周)
         self.combo_week = QComboBox()
-        self.combo_week.addItems([f'第{w}周' for w in range(1, 9)])
+        self.combo_week.setMinimumWidth(220)
+        self.combo_week.setSizeAdjustPolicy(QComboBox.AdjustToMinimumContentsLengthWithIcon)
+        week_labels = []
+        for w in range(1, 21):
+            p = TrainingPlanParser.get_phase(w)
+            phase_label = PHASE_INFO[p]['name']
+            week_labels.append(f'第{w}周 [{phase_label}]')
+        self.combo_week.addItems(week_labels)
         self.combo_week.setStyleSheet(f"background-color: {COLORS['card']}; color: {COLORS['text']}; "
-                                      f"padding: 4px; border-radius: 4px;")
+                                       f"padding: 4px; border-radius: 4px;")
+        self.combo_week.currentIndexChanged.connect(self._on_week_changed)
         top.addWidget(self.combo_week)
         layout.addLayout(top)
 
-        # 进度提示
+        # 阶段信息标签
+        self.phase_label = QLabel()
+        self.phase_label.setStyleSheet(f"color: {COLORS['success']}; padding: 4px; font-size: 12px;")
+        layout.addWidget(self.phase_label)
+
+        # 提示
         note = QLabel('💡 点击动作卡片查看GIF示范 + 详细步骤教学')
         note.setStyleSheet(f"color: {COLORS['subtext']}; padding: 4px;")
         layout.addWidget(note)
@@ -1067,89 +1627,802 @@ class TrainingPlanPage(QWidget):
         # 7天卡片网格
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
-        scroll.setStyleSheet("QScrollArea { border: none; }")
-        container = QWidget()
-        grid = QGridLayout(container)
-        grid.setSpacing(8)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
+        self.container_days = QWidget()
+        self.container_days.setMinimumWidth(900)  # 3列x280+间距, 防止卡片被压扁
+        self.grid_days = QGridLayout(self.container_days)
+        self.grid_days.setSpacing(10)
+        # 三列等宽stretch, 避免列被压扁
+        self.grid_days.setColumnStretch(0, 1)
+        self.grid_days.setColumnStretch(1, 1)
+        self.grid_days.setColumnStretch(2, 1)
+        scroll.setWidget(self.container_days)
+        layout.addWidget(scroll, stretch=1)
+
+        self._refresh_days()
+
+    def _on_week_changed(self, idx: int):
+        self.current_week = idx + 1
+        self.daily_exercises = self.plan.get_daily_exercises(self.current_week)
+        self._refresh_days()
+
+    def _refresh_days(self):
+        # 清除旧卡片
+        while self.grid_days.count():
+            item = self.grid_days.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+
+        phase = TrainingPlanParser.get_phase(self.current_week)
+        info = PHASE_INFO[phase]
+        week_notes = self.plan.get_phase_notes(self.current_week)
+        phase_text = f"📍 {info['name']} ({info['weeks']}) — {info['desc']}"
+        if week_notes:
+            phase_text += "\n⚠ Phase调整: " + ' | '.join(week_notes[:6])
+        self.phase_label.setText(phase_text)
 
         for i, sched in enumerate(TRAINING_SCHEDULE):
             day_card = self._make_day_card(sched)
-            grid.addWidget(day_card, i // 3, i % 3)
-
-        scroll.setWidget(container)
-        layout.addWidget(scroll, stretch=1)
+            self.grid_days.addWidget(day_card, i // 3, i % 3)
 
     def _make_day_card(self, sched: Dict) -> QFrame:
+        # v5.9.2: 识别 HIIT / LISS / REST 特殊日, 头部渐变 + GIF统计徽章
+        title_lower = sched['title'].lower()
+        is_hiit = 'hiit' in title_lower
+        is_liss = 'liss' in title_lower
+        is_rest = ('休息' in sched['title']) or ('rest' in title_lower)
+        if is_hiit:
+            head_bg = f"qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 {COLORS['hiit_bg']}, stop:1 {COLORS['card']})"
+            title_color = COLORS['hiit_fg']
+            sub_text = '🔥 高强度间歇训练'
+        elif is_liss:
+            head_bg = f"qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 {COLORS['liss_bg']}, stop:1 {COLORS['card']})"
+            title_color = COLORS['liss_fg']
+            sub_text = '🚶 低强度稳态有氧'
+        elif is_rest:
+            head_bg = f"qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 {COLORS['card']}, stop:1 {COLORS['card']})"
+            title_color = COLORS['rest_fg']
+            sub_text = '💤 主动恢复日'
+        else:
+            head_bg = COLORS['card']
+            title_color = COLORS['primary']
+            sub_text = sched.get('focus', '')
+
         card = QFrame()
+        card.setMinimumWidth(280)
+        card.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         card.setStyleSheet(f"""
             QFrame {{ background-color: {COLORS['card']}; border-radius: 10px;
                       border: 1px solid {COLORS['border']}; }}
         """)
         cl = QVBoxLayout(card)
         cl.setContentsMargins(10, 10, 10, 10)
+        cl.setSpacing(6)
 
-        # 头部
-        header = QLabel(f"{sched['icon']}  {sched['day']}  {sched['title']}")
-        header.setFont(QFont('Microsoft YaHei', 11, QFont.Bold))
-        header.setStyleSheet(f"color: {COLORS['primary']};")
-        cl.addWidget(header)
+        # ===== v5.9.2 头部 (图标 + 标题 + 副标题 + 统计徽章) =====
+        header_row = QHBoxLayout()
+        header_row.setSpacing(8)
 
-        focus = QLabel(sched['focus'])
-        focus.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px;")
-        cl.addWidget(focus)
+        icon_lbl = QLabel(sched['icon'])
+        icon_lbl.setStyleSheet("font-size: 18px; background: transparent;")
+        header_row.addWidget(icon_lbl)
 
-        # 分隔线
+        title_col = QVBoxLayout()
+        title_col.setSpacing(0)
+        header = QLabel(f"{sched['day']}  {sched['title']}")
+        header.setFont(QFont('Microsoft YaHei', 12, QFont.Bold))
+        header.setStyleSheet(f"color: {title_color}; background: transparent;")
+        focus = QLabel(sub_text)
+        focus.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 10px; background: transparent;")
+        title_col.addWidget(header)
+        title_col.addWidget(focus)
+        title_wrap = QWidget()
+        title_wrap.setStyleSheet("background: transparent;")
+        title_wrap.setLayout(title_col)
+        header_row.addWidget(title_wrap, 1)
+
+        # 统计徽章: X/Y GIF
+        exercises = self.daily_exercises.get(sched['day'], [])
+        real_exs = [e for e in exercises if not e.get('is_workout_block')]
+        total = len(real_exs)
+        with_gif = sum(1 for e in real_exs if self._resolve_ex_data(e).get('media_id'))
+        if is_rest or total == 0:
+            stat_chip = QLabel('休息日')
+            chip_color = COLORS['rest_fg']
+        elif with_gif == total:
+            stat_chip = QLabel(f'✓ {total} GIF')
+            chip_color = COLORS['success']
+        elif with_gif > 0:
+            stat_chip = QLabel(f'{with_gif}/{total}')
+            chip_color = COLORS['accent']
+        else:
+            stat_chip = QLabel(f'0/{total}')
+            chip_color = COLORS['warning']
+        stat_chip.setStyleSheet(
+            f"color: {chip_color}; background-color: {COLORS['bg']}; "
+            f"border: 1px solid {chip_color}; border-radius: 9px; "
+            f"padding: 3px 9px; font-size: 10px; font-weight: bold;"
+        )
+        header_row.addWidget(stat_chip)
+        cl.addLayout(header_row)
+
+        # 头部底色通过父容器包裹的方式表达 — 这里用顶部frame作为视觉条
+        # (实际效果靠标题色+渐变控制, 此处保留分隔)
+
         sep = QFrame()
         sep.setFrameShape(QFrame.HLine)
         sep.setStyleSheet(f"color: {COLORS['border']};")
         cl.addWidget(sep)
 
-        # 动作列表
-        exercises = self.daily_exercises.get(sched['day'], [])
-        if not exercises:
-            hint = QLabel('🌿 主动恢复日\n慢走6000-8000步\n泡沫轴放松 + 全身拉伸')
+        if is_rest or not exercises:
+            hint = QLabel('😴 完全休息日\n睡眠>8h | 泡脚 | 按摩\n当日蛋白目标155-160g')
             hint.setStyleSheet(f"color: {COLORS['success']}; padding: 8px;")
             hint.setWordWrap(True)
             cl.addWidget(hint)
         else:
             for ex in exercises:
-                ex_btn = self._make_exercise_button(ex)
-                cl.addWidget(ex_btn)
+                # v5.9.2: HIIT循环/LISS流程 渲染为流程块而非按钮
+                if ex.get('is_workout_block'):
+                    ex_wid = self._make_workout_block(ex)
+                else:
+                    ex_wid = self._make_exercise_button(ex)
+                cl.addWidget(ex_wid)
 
         cl.addStretch()
         return card
 
-    def _make_exercise_button(self, ex: Dict) -> QPushButton:
+    def _resolve_ex_data(self, ex: Dict) -> Dict:
+        """统一的ex→ex_data解析入口, 供统计/缩略图共用"""
+        media_id = ex.get('media_id', '') or ''
+        if media_id:
+            ed = self.lib.get_by_media_id(media_id)
+            if ed:
+                return ed
+        ed = self.lib.get_by_name(ex.get('name', '')) if ex.get('name') else None
+        if ed:
+            return ed
+        ed = self._fuzzy_match_exercise(ex.get('name', ''))
+        if ed:
+            return ed
+        return {
+            'name_cn': ex.get('name', ''), 'name_en': '', 'target': ex.get('target', ''),
+            'muscle_group': '', 'secondary_muscles': [],
+            'equipment': '', 'instructions_zh': '', 'instruction_steps_zh': [],
+            'media_id': '', 'matched': False,
+        }
+
+    def _make_workout_block(self, ex: Dict) -> QFrame:
+        """v5.9.2: HIIT循环 / LISS流程 / 复合动作 紧凑流程块(非可点击动作卡)"""
+        block_type = ex.get('block_type', 'flow')  # 'hiit_loop' | 'liss_cardio' | 'flow'
+        duration = ex.get('duration', '')
+        sub = ex.get('sub_info', '')
+        block = QFrame()
+        block.setMinimumHeight(46)
+        block.setStyleSheet(f"""
+            QFrame {{
+                background-color: {COLORS['bg']};
+                border: 1px dashed {COLORS['primary']};
+                border-radius: 8px;
+            }}
+        """)
+        hl = QHBoxLayout(block)
+        hl.setContentsMargins(10, 6, 10, 6)
+        hl.setSpacing(8)
+
+        if block_type == 'hiit_loop':
+            ic = QLabel('🔥'); ic.setStyleSheet("font-size: 16px; background: transparent;")
+            lbl_main = QLabel(ex.get('name', 'HIIT循环'))
+            lbl_main.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
+            lbl_main.setStyleSheet(f"color: {COLORS['hiit_fg']}; background: transparent;")
+            lbl_sub = QLabel(sub or '40秒训练 / 20秒休息')
+            lbl_sub.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px; background: transparent;")
+        elif block_type == 'liss_cardio':
+            ic = QLabel('🚶'); ic.setStyleSheet("font-size: 16px; background: transparent;")
+            lbl_main = QLabel(ex.get('name', 'LISS有氧'))
+            lbl_main.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
+            lbl_main.setStyleSheet(f"color: {COLORS['liss_fg']}; background: transparent;")
+            lbl_sub = QLabel(sub or '心率120-135 · 低强稳态')
+            lbl_sub.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px; background: transparent;")
+        else:
+            ic = QLabel('📋'); ic.setStyleSheet("font-size: 16px; background: transparent;")
+            lbl_main = QLabel(ex.get('name', '训练流程'))
+            lbl_main.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
+            lbl_main.setStyleSheet(f"color: {COLORS['cyan']}; background: transparent;")
+            lbl_sub = QLabel(sub or '')
+            lbl_sub.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px; background: transparent;")
+
+        hl.addWidget(ic)
+        col = QVBoxLayout(); col.setSpacing(0)
+        col.addWidget(lbl_main); col.addWidget(lbl_sub)
+        col_w = QWidget(); col_w.setStyleSheet("background: transparent;"); col_w.setLayout(col)
+        hl.addWidget(col_w, 1)
+
+        if duration:
+            dur_lbl = QLabel(duration)
+            dur_lbl.setStyleSheet(
+                f"color: {COLORS['accent']}; font-size: 10px; font-weight: bold; "
+                f"background-color: {COLORS['card']}; border-radius: 8px; padding: 3px 9px;"
+            )
+            hl.addWidget(dur_lbl)
+        return block
+
+    def _make_exercise_button(self, ex: Dict) -> QFrame:
         name = ex.get('name', '')
         sets = ex.get('sets', '')
         target = ex.get('target', '')
+        tip = ex.get('tip', '')
         media_id = ex.get('media_id', '')
 
-        text = f'{name}  {sets}'
-        if target:
-            text += f'\n  🎯 {target[:20]}'
-
-        btn = QPushButton(text)
-        btn.setStyleSheet(f"""
-            QPushButton {{ background-color: {COLORS['bg']}; color: {COLORS['text']};
-                          border: 1px solid {COLORS['border']}; border-radius: 6px;
-                          padding: 8px; text-align: left; font-size: 10px; }}
-            QPushButton:hover {{ background-color: {COLORS['card']}; border: 1px solid {COLORS['primary']}; }}
-        """)
-        btn.setMinimumHeight(45)
-
-        # 点击跳转详情
+        # 查找动作库: media_id 优先, 其次按名称模糊匹配
         ex_data = self.lib.get_by_media_id(media_id) if media_id else None
+        if ex_data is None:
+            ex_data = self.lib.get_by_name(name) or self._fuzzy_match_exercise(name)
         if ex_data is None:
             ex_data = {
                 'name_cn': name, 'name_en': '', 'target': target,
                 'muscle_group': '', 'secondary_muscles': [],
                 'equipment': '', 'instructions_zh': '', 'instruction_steps_zh': [],
-                'media_id': media_id, 'matched': False,
+                'media_id': '', 'matched': False,
             }
-        btn.clicked.connect(lambda *args, e=ex_data: self._show_exercise(e))
-        return btn
+
+        # 使用QFrame作为可点击容器, 嵌入缩略图+文字+状态标识
+        container = QFrame()
+        container.setMinimumHeight(54)
+        container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        container.setCursor(Qt.PointingHandCursor)
+        has_gif = self.lib.has_gif(ex_data.get('media_id', ''))
+        matched = ex_data.get('matched', True)
+
+        border_color = COLORS['border']
+        if not matched:
+            border_color = COLORS['warning']
+        elif has_gif:
+            border_color = COLORS['success'] + '88'   # 半透明成功色
+
+        container.setStyleSheet(f"""
+            QFrame {{ background-color: {COLORS['bg']}; border-radius: 8px;
+                      border: 1px solid {border_color}; }}
+            QFrame:hover {{ background-color: {COLORS['card']};
+                           border: 1px solid {COLORS['primary']}; }}
+        """)
+
+        hbox = QHBoxLayout(container)
+        hbox.setContentsMargins(8, 4, 8, 4)
+        hbox.setSpacing(8)
+
+        # 左: GIF缩略图 (52x40) - v5.9.2 缺图时显示肌肉群 emoji
+        thumb = QLabel()
+        thumb.setFixedSize(52, 40)
+        thumb.setAlignment(Qt.AlignCenter)
+        if has_gif:
+            pm = self.lib.get_first_frame(ex_data['media_id'])
+            if pm and not pm.isNull():
+                thumb.setPixmap(pm.scaled(50, 38, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+                thumb.setStyleSheet(
+                    f"background-color: #000; border-radius: 4px; "
+                    f"border: 1px solid {COLORS['success']}66;"
+                )
+            else:
+                thumb.setText('GIF')
+                thumb.setStyleSheet(
+                    f"background-color: {COLORS['bg']}; color: {COLORS['primary']}; "
+                    f"font-size: 8px; font-weight: bold; border-radius: 4px; "
+                    f"border: 1px solid {COLORS['border']};"
+                )
+        else:
+            # v5.9.2: 显示肌肉群emoji占位 — 富点击反馈感
+            emoji = _emoji_for_target(target or name)
+            thumb.setText(emoji)
+            bg_tint = COLORS['card']
+            thumb.setStyleSheet(
+                f"background-color: {bg_tint}; color: {COLORS['primary']}; "
+                f"font-size: 18px; border-radius: 4px; "
+                f"border: 1px dashed {COLORS['warning']}88;"
+            )
+        hbox.addWidget(thumb)
+
+        # 中: 动作名称 + 组数 + 目标
+        text_widget = QWidget()
+        text_widget.setStyleSheet("background: transparent; border: none;")
+        tv = QVBoxLayout(text_widget)
+        tv.setContentsMargins(0, 0, 0, 0)
+        tv.setSpacing(2)
+
+        title_row = QHBoxLayout()
+        title_row.setSpacing(4)
+        n = QLabel(name)
+        n.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
+        n.setStyleSheet(f"color: {COLORS['text']}; background: transparent; border: none;")
+        title_row.addWidget(n)
+        if sets:
+            s = QLabel(str(sets))
+            s.setStyleSheet(f"color: {COLORS['accent']}; font-size: 10px; font-weight: bold; background: transparent; border: none;")
+            title_row.addWidget(s)
+        title_row.addStretch()
+        tv.addLayout(title_row)
+
+        # 肌群/提示行
+        sub_text = ''
+        if target and target not in ('收尾',) and 'LISS' not in str(target):
+            sub_text = f'目标: {str(target)[:24]}'
+        elif tip and len(tip) < 25:
+            sub_text = f'{tip}'
+        if sub_text:
+            sub = QLabel(sub_text)
+            sub.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px; background: transparent; border: none;")
+            tv.addWidget(sub)
+
+        hbox.addWidget(text_widget, stretch=1)
+
+        # 右: 状态标识 (v5.9.2: 改为更鲜明的徽章)
+        status_lbl = QLabel()
+        status_lbl.setFixedWidth(34)
+        status_lbl.setAlignment(Qt.AlignCenter)
+        if has_gif:
+            status_lbl.setText('GIF')
+            status_lbl.setStyleSheet(
+                f"color: {COLORS['success']}; font-size: 8px; font-weight: bold; "
+                f"background-color: {COLORS['success']}22; "
+                f"border: 1px solid {COLORS['success']}66; "
+                f"border-radius: 4px; padding: 2px 4px;"
+            )
+        else:
+            status_lbl.setText('!')
+            status_lbl.setStyleSheet(
+                f"color: {COLORS['warning']}; font-size: 9px; font-weight: bold; "
+                f"background-color: {COLORS['warning']}18; "
+                f"border: 1px solid {COLORS['warning']}66; "
+                f"border-radius: 4px; padding: 1px 4px;"
+            )
+        hbox.addWidget(status_lbl)
+
+        # 点击事件
+        container.mousePressEvent = lambda e, data=ex_data: self._show_exercise(data)
+        # 子控件也传递点击
+        for child in container.findChildren(QWidget):
+            child.mousePressEvent = lambda e, data=ex_data: self._show_exercise(data)
+
+        return container
+
+    def _fuzzy_match_exercise(self, name: str) -> Optional[Dict]:
+        """按名称模糊匹配: 取前2-3个关键词搜索, 取第一个结果"""
+        if not name:
+            return None
+        # 提取核心关键词 (去括号、去特殊格式、去数字和时长单位后缀)
+        core = name.replace('(', ' ').replace('（', ' ').replace(')', ' ').replace('）', ' ')
+        core = core.replace(' 超级组', '').replace('+', ' ')
+        # 去除 "2分钟" "3秒" "4组" 等数字+单位尾巴
+        import re
+        core = re.sub(r'\d+\s*(分钟|分|秒|组|次|圈|轮|x|X)?\s*$', '', core)
+        core = core.strip()
+        # 直接精确搜完整核心名
+        if core:
+            results = self.lib.search(core)
+            if results:
+                return results[0]
+        # 取前2-3个词
+        words = core.split()
+        for n_words in [3, 2, 1]:
+            if len(words) >= n_words:
+                kw = ' '.join(words[:n_words])
+                results = self.lib.search(kw)
+                if results:
+                    return results[0]
+        # 直接搜完整名称
+        results = self.lib.search(name)
+        return results[0] if results else None
 
     def _show_exercise(self, ex: Dict):
         dlg = ExerciseDetailDialog(ex, self.lib, self)
         dlg.exec()
+
+
+# ═══════════════════════════════════════════════════════════
+# UI组件 — 饮食与补剂页面
+# ═══════════════════════════════════════════════════════════
+
+class NutritionPage(QWidget):
+    """饮食与补剂 — 三阶段营养方案 + 五餐明细 + 补剂表 + 饮水指南"""
+
+    def __init__(self):
+        super().__init__()
+        self.current_week = 1
+        self.current_day_type = 'training'  # 'training' | 'rest' | 'high_carb'
+        self._build_ui()
+
+    def _build_ui(self):
+        self.setStyleSheet(f"background-color: {COLORS['bg']};")
+        outer = QVBoxLayout(self)
+
+        # ── 顶部栏 ──
+        top = QHBoxLayout()
+        title = QLabel('🍽 饮食与补剂方案')
+        title.setFont(QFont('Microsoft YaHei', 16, QFont.Bold))
+        title.setStyleSheet(f"color: {COLORS['primary']};")
+        top.addWidget(title)
+        top.addStretch()
+
+        # 周次
+        self.combo_week = QComboBox()
+        self.combo_week.setMinimumWidth(220)
+        self.combo_week.setSizeAdjustPolicy(QComboBox.AdjustToMinimumContentsLengthWithIcon)
+        week_labels = []
+        for w in range(1, 21):
+            p = NutritionParser.get_phase(w)
+            phase_label = PHASE_INFO[p]['name']
+            week_labels.append(f'第{w}周 [{phase_label}]')
+        self.combo_week.addItems(week_labels)
+        self.combo_week.setStyleSheet(f"background-color: {COLORS['card']}; color: {COLORS['text']}; "
+                                       f"padding: 4px; border-radius: 4px;")
+        self.combo_week.currentIndexChanged.connect(self._on_week_changed)
+        top.addWidget(self.combo_week)
+
+        # 日类型切换
+        self.btn_training = self._make_type_btn('🏋 训练日', 'training', True)
+        self.btn_rest = self._make_type_btn('😴 休息日', 'rest', False)
+        self.btn_highcarb = self._make_type_btn('⚡ 高碳日', 'high_carb', False)
+        top.addWidget(self.btn_training)
+        top.addWidget(self.btn_rest)
+        top.addWidget(self.btn_highcarb)
+        outer.addLayout(top)
+
+        # ── 阶段信息 ──
+        self.phase_label = QLabel()
+        self.phase_label.setStyleSheet(f"color: {COLORS['success']}; padding: 2px 4px; font-size: 12px;")
+        outer.addWidget(self.phase_label)
+
+        # ── 滚动可容纳两个区域: 宏量 + 餐食 + 补剂饮水 ──
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
+        content = QWidget()
+        content.setMinimumWidth(900)
+        content_layout = QVBoxLayout(content)
+
+        # ── 宏量营养概览卡片 ──
+        self.macro_card = QFrame()
+        self.macro_card.setStyleSheet(f"""
+            QFrame {{ background-color: {COLORS['card']}; border-radius: 10px;
+                      border: 1px solid {COLORS['border']}; }}
+        """)
+        self.macro_layout = QHBoxLayout(self.macro_card)
+        self.macro_layout.setContentsMargins(20, 16, 20, 16)
+        self.macro_layout.setSpacing(12)
+
+        # 4个宏量数字卡片占位
+        self.macro_labels = {}
+        for key, icon, name, unit in [
+            ('kcal', '🔥', '总热量', 'kcal'),
+            ('protein', '🥩', '蛋白质', 'g'),
+            ('carbs', '🍚', '碳水化合物', 'g'),
+            ('fat', '🧈', '脂肪', 'g'),
+        ]:
+            panel = self._make_macro_panel(icon, name, unit)
+            self.macro_layout.addWidget(panel)
+            self.macro_labels[key] = panel
+        content_layout.addWidget(self.macro_card)
+
+        # ── 蛋白质占比标签 ──
+        self.protein_pct_label = QLabel()
+        self.protein_pct_label.setStyleSheet(f"color: {COLORS['subtext']}; padding: 4px 0; font-size: 11px;")
+        content_layout.addWidget(self.protein_pct_label)
+
+        # ── 五餐明细 (2行×3列) ──
+        meals_title = QLabel('📋 每日五餐明细')
+        meals_title.setFont(QFont('Microsoft YaHei', 13, QFont.Bold))
+        meals_title.setStyleSheet(f"color: {COLORS['primary']}; padding-top: 12px;")
+        content_layout.addWidget(meals_title)
+
+        self.meals_grid = QGridLayout()
+        self.meals_grid.setSpacing(10)
+        for col in range(3):
+            self.meals_grid.setColumnStretch(col, 1)
+        content_layout.addLayout(self.meals_grid)
+
+        # 五餐合计小结
+        self.total_summary = QLabel()
+        self.total_summary.setStyleSheet(f"color: {COLORS['success']}; padding: 6px 0; font-size: 12px;")
+        content_layout.addWidget(self.total_summary)
+
+        # ── 补剂方案 ──
+        supp_title = QLabel('💊 补剂方案')
+        supp_title.setFont(QFont('Microsoft YaHei', 13, QFont.Bold))
+        supp_title.setStyleSheet(f"color: {COLORS['primary']}; padding-top: 12px;")
+        content_layout.addWidget(supp_title)
+
+        self.supplement_table = QWidget()
+        supp_layout = QVBoxLayout(self.supplement_table)
+        supp_layout.setSpacing(4)
+        content_layout.addWidget(self.supplement_table)
+
+        # ── 饮水控盐 ──
+        water_title = QLabel('💧 饮水与控盐')
+        water_title.setFont(QFont('Microsoft YaHei', 13, QFont.Bold))
+        water_title.setStyleSheet(f"color: {COLORS['primary']}; padding-top: 12px;")
+        content_layout.addWidget(water_title)
+
+        self.water_table = QWidget()
+        water_layout = QVBoxLayout(self.water_table)
+        water_layout.setSpacing(4)
+        content_layout.addWidget(self.water_table)
+
+        content_layout.addStretch()
+        scroll.setWidget(content)
+        outer.addWidget(scroll, stretch=1)
+
+        # 初始刷新
+        self._refresh_all()
+
+    # ── 控件工厂 ──
+
+    def _make_type_btn(self, text: str, day_type: str, active: bool) -> QPushButton:
+        btn = QPushButton(text)
+        btn.setFixedHeight(32)
+        btn.setCheckable(True)
+        btn.setChecked(active)
+        btn.setProperty('day_type', day_type)
+        base_bg = COLORS['primary'] if active else COLORS['card']
+        btn.setStyleSheet(f"""
+            QPushButton {{ background-color: {base_bg}; color: {'#fff' if active else COLORS['text']};
+                          border: 1px solid {COLORS['border']}; border-radius: 4px;
+                          padding: 4px 12px; font-size: 11px; font-weight: bold; }}
+            QPushButton:checked {{ background-color: {COLORS['primary']}; color: #fff; }}
+            QPushButton:hover {{ border: 1px solid {COLORS['primary']}; }}
+        """)
+        btn.clicked.connect(lambda checked=False, t=day_type: self._on_day_type_changed(t))
+        return btn
+
+    def _make_macro_panel(self, icon: str, name: str, unit: str) -> QFrame:
+        panel = QFrame()
+        panel.setStyleSheet(f"""
+            QFrame {{ background-color: {COLORS['bg']}; border-radius: 8px;
+                      border: 1px solid {COLORS['border']}; }}
+        """)
+        vl = QVBoxLayout(panel)
+        vl.setContentsMargins(14, 10, 14, 10)
+        vl.setSpacing(2)
+
+        head = QLabel(f'{icon} {name}')
+        head.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 10px;")
+        vl.addWidget(head)
+
+        # 值 + 单位在同一行
+        val_row = QHBoxLayout()
+        val_row.setSpacing(4)
+        val = QLabel('--')
+        val.setObjectName('macro_value')
+        val.setFont(QFont('Consolas', 22, QFont.Bold))
+        val.setStyleSheet(f"color: {COLORS['text']};")
+        val_row.addWidget(val)
+        unit_lbl = QLabel(unit)
+        unit_lbl.setStyleSheet(f"color: {COLORS['subtext']}; padding-top: 6px; font-size: 10px;")
+        val_row.addWidget(unit_lbl)
+        val_row.addStretch()
+        vl.addLayout(val_row)
+
+        # 对比目标
+        cmp = QLabel()
+        cmp.setObjectName('macro_cmp')
+        cmp.setStyleSheet(f"color: {COLORS['success']}; font-size: 9px;")
+        vl.addWidget(cmp)
+        return panel
+
+    def _make_meal_card(self, meal: Dict) -> QFrame:
+        card = QFrame()
+        card.setStyleSheet(f"""
+            QFrame {{ background-color: {COLORS['card']}; border-radius: 8px;
+                      border: 1px solid {COLORS['border']}; }}
+        """)
+        cv = QVBoxLayout(card)
+        cv.setContentsMargins(12, 10, 12, 10)
+        cv.setSpacing(4)
+
+        # 标题行: 餐名 + 热量
+        hrow = QHBoxLayout()
+        hrow.setSpacing(6)
+        n = QLabel(meal['name'])
+        n.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
+        n.setStyleSheet(f"color: {COLORS['primary']};")
+        hrow.addWidget(n)
+        hrow.addStretch()
+        kcal_str = f"{meal['kcal']} kcal  P{meal['protein']}g C{meal['carbs']}g F{meal['fat']}g"
+        cal = QLabel(kcal_str)
+        cal.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px;")
+        hrow.addWidget(cal)
+        cv.addLayout(hrow)
+
+        # 分隔线
+        sep = QFrame()
+        sep.setFrameShape(QFrame.HLine)
+        sep.setStyleSheet(f"color: {COLORS['border']};")
+        cv.addWidget(sep)
+
+        # 食材列表
+        for item_name, amount, detail in meal['items']:
+            item_line = QHBoxLayout()
+            item_line.setSpacing(6)
+            iname = QLabel(item_name)
+            iname.setStyleSheet(f"color: {COLORS['text']}; font-size: 10px;")
+            item_line.addWidget(iname)
+            iamt = QLabel(amount)
+            iamt.setStyleSheet(f"color: {COLORS['accent']}; font-size: 10px; font-weight: bold;")
+            item_line.addWidget(iamt)
+            item_line.addStretch()
+            idet = QLabel(detail)
+            idet.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px;")
+            item_line.addWidget(idet)
+            cv.addLayout(item_line)
+
+        return card
+
+    def _make_supplement_row(self, supp: Dict) -> QFrame:
+        row = QFrame()
+        row.setStyleSheet(f"""
+            QFrame {{ background-color: {COLORS['card']}; border-radius: 6px;
+                      border: 1px solid {COLORS['border']}; }}
+        """)
+        rh = QHBoxLayout(row)
+        rh.setContentsMargins(12, 6, 12, 6)
+        rh.setSpacing(12)
+
+        name = QLabel(supp['name'])
+        name.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
+        name.setStyleSheet(f"color: {COLORS['text']};")
+        name.setMinimumWidth(100)
+        rh.addWidget(name)
+
+        dose = QLabel(supp['dose'])
+        dose.setStyleSheet(f"color: {COLORS['accent']}; font-weight: bold; font-size: 11px;")
+        dose.setMinimumWidth(70)
+        rh.addWidget(dose)
+
+        timing = QLabel(supp['timing'])
+        timing.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 10px;")
+        timing.setMinimumWidth(130)
+        rh.addWidget(timing)
+
+        purpose = QLabel(supp['purpose'])
+        purpose.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 10px;")
+        purpose.setMinimumWidth(120)
+        rh.addWidget(purpose)
+
+        note = QLabel(supp['note'])
+        note.setStyleSheet(f"color: {COLORS['success']}; font-size: 10px;")
+        rh.addWidget(note)
+        rh.addStretch()
+        return row
+
+    def _make_water_row(self, item: Tuple) -> QFrame:
+        row = QFrame()
+        row.setStyleSheet(f"""
+            QFrame {{ background-color: {COLORS['card']}; border-radius: 6px;
+                      border: 1px solid {COLORS['border']}; }}
+        """)
+        rh = QHBoxLayout(row)
+        rh.setContentsMargins(12, 6, 12, 6)
+        rh.setSpacing(12)
+
+        name = QLabel(item[0])
+        name.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
+        name.setStyleSheet(f"color: {COLORS['text']};")
+        name.setMinimumWidth(100)
+        rh.addWidget(name)
+
+        std = QLabel(item[1])
+        std.setStyleSheet(f"color: {COLORS['accent']}; font-weight: bold; font-size: 11px;")
+        std.setMinimumWidth(120)
+        rh.addWidget(std)
+
+        note = QLabel(item[2])
+        note.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 10px;")
+        rh.addWidget(note)
+        rh.addStretch()
+        return row
+
+    # ── 事件 ──
+
+    def _on_week_changed(self, idx: int):
+        self.current_week = idx + 1
+        # Phase 3 才显示高碳日按钮
+        phase = NutritionParser.get_phase(self.current_week)
+        self.btn_highcarb.setVisible(phase >= 3)
+        if self.current_day_type == 'high_carb' and phase < 3:
+            self.current_day_type = 'training'
+            self.btn_training.setChecked(True)
+        self._refresh_all()
+
+    def _on_day_type_changed(self, day_type: str):
+        self.current_day_type = day_type
+        for btn in [self.btn_training, self.btn_rest, self.btn_highcarb]:
+            btn.setChecked(btn.property('day_type') == day_type)
+        self._refresh_all()
+
+    def _refresh_all(self):
+        phase = NutritionParser.get_phase(self.current_week)
+        info = PHASE_INFO[phase]
+        macros = NutritionParser.get_macros(self.current_week, self.current_day_type)
+        meals = NutritionParser.get_meals()
+        supplements = NutritionParser.get_supplements()
+        hydration = NutritionParser.get_hydration()
+        daily = NutritionParser.get_daily_totals(meals)
+
+        # 阶段标签
+        day_type_name = {'training': '训练日', 'rest': '休息日', 'high_carb': '高碳日'}[self.current_day_type]
+        self.phase_label.setText(
+            f"📍 {info['name']} ({info['weeks']}) — {info['desc']} | 当前: {day_type_name} 营养方案"
+        )
+
+        # 宏量数字卡片
+        macro_keys = [('kcal', 0), ('protein', 1), ('carbs', 2), ('fat', 3)]
+        for key, _ in macro_keys:
+            target = macros[key]
+            actual = daily.get(key, 0) if key in daily else 0
+            panel = self.macro_labels[key]
+            val_label = panel.findChild(QLabel, 'macro_value')
+            cmp_label = panel.findChild(QLabel, 'macro_cmp')
+            if val_label:
+                val_label.setText(str(target))
+
+        self._update_macro_panel('kcal', macros['kcal'], daily.get('kcal', 0), 'kcal')
+        self._update_macro_panel('protein', macros['protein'], daily.get('protein', 0), 'g')
+        self._update_macro_panel('carbs', macros['carbs'], daily.get('carbs', 0), 'g')
+        self._update_macro_panel('fat', macros['fat'], daily.get('fat', 0), 'g')
+
+        self.protein_pct_label.setText(
+            f"蛋白质占比: {macros['protein_pct']}% (目标) | 五餐合计: "
+            f"P{daily['protein']}g C{daily['carbs']}g F{daily['fat']}g = {daily['kcal']}kcal"
+        )
+
+        # 五餐卡片
+        while self.meals_grid.count():
+            item = self.meals_grid.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        for i, meal in enumerate(meals):
+            card = self._make_meal_card(meal)
+            self.meals_grid.addWidget(card, i // 3, i % 3)
+
+        # 五餐合计
+        totals = NutritionParser.get_daily_totals(meals)
+        target_p = macros['protein']
+        diff_p = totals['protein'] - target_p
+        sign = '+' if diff_p > 0 else ''
+        self.total_summary.setText(
+            f"🍽 五餐合计: 蛋白质 {totals['protein']}g (目标 {target_p}g, {sign}{diff_p}g) | "
+            f"碳水 {totals['carbs']}g (目标 {macros['carbs']}g) | "
+            f"脂肪 {totals['fat']}g (目标 {macros['fat']}g) | "
+            f"热量 {totals['kcal']}kcal (目标 {macros['kcal']}kcal)"
+        )
+
+        # 补剂表格
+        while self.supplement_table.layout().count():
+            item = self.supplement_table.layout().takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        for s in supplements:
+            self.supplement_table.layout().addWidget(self._make_supplement_row(s))
+
+        # 饮水控盐
+        while self.water_table.layout().count():
+            item = self.water_table.layout().takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        for w in hydration:
+            self.water_table.layout().addWidget(self._make_water_row(w))
+
+    def _update_macro_panel(self, key: str, target: float, actual: float, unit: str):
+        panel = self.macro_labels[key]
+        val_label = panel.findChild(QLabel, 'macro_value')
+        cmp_label = panel.findChild(QLabel, 'macro_cmp')
+        if val_label:
+            val_label.setText(str(target))
+        if cmp_label:
+            diff = actual - target
+            if unit == 'kcal':
+                diff_str = f"五餐合计: {actual}kcal (求值{target}kcal)"
+            else:
+                diff_str = f"五餐合计: {actual}g (目标{target}g)"
+            cmp_label.setText(diff_str)
