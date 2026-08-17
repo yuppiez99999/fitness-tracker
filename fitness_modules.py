@@ -44,23 +44,23 @@ REPORT_DIR = os.path.join(DATA_DIR, '报告')
 DATA_FILE = os.path.join(DATA_DIR, '体脂体重.txt')
 EXERCISES_JSON = os.path.join(DATA_DIR, 'exercises_matched.json')
 GIF_DIR = os.path.join(DATA_DIR, 'exercises_gif')
-PLAN_MD = os.path.join(DATA_DIR, '12月底塑形冲刺计划.md')
+PLAN_MD = os.path.join(DATA_DIR, '12月底塑形冲刺计划_v2.1_宽背窄腰_执行版.md')
 
 for d in [DATA_DIR, CHART_DIR, REPORT_DIR, GIF_DIR]:
     os.makedirs(d, exist_ok=True)
 
 # 颜色主题(暗色)
 COLORS = {
-    'bg': '#0d1117', 'card': '#161b22', 'border': '#30363d',
-    'text': '#e6edf3', 'subtext': '#8b949e', 'primary': '#58a6ff',
-    'success': '#3fb950', 'warning': '#d29922', 'danger': '#f85149',
-    'purple': '#bc8cff', 'cyan': '#39d2c0', 'accent': '#f0c040',
+    'bg': '#FBF7F0', 'card': '#FFFFFF', 'border': '#E0D8CC',
+    'text': '#2C2416', 'subtext': '#8C8278', 'primary': '#4A8FE7',
+    'success': '#2DA44E', 'warning': '#BF8600', 'danger': '#CF222E',
+    'purple': '#8250DF', 'cyan': '#1B9AAA', 'accent': '#D4A017',
     # v5.9.2 新增特殊主题色
-    'hiit_fg': '#ff6b35',     # HIIT 渐变前景
-    'hiit_bg': '#3a1f15',     # HIIT 渐变背景
-    'liss_fg': '#2ea043',     # LISS 渐变前景
-    'liss_bg': '#102818',     # LISS 渐变背景
-    'rest_fg': '#8957e5',     # 完全休息前景
+    'hiit_fg': '#E85D3A',     # HIIT 渐变前景
+    'hiit_bg': '#FDE8E3',     # HIIT 渐变背景
+    'liss_fg': '#2DA44E',     # LISS 渐变前景
+    'liss_bg': '#E6F4EA',     # LISS 渐变背景
+    'rest_fg': '#8250DF',     # 完全休息前景
 }
 
 # 肌肉群 Emoji 映射 (缺GIF时的占位图标)
@@ -101,6 +101,42 @@ MUSCLE_EMOJI = {
     '默认': '🎯',
 }
 
+# 真空腹训练文字教程 (数据集无此动作, 通过弹窗提供专业指导)
+VACUUM_TUTORIAL = [
+    '选择姿势: 四点支撑（双手双膝着地）或跪姿或站姿, 新手推荐四点支撑, 最容易感知腹横肌。',
+    '深吸一口气, 然后用力呼气, 把肺里所有空气都吐尽, 这是关键的一步 —— 必须完全排空。',
+    '保持呼气末状态, 用力收腹, 想象把肚脐往脊椎方向拉, 同时收紧整个腹部区域（腹横肌收缩）。',
+    '保持收缩状态 15-60 秒, 此期间用胸式呼吸（吸气时胸腔扩张但腹部不要鼓起）, 让腹部持续"内收"。',
+    '放松呼气, 然后重复。每组 60 秒, 每天 3-5 组, 早晚各一次。',
+    '进阶技巧: 保持真空腹时可配合站立/走路, 形成"动态真空腹", 腹横肌刺激翻倍。',
+    '常见错误: ❌ 憋气（会导致血压飙升, 头晕）❌ 用腹直肌发力（应该深层收缩）❌ 腹直肌鼓起（必须内收）。',
+    '⚠ 健康提示: 孕妇、高血压、心脏病患者不宜做; 训练中如感头晕立即停止, 正常呼吸休息。',
+    '预期效果: 研究显示持续 8 周真空腹训练, 腰围可减少 2-3cm (视觉上更窄), 配合体脂降低效果更佳。',
+    '训练时间安排: 早晨起床后空腹（代谢唤醒）+ 训练后（巩固效果）+ 睡前（替代腹部呼吸, 提升睡眠质量）。',
+]
+
+# 其他流程块通用教程 (HIIT/LISS/其他复合训练)
+FLOW_TUTORIAL = {
+    'hiit_loop': [
+        'HIIT（高强度间歇训练）原理: 短时间全力运动 + 短休息, 提升心率至 150-170 bpm。',
+        '每个动作 40 秒全力训练, 20 秒休息, 6 个动作为一组, 4 组循环。',
+        '组间休息 90 秒, 让心率短暂恢复。',
+        '⚠ 安全提示: 心血管疾病患者不宜做, 训练前充分热身, 训练中如感不适立即停止。',
+        '预期效果: HIIT 比 LISS 燃脂效率高 30%, 运动后过量氧耗 (EPOC) 可持续 24 小时。',
+    ],
+    'liss_cardio': [
+        'LISS（低强度稳态有氧）原理: 保持心率在脂肪供能区间 (120-135 bpm), 持续 35-45 分钟。',
+        '推荐项目: 快走、慢跑机、椭圆机、骑车等, 选择能持续 30 分钟以上的低强度活动。',
+        '⚠ 关键: 心率必须稳定在 120-135, 不要跑太快进入无氧区间, 否则燃脂效率反而下降。',
+        '预期效果: 直接燃脂 + 提升心肺基础 + 不易疲劳, 适合每周 2-3 次作为减脂主轴。',
+    ],
+    'flow': [
+        '这是一个训练流程组合, 由多个基础动作组成, 目的是综合刺激多个肌群或达到特定训练目标。',
+        '执行要点: 按顺序完成每个动作, 组间休息根据动作复杂度调整 (30-90 秒)。',
+        '训练前充分热身, 训练后拉伸放松, 避免运动损伤。',
+    ],
+}
+
 # 按目标肌群关键词推断 emoji
 def _emoji_for_target(target: str) -> str:
     """根据目标肌群中英文返回emoji"""
@@ -121,22 +157,23 @@ BODY_COLUMNS = [
     '骨骼肌率(%)', '腰围(cm)', '臀围(cm)'
 ]
 
-# 训练计划结构(20周塑形冲刺, 三阶段周期化, 5-6练/周)
+# 训练计划结构(v2.0宽背窄腰版, 22周塑形冲刺, 三阶段周期化, 6练1休)
+# ★v2.0: 背/胸各一周2次(宽背+清晰胸肌), 固定6练1休(周日休息+真空腹日)
 TRAINING_SCHEDULE = [
-    {'day': '周一', 'title': '胸 + 三头', 'focus': '上胸强化+超级组', 'icon': '💪'},
-    {'day': '周二', 'title': '背 + 二头', 'focus': '宽度+厚度+超级组', 'icon': '🔙'},
-    {'day': '周三', 'title': '腿 + 臀', 'focus': '复合为主+代谢收尾', 'icon': '🦵'},
-    {'day': '周四', 'title': '肩 + 核心', 'focus': '三束刺激+抗旋转', 'icon': '🙆'},
-    {'day': '周五', 'title': '全身HIIT+冲刺', 'focus': 'Tabata循环+代谢冲刺', 'icon': '🔥'},
-    {'day': '周六', 'title': 'LISS+腹肌专项', 'focus': '低强有氧+核心雕刻', 'icon': '🏃'},
-    {'day': '周日', 'title': '完全休息', 'focus': '睡眠>8h 泡脚 按摩', 'icon': '😴'},
+    {'day': '周一', 'title': '背（宽）', 'focus': '引体+高位下拉+单臂划船, 背阔宽度核心', 'icon': '🔙'},
+    {'day': '周二', 'title': '胸（上胸优先）', 'focus': '上斜卧推+平板卧推, 上胸饱满+整体厚度', 'icon': '💪'},
+    {'day': '周三', 'title': '腿（四头为主）', 'focus': '深蹲+前蹲+罗马尼亚硬拉, 大重量复合', 'icon': '🦵'},
+    {'day': '周四', 'title': '背（厚度）+ 二头', 'focus': '俯身杠铃划船+T杆+坐姿划船, 上背厚度', 'icon': '🏋️'},
+    {'day': '周五', 'title': '肩 + 腹', 'focus': '推举+侧平举+抗旋转, 中束宽度+肩腰比', 'icon': '🙆'},
+    {'day': '周六', 'title': '胸+腿泵感（HIIT）', 'focus': '高次泵感+代谢冲刺, 线条雕刻', 'icon': '🔥'},
+    {'day': '周日', 'title': '完全休息 + 真空腹', 'focus': '真空腹 3×30s, 窄腰核心', 'icon': '😴'},
 ]
 
-# 三阶段映射
+# 三阶段映射 (v2.1: 22周 宽背窄腰 执行版)
 PHASE_INFO = {
-    1: {'name': '代谢重建',  'weeks': 'W1-W6',   'desc': '中等容量+动作优化, 建立代谢压力适应'},
-    2: {'name': '体成分重组','weeks': 'W7-W14',  'desc': '容量递增+晨间空腹快走, 肌肉保护减脂'},
-    3: {'name': '线条雕刻',  'weeks': 'W15-W20', 'desc': '峰值容量+Tabata HIIT+碳水循环, 巅峰塑形'},
+    1: {'name': '代谢重建',  'weeks': 'W1-W6',   'desc': '高容量背训练+动作固化, 建立代谢压力适应, 热身组强制执行'},
+    2: {'name': '体成分重组','weeks': 'W7-W14',  'desc': '容量递进+1-2组/周(上限16组), 真空腹每日化(3×40s), 有氧递进HIIT 15→20+LISS 35→40min'},
+    3: {'name': '线条雕刻',  'weeks': 'W15-W22', 'desc': '碳水循环(高碳日背/腿 300g→中碳日胸/肩 200g→低碳日休息 130g), 泵感日+峰值减量'},
 }
 
 
@@ -149,8 +186,8 @@ class BodyDataModel:
 
     def __init__(self):
         self.df = self._load()
-        self.target_weight = 65.5  # 目标体重(kg) [新计划: 12月底体成分重组]
-        self.target_bodyfat = 15.0
+        self.target_weight = 65.0  # 目标体重(kg) [v2.0宽背窄腰: 12月底64.5-65.5]
+        self.target_bodyfat = 13.0
 
     def _load(self) -> pd.DataFrame:
         """加载体测数据,兼容旧格式(3列)和新格式(12列)"""
@@ -409,56 +446,52 @@ class TrainingPlanParser:
     # ──────────────── 解析引擎 ────────────────
 
     def _parse_all(self):
+        """v2.1 格式: ## 五、Phase 1 训练明细 — ### 周X 日标题 + 3列表格(动作|组×次|要点)"""
         if not self.raw_text:
             return
 
         lines = self.raw_text.split('\n')
-        in_ch3 = False
+        in_section = 0      # 0=跳过, 5=Chapter5训练, 6=Chapter6概要
         current_day = None
-        current_phase = 0
-        parsed = {}      # {day: [exercises]} for current phase
-        table_header = []  # tracks current table column names
-        note_buf = []    # Phase 2/3 note buffer
+        parsed = {}
+        table_header = []
 
         for i, line in enumerate(lines):
             stripped = line.strip()
 
             # ── 章节边界 ──
-            if stripped.startswith('## 三、'):
-                in_ch3 = True; continue
-            if in_ch3 and (stripped.startswith('## 四、') or stripped.startswith('## 五、')
-                           or stripped.startswith('## 六、') or stripped.startswith('## 七、')):
+            if stripped.startswith('## 五、'):
+                in_section = 5; continue
+            if in_section == 5 and stripped.startswith('## 六、'):
+                # 保存 Phase 1
+                if parsed:
+                    self._phase_exercises[1] = dict(parsed)
+                in_section = 6; continue
+            if in_section == 6 and stripped.startswith('## 七、'):
                 break
-            if not in_ch3:
+            if in_section == 0:
                 continue
 
-            # ── 阶段切换 ──
-            phase_match = self._detect_phase(stripped)
-            if phase_match:
-                if current_phase > 0 and parsed:
-                    self._phase_exercises[current_phase] = dict(parsed)
-                current_phase = phase_match
-                current_day = None
-                parsed = {}
-                table_header = []
-                note_buf = []
-                # Phase 2/3 后收集调整说明(直到下一个 #### 或 ## )
-                if current_phase >= 2:
-                    self._collect_phase_notes(current_phase, lines, i)
+            # ── Chapter 6: Phase 2/3 概要收集 (v2.1: 粗体格式 **Phase N**) ──
+            if in_section == 6:
+                if stripped.startswith('**Phase 2') or stripped.startswith('### Phase 2'):
+                    self._collect_phase_notes(2, lines, i)
+                elif stripped.startswith('**Phase 3') or stripped.startswith('### Phase 3'):
+                    self._collect_phase_notes(3, lines, i)
                 continue
 
-            # ── 日期检测 (#### 周一: ... ) ──
+            # ── Chapter 5: 日期检测 (### 周一 · ... ) ──
             day_found = False
             for dn in self.DAY_NAMES:
-                if stripped.startswith(f'#### {dn}'):
+                if stripped.startswith(f'### {dn}') and ('·' in stripped or '★' in stripped or '—' in stripped):
                     current_day = dn
                     table_header = []
                     day_found = True
                     break
             if day_found:
                 continue
-            # 非日期的 #### 行重置 current_day
-            if stripped.startswith('####'):
+            # 非日期的 ### 行重置
+            if stripped.startswith('###'):
                 current_day = None
                 table_header = []
                 continue
@@ -466,9 +499,8 @@ class TrainingPlanParser:
             if current_day is None or current_day == '周日':
                 continue
 
-            # ── 表格行解析 ──
+            # ── 表格行解析 (3列: 动作 | 组×次 | 要点) ──
             if not stripped.startswith('|') or '---' in stripped:
-                # 表格结束行
                 if not stripped.startswith('|') and table_header:
                     table_header = []
                 continue
@@ -479,8 +511,8 @@ class TrainingPlanParser:
 
             first_cell = cells[0]
 
-            # 表头行
-            if first_cell in ('序号', '循环', '项目', '部位'):
+            # 表头行: v2.1 第一列是 "动作"
+            if first_cell == '动作':
                 table_header = cells
                 continue
             if not table_header:
@@ -489,97 +521,103 @@ class TrainingPlanParser:
             # ── 分格式解析 ──
             parsed.setdefault(current_day, [])
 
-            if first_cell.isdigit():
-                # 5列力量训练: | 序号 | 动作 | 组×次 | 重量(%1RM) | 重点提示 |
-                parsed[current_day].append({
-                    'name': cells[1] if len(cells) > 1 else '',
-                    'sets': cells[2] if len(cells) > 2 else '',
-                    'target': cells[3] if len(cells) > 3 else '',
-                    'tip': cells[4] if len(cells) > 4 else '',
-                    'media_id': '',
-                })
-            elif first_cell == '收尾':
-                # 收尾行
-                parsed[current_day].append({
-                    'name': cells[1] if len(cells) > 1 else '',
-                    'sets': cells[2] if len(cells) > 2 else '',
-                    'target': '收尾',
-                    'tip': cells[3] if len(cells) > 3 else '',
-                    'media_id': '',
-                })
+            if first_cell == '收尾':
+                ex_name = cells[1] if len(cells) > 1 else ''
+                ex_tip = cells[2] if len(cells) > 2 else ''
+                if '真空腹' in ex_name:
+                    if '+' in ex_name:
+                        # 拆分: 非真空腹动作 + 真空腹流程块
+                        non_vac = [p.strip().replace('**', '') for p in ex_name.split('+')
+                                   if p.strip() and '真空腹' not in p]
+                        if non_vac:
+                            parsed[current_day].append({
+                                'name': non_vac[0], 'sets': '',
+                                'target': '收尾', 'tip': ex_tip, 'media_id': '',
+                            })
+                        vac_sets = ' '.join(p.strip() for p in ex_name.split('+') if '真空腹' in p)
+                        parsed[current_day].append({
+                            'name': vac_sets if vac_sets else '真空腹', 'sets': '',
+                            'target': '窄腰', 'tip': '',
+                            'media_id': '',
+                            'is_workout_block': True, 'block_type': 'flow',
+                            'duration': '', 'sub_info': '腹横肌收缩训练, 缩小腰围最有效的非有氧手段',
+                        })
+                    else:
+                        parsed[current_day].append({
+                            'name': ex_name, 'sets': '',
+                            'target': '窄腰', 'tip': ex_tip, 'media_id': '',
+                            'is_workout_block': True, 'block_type': 'flow',
+                            'duration': '', 'sub_info': '腹横肌收缩训练, 缩小腰围最有效的非有氧手段',
+                        })
+                else:
+                    parsed[current_day].append({
+                        'name': ex_name, 'sets': cells[1] if len(cells) > 1 else '',
+                        'target': '收尾', 'tip': ex_tip, 'media_id': '',
+                    })
             elif first_cell == '热身':
                 parsed[current_day].append({
                     'name': cells[1] if len(cells) > 1 else '动态热身',
-                    'sets': '热身',
-                    'target': '',
-                    'tip': cells[2] if len(cells) > 2 else '',
-                    'media_id': '',
-                    'is_workout_block': True,
-                    'block_type': 'flow',
-                    'duration': '5-8分钟',
-                    'sub_info': '关节绕环+空杆激活',
+                    'sets': '热身', 'target': '',
+                    'tip': cells[2] if len(cells) > 2 else '', 'media_id': '',
+                    'is_workout_block': True, 'block_type': 'flow',
+                    'duration': '5-8分钟', 'sub_info': '关节绕环+空杆激活',
                 })
             elif first_cell.startswith('循环'):
                 parsed[current_day].append({
                     'name': cells[1] if len(cells) > 1 else 'HIIT循环',
-                    'sets': '4循环',
-                    'target': 'HIIT',
-                    'tip': cells[2] if len(cells) > 2 else '',
-                    'media_id': '',
-                    'is_workout_block': True,
-                    'block_type': 'hiit_loop',
+                    'sets': '4循环', 'target': 'HIIT',
+                    'tip': cells[2] if len(cells) > 2 else '', 'media_id': '',
+                    'is_workout_block': True, 'block_type': 'hiit_loop',
                     'duration': cells[2] if len(cells) > 2 else '约15分钟',
-                    'sub_info': '6动作 × 40秒训练 / 20秒休息',
+                    'sub_info': '6动作 x 40秒训练 / 20秒休息',
                 })
-            elif first_cell == '动作':
-                # HIIT 动作清单: "壶铃摆荡/波比跳/登山跑/..."
-                for act in (cells[1] if len(cells) > 1 else '').split('/'):
-                    act = act.strip()
-                    if act:
-                        parsed[current_day].append({
-                            'name': act, 'sets': '40s+20s',
-                            'target': 'HIIT', 'tip': 'Tabata全身',
-                            'media_id': '',
-                        })
             elif first_cell == '拉伸':
                 parsed[current_day].append({
                     'name': '全身拉伸', 'sets': cells[1] if len(cells) > 1 else '10分钟',
-                    'target': '拉伸', 'tip': cells[2] if len(cells) > 2 else '',
-                    'media_id': '',
-                    'is_workout_block': True,
-                    'block_type': 'flow',
+                    'target': '拉伸', 'tip': cells[2] if len(cells) > 2 else '', 'media_id': '',
+                    'is_workout_block': True, 'block_type': 'flow',
                     'duration': cells[1] if len(cells) > 1 else '10分钟',
                     'sub_info': '静态拉伸·肌筋膜放松',
                 })
             elif first_cell == '快走/椭圆机':
                 parsed[current_day].append({
                     'name': '快走/椭圆机 (LISS)', 'sets': cells[1] if len(cells) > 1 else '',
-                    'target': 'LISS有氧 心率120-135',
-                    'tip': cells[2] if len(cells) > 2 else '',
+                    'target': 'LISS有氧 心率120-135', 'tip': cells[2] if len(cells) > 2 else '',
                     'media_id': '',
-                    'is_workout_block': True,
-                    'block_type': 'liss_cardio',
+                    'is_workout_block': True, 'block_type': 'liss_cardio',
                     'duration': cells[1] if len(cells) > 1 else '35分钟',
                     'sub_info': '心率120-135 bpm · 燃脂神经恢复',
                 })
             else:
-                # 通用3列格式 (LISS腹肌日)
-                name = cells[0]
-                if name and name not in ('项目',) and not name.startswith('-'):
+                # 普通动作行: | 动作名 | 组×次 | 要点 |
+                ex_name = first_cell
+                if '真空腹' in ex_name:
                     parsed[current_day].append({
-                        'name': name,
+                        'name': ex_name,
+                        'sets': cells[1] if len(cells) > 1 else '',
+                        'target': '窄腰',
+                        'tip': cells[2] if len(cells) > 2 else '',
+                        'media_id': '',
+                        'is_workout_block': True, 'block_type': 'flow',
+                        'duration': cells[1] if len(cells) > 1 else '',
+                        'sub_info': '腹横肌收缩训练, 缩小腰围最有效的非有氧手段',
+                    })
+                else:
+                    parsed[current_day].append({
+                        'name': ex_name,
                         'sets': cells[1] if len(cells) > 1 else '',
                         'target': '',
                         'tip': cells[2] if len(cells) > 2 else '',
                         'media_id': '',
                     })
 
-        # 保存最后一个阶段
-        if current_phase > 0 and parsed:
-            self._phase_exercises[current_phase] = dict(parsed)
+        # 如果没有通过 Chapter 5→6 边界保存, 兜底保存 Phase 1
+        if parsed and 1 not in self._phase_exercises:
+            self._phase_exercises[1] = dict(parsed)
 
     @staticmethod
     def _detect_phase(stripped: str) -> int:
+        # v2.1: Phase 1 明细直接在 ## 五、 下, 无需 ### 子标题检测, 此方法保留兼容
         if stripped.startswith('### 3.1'):
             return 1
         if stripped.startswith('### 3.2'):
@@ -589,17 +627,17 @@ class TrainingPlanParser:
         return 0
 
     def _collect_phase_notes(self, phase: int, lines: List[str], start_idx: int):
-        """收集 Phase 2/3 的调整说明(从 phase 标题后到下一个 #### 或 ###)"""
+        """从 Phase 2/3 概要(## 六、)标题后收集调整说明, 直到下一个 Phase 标题 或 ## 章节"""
         notes = []
         for j in range(start_idx + 1, len(lines)):
             s = lines[j].strip()
             if not s:
                 continue
-            if s.startswith('####') or s.startswith('### 3.') or s.startswith('## '):
+            # 停止条件: 下一个 Phase 粗体/标题 或 ## 章节
+            if s.startswith('**Phase') or s.startswith('### Phase') or s.startswith('## '):
                 break
-            if s.startswith('1. **') or s.startswith('2. **') or s.startswith('3. **') or \
-               s.startswith('4. **') or s.startswith('5. **') or s.startswith('6. **') or \
-               s.startswith('- **') or s.startswith('**'):
+            if s.startswith('- ') or s.startswith('**') or \
+               any(s.startswith(f'{n}. **') for n in range(1, 10)):
                 notes.append(s)
         if notes:
             self._phase_notes[phase] = notes
@@ -612,24 +650,26 @@ class TrainingPlanParser:
 class NutritionParser:
     """从计划文档提取三阶段营养方案 + 补剂 + 饮水"""
 
-    # 三阶段热量与宏量数据(来自计划 2.1 节)
+    # 三阶段热量与宏量数据(v2.1宽背窄腰执行版, 热量提升+碳水循环优化)
     PHASE_MACROS = {
-        1: {  # 代谢重建期
-            'training':   {'kcal': 2100, 'protein': 160, 'carbs': 230, 'fat': 60, 'protein_pct': 30},
-            'rest':       {'kcal': 1900, 'protein': 155, 'carbs': 180, 'fat': 60, 'protein_pct': 33},
+        1: {  # 代谢重建期 (v2.1: 2300/2100, 缺口~200-300kcal)
+            'training':   {'kcal': 2300, 'protein': 170, 'carbs': 260, 'fat': 60, 'protein_pct': 30},
+            'rest':       {'kcal': 2100, 'protein': 165, 'carbs': 210, 'fat': 60, 'protein_pct': 31},
         },
-        2: {  # 体成分重组期
-            'training':   {'kcal': 2050, 'protein': 165, 'carbs': 220, 'fat': 55, 'protein_pct': 32},
-            'rest':       {'kcal': 1800, 'protein': 160, 'carbs': 160, 'fat': 55, 'protein_pct': 36},
+        2: {  # 体成分重组期 (v2.1: 2200/2000, 缺口~200-300kcal)
+            'training':   {'kcal': 2200, 'protein': 170, 'carbs': 240, 'fat': 55, 'protein_pct': 31},
+            'rest':       {'kcal': 2000, 'protein': 165, 'carbs': 190, 'fat': 55, 'protein_pct': 33},
         },
-        3: {  # 线条雕刻期 (标准训练日 + 高碳日 + 休息日)
-            'training':   {'kcal': 2000, 'protein': 165, 'carbs': 200, 'fat': 50, 'protein_pct': 33},
-            'high_carb':  {'kcal': 2300, 'protein': 155, 'carbs': 280, 'fat': 55, 'protein_pct': 27},
-            'rest':       {'kcal': 1750, 'protein': 160, 'carbs': 140, 'fat': 50, 'protein_pct': 37},
+        3: {  # 线条雕刻期 (碳水循环: 高碳日背/腿350g, 中碳日胸/肩240g, 低碳日泵感+休息150g)
+            'training':   {'kcal': 2200, 'protein': 170, 'carbs': 240, 'fat': 55, 'protein_pct': 31},  # 中碳日 fallback
+            'high_carb':  {'kcal': 2500, 'protein': 170, 'carbs': 350, 'fat': 60, 'protein_pct': 27},
+            'medium':     {'kcal': 2200, 'protein': 170, 'carbs': 240, 'fat': 55, 'protein_pct': 31},
+            'low_carb':   {'kcal': 1900, 'protein': 165, 'carbs': 150, 'fat': 50, 'protein_pct': 35},
+            'rest':       {'kcal': 1900, 'protein': 165, 'carbs': 150, 'fat': 50, 'protein_pct': 35},
         },
     }
 
-    # 每日五餐 (Phase 1 训练日基准 2100kcal, 来自计划 2.2 节)
+    # 每日五餐 (v2.0 Phase 1 训练日基准 2050kcal, 蛋白目标165g)
     DAILY_MEALS = [
         {'name': '早餐 (07:00)', 'kcal': 450, 'protein': 38, 'carbs': 43, 'fat': 22,
          'items': [
@@ -657,10 +697,11 @@ class NutritionParser:
              ('全麦面包', '2片', '30g碳水, 6g蛋白'),
              ('无糖豆浆', '200ml', '3g碳水, 6g蛋白'),
          ]},
-        {'name': '训练后 (19:00)', 'kcal': 310, 'protein': 26, 'carbs': 29, 'fat': 1,
+        {'name': '训练后 (19:00)', 'kcal': 310, 'protein': 27, 'carbs': 29, 'fat': 1,
          'items': [
              ('酵母蛋白粉', '35g', '25g蛋白, 4g碳水'),
              ('香蕉', '1根', '25g碳水, 1g蛋白'),
+             ('亮氨酸粉', '2-3g', '补偿酵母蛋白亮氨酸'),
          ]},
         {'name': '晚餐 (20:30)', 'kcal': 290, 'protein': 25, 'carbs': 8, 'fat': 9,
          'items': [
@@ -670,32 +711,37 @@ class NutritionParser:
          ]},
     ]
 
-    # 补剂方案 (来自计划 2.5 节)
+    # 补剂方案 (v2.0宽背窄腰版, 新增乳清/CLA/电解质, 维D3提升)
     SUPPLEMENTS = [
-        {'name': '酵母蛋白粉',   'dose': '35g',       'timing': '训练后30分钟内',     'purpose': '蛋白质补充',         'note': '从30g提升'},
+        {'name': '酵母蛋白粉',   'dose': '35g',       'timing': '训练后30分钟内',     'purpose': '蛋白质补充',         'note': '维持'},
+        {'name': '乳清蛋白粉',   'dose': '30g',       'timing': '训练前30分钟',       'purpose': '弥补酵母蛋白亮氨酸不足', 'note': '★新增,训练前补充'},
         {'name': '肌酸单水合物', 'dose': '5g/天',     'timing': '训练后随蛋白粉',     'purpose': '力量+肌肉饱满度',    'note': '维持'},
-        {'name': '亮氨酸粉',     'dose': '2-3g',      'timing': '训练后(混蛋白粉)',   'purpose': '补偿酵母蛋白亮氨酸', 'note': '★强烈建议,日均~1元'},
-        {'name': '鱼油',         'dose': '2-3g',      'timing': '随餐',               'purpose': '抗炎+减脂辅助',      'note': '维持'},
-        {'name': '维生素D3',     'dose': '2000IU',    'timing': '早餐',               'purpose': '睾酮支持+免疫功能',  'note': '新增建议'},
+        {'name': '亮氨酸粉',     'dose': '3-4g',      'timing': '训练后(混蛋白粉)',   'purpose': 'MPS最大化',          'note': '★v2.0从2-3g提升'},
+        {'name': '鱼油',         'dose': '3g',        'timing': '随餐',               'purpose': '抗炎+减脂辅助',      'note': '维持'},
+        {'name': 'CLA共轭亚油酸', 'dose': '3g',       'timing': '随餐',               'purpose': '减少腹部顽固脂肪',   'note': '★新增,窄腰针对性'},
+        {'name': '维生素D3',     'dose': '4000IU',    'timing': '早餐',               'purpose': '睾酮支持+免疫',      'note': '★v2.0提升到4000IU(冬季阳光少)'},
         {'name': '锌镁',         'dose': '30mg+450mg','timing': '睡前1h',             'purpose': '睡眠+恢复',          'note': '维持'},
+        {'name': '电解质',       'dose': '含钾钠镁',   'timing': '高碳日训练中',       'purpose': '防抽筋+维持水合',    'note': '★新增,高碳日专用'},
     ]
 
-    # 饮水与控盐 (来自计划 2.6 节)
+    # 饮水与控盐 (v2.0窄腰版: 饮水提升, 盐摄入降低)
     HYDRATION = [
-        ('总饮水量',     '3.5-4.0L/天', '训练日偏多'),
-        ('晨起',          '500ml温水',   '代谢唤醒'),
-        ('训练中',        '600-800ml',   '每15分钟150-200ml'),
-        ('肌酸补水',      '额外+300ml/天', '肌酸需充足水合'),
-        ('盐摄入',        '4-5g/天',     '比原计划降低1g,减少皮下水分'),
+        ('总饮水量',     '4.0-4.5L/天', 'v2.0提升0.5L帮助代谢'),
+        ('晨起',          '500ml温水+柠檬', '代谢唤醒'),
+        ('训练中',        '800-1000ml', '每15分钟200ml'),
+        ('肌酸补水',      '额外+500ml/天', '肌酸需充足水合'),
+        ('盐摄入',        '<4g/天',     '★v2.0从4-5g降至<4g,控皮下水分'),
+        ('周日控盐日',    '<3g/天',     '★窄腰日严格控盐'),
         ('睡前2h',        '限水',         '避免夜起'),
-        ('钠控制',        '避免加工食品', '肌肉线条显现关键'),
+        ('加工食品',      '完全避免',     '★香肠腊肉酱料一律不碰'),
     ]
 
-    # Phase 3 高碳日说明
+    # Phase 3 高碳日说明 (v2.1: 高碳日350g碳水专为大肌群背/腿日)
     HIGH_CARB_INFO = (
-        '高碳日安排: 腿日和背日(大肌群训练日)\n'
-        '调整: 早餐燕麦→60g / 午餐糙米饭→180g / '
-        '训练后+葡萄糖粉15g+额外香蕉1根 / 晚餐+红薯100g'
+        '高碳日安排(碳水350g): 周四背日 + 周三腿日\n'
+        '调整: 早餐燕麦→60g / 训练前+香蕉1根+燕麦20g / '
+        '训练中+含30g麦芽糊精运动饮料 / 训练后+葡萄糖粉15g+额外香蕉 / 晚餐+红薯100g\n'
+        '中碳日(碳水240g): 周一背日 + 周二上胸日 + 周五肩日 · 低碳日(碳水150g): 周六胸腿泵感 + 周日休息'
     )
 
     @classmethod
@@ -1592,18 +1638,18 @@ class TrainingPlanPage(QWidget):
 
         # 顶部
         top = QHBoxLayout()
-        title = QLabel('📅 20周塑形冲刺 — 三阶段周期化')
+        title = QLabel('📅 22周塑形冲刺 — 宽背窄腰 · 三阶段周期化')
         title.setFont(QFont('Microsoft YaHei', 16, QFont.Bold))
         title.setStyleSheet(f"color: {COLORS['primary']};")
         top.addWidget(title)
         top.addStretch()
 
-        # 周次选择 (20周)
+        # 周次选择 (22周)
         self.combo_week = QComboBox()
         self.combo_week.setMinimumWidth(220)
         self.combo_week.setSizeAdjustPolicy(QComboBox.AdjustToMinimumContentsLengthWithIcon)
         week_labels = []
-        for w in range(1, 21):
+        for w in range(1, 23):
             p = TrainingPlanParser.get_phase(w)
             phase_label = PHASE_INFO[p]['name']
             week_labels.append(f'第{w}周 [{phase_label}]')
@@ -1794,7 +1840,7 @@ class TrainingPlanPage(QWidget):
         }
 
     def _make_workout_block(self, ex: Dict) -> QFrame:
-        """v5.9.2: HIIT循环 / LISS流程 / 复合动作 紧凑流程块(非可点击动作卡)"""
+        """v5.9.2: HIIT循环 / LISS流程 / 复合动作 紧凑流程块(窄腰/真空腹可点击查看教程)"""
         block_type = ex.get('block_type', 'flow')  # 'hiit_loop' | 'liss_cardio' | 'flow'
         duration = ex.get('duration', '')
         sub = ex.get('sub_info', '')
@@ -1806,34 +1852,31 @@ class TrainingPlanPage(QWidget):
                 border: 1px dashed {COLORS['primary']};
                 border-radius: 8px;
             }}
+            QFrame:hover {{
+                background-color: {COLORS['card']};
+                border: 1px dashed {COLORS['accent']};
+            }}
         """)
+
+        if block_type == 'hiit_loop':
+            ic = '🔥'; main_color = COLORS['hiit_fg']; lbl_sub_text = sub or '40秒训练 / 20秒休息'
+        elif block_type == 'liss_cardio':
+            ic = '🚶'; main_color = COLORS['liss_fg']; lbl_sub_text = sub or '心率120-135 · 低强稳态'
+        else:
+            ic = '📋'; main_color = COLORS['cyan']; lbl_sub_text = sub or ''
+
+        ic_lbl = QLabel(ic); ic_lbl.setStyleSheet("font-size: 16px; background: transparent;")
+        lbl_main = QLabel(ex.get('name', '训练流程'))
+        lbl_main.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
+        lbl_main.setStyleSheet(f"color: {main_color}; background: transparent;")
+        lbl_sub = QLabel(lbl_sub_text)
+        lbl_sub.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px; background: transparent;")
+
         hl = QHBoxLayout(block)
         hl.setContentsMargins(10, 6, 10, 6)
         hl.setSpacing(8)
+        hl.addWidget(ic_lbl)
 
-        if block_type == 'hiit_loop':
-            ic = QLabel('🔥'); ic.setStyleSheet("font-size: 16px; background: transparent;")
-            lbl_main = QLabel(ex.get('name', 'HIIT循环'))
-            lbl_main.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
-            lbl_main.setStyleSheet(f"color: {COLORS['hiit_fg']}; background: transparent;")
-            lbl_sub = QLabel(sub or '40秒训练 / 20秒休息')
-            lbl_sub.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px; background: transparent;")
-        elif block_type == 'liss_cardio':
-            ic = QLabel('🚶'); ic.setStyleSheet("font-size: 16px; background: transparent;")
-            lbl_main = QLabel(ex.get('name', 'LISS有氧'))
-            lbl_main.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
-            lbl_main.setStyleSheet(f"color: {COLORS['liss_fg']}; background: transparent;")
-            lbl_sub = QLabel(sub or '心率120-135 · 低强稳态')
-            lbl_sub.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px; background: transparent;")
-        else:
-            ic = QLabel('📋'); ic.setStyleSheet("font-size: 16px; background: transparent;")
-            lbl_main = QLabel(ex.get('name', '训练流程'))
-            lbl_main.setFont(QFont('Microsoft YaHei', 10, QFont.Bold))
-            lbl_main.setStyleSheet(f"color: {COLORS['cyan']}; background: transparent;")
-            lbl_sub = QLabel(sub or '')
-            lbl_sub.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px; background: transparent;")
-
-        hl.addWidget(ic)
         col = QVBoxLayout(); col.setSpacing(0)
         col.addWidget(lbl_main); col.addWidget(lbl_sub)
         col_w = QWidget(); col_w.setStyleSheet("background: transparent;"); col_w.setLayout(col)
@@ -1846,7 +1889,81 @@ class TrainingPlanPage(QWidget):
                 f"background-color: {COLORS['card']}; border-radius: 8px; padding: 3px 9px;"
             )
             hl.addWidget(dur_lbl)
+
+        # v2.0: 流程块支持点击查看教程 (真空腹等专项训练的文字教程)
+        block.setCursor(Qt.PointingHandCursor)
+        # 透传点击事件给所有子控件
+        handler = lambda e, data=ex: self._show_flow_detail(data)
+        block.mousePressEvent = handler
+        for child in block.findChildren(QWidget):
+            child.setCursor(Qt.PointingHandCursor)
+            child.mousePressEvent = handler
         return block
+
+    def _show_flow_detail(self, ex: Dict):
+        """v2.0: 流程块详情弹窗 — 真空腹/HIIT/LISS 等文字教程"""
+        dlg = QDialog(self)
+        name = ex.get('name', '训练流程')
+        dlg.setWindowTitle(f'📋 {name} — 详细教程')
+        dlg.setMinimumSize(620, 540)
+        dlg.resize(680, 600)
+        dlg.setStyleSheet(f"background-color: {COLORS['bg']}; color: {COLORS['text']};")
+        lay = QVBoxLayout(dlg)
+        lay.setContentsMargins(20, 16, 20, 16)
+        lay.setSpacing(12)
+
+        # 标题
+        title = QLabel(f'📋 {name}')
+        title.setFont(QFont('Microsoft YaHei', 15, QFont.Bold))
+        title.setStyleSheet(f"color: {COLORS['primary']};")
+        lay.addWidget(title)
+
+        # 副标题
+        sub_info = ex.get('sub_info', '')
+        if sub_info:
+            sub = QLabel(sub_info)
+            sub.setStyleSheet(f"color: {COLORS['accent']}; font-size: 11px;")
+            sub.setWordWrap(True)
+            lay.addWidget(sub)
+
+        # 分隔
+        sep = QFrame(); sep.setFrameShape(QFrame.HLine)
+        sep.setStyleSheet(f"color: {COLORS['border']};")
+        lay.addWidget(sep)
+
+        # 教程内容
+        tutorial = VACUUM_TUTORIAL if '真空腹' in name else FLOW_TUTORIAL.get(ex.get('block_type', 'flow'), FLOW_TUTORIAL['flow'])
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
+        body = QWidget()
+        body.setStyleSheet("background: transparent;")
+        bl = QVBoxLayout(body)
+        bl.setContentsMargins(0, 4, 0, 4)
+        bl.setSpacing(8)
+        for i, step in enumerate(tutorial, 1):
+            row = QLabel(f'{i}. {step}')
+            row.setStyleSheet(f"color: {COLORS['text']}; font-size: 12px; padding: 4px 0;")
+            row.setWordWrap(True)
+            bl.addWidget(row)
+        bl.addStretch()
+        scroll.setWidget(body)
+        lay.addWidget(scroll, stretch=1)
+
+        # 关闭按钮
+        btn_row = QHBoxLayout()
+        btn_row.addStretch()
+        btn_close = QPushButton('关闭')
+        btn_close.setStyleSheet(
+            f"QPushButton {{ background-color: {COLORS['primary']}; color: white; "
+            f"border-radius: 4px; padding: 6px 20px; font-weight: bold; }}"
+            f"QPushButton:hover {{ background-color: #1890FF; }}"
+        )
+        btn_close.clicked.connect(dlg.accept)
+        btn_row.addWidget(btn_close)
+        lay.addLayout(btn_row)
+
+        dlg.exec()
 
     def _make_exercise_button(self, ex: Dict) -> QFrame:
         name = ex.get('name', '')
@@ -1987,32 +2104,49 @@ class TrainingPlanPage(QWidget):
         return container
 
     def _fuzzy_match_exercise(self, name: str) -> Optional[Dict]:
-        """按名称模糊匹配: 取前2-3个关键词搜索, 取第一个结果"""
+        """按名称模糊匹配: 剥离括号/数字/特殊格式/超级组标记, 取第一个有效匹配"""
         if not name:
             return None
-        # 提取核心关键词 (去括号、去特殊格式、去数字和时长单位后缀)
-        core = name.replace('(', ' ').replace('（', ' ').replace(')', ' ').replace('）', ' ')
-        core = core.replace(' 超级组', '').replace('+', ' ')
-        # 去除 "2分钟" "3秒" "4组" 等数字+单位尾巴
         import re
-        core = re.sub(r'\d+\s*(分钟|分|秒|组|次|圈|轮|x|X)?\s*$', '', core)
-        core = core.strip()
-        # 直接精确搜完整核心名
-        if core:
-            results = self.lib.search(core)
-            if results:
-                return results[0]
-        # 取前2-3个词
+        # 步骤1: 完全删除括号及其内部内容
+        core = re.sub(r'[（(][^）)]*[）)]', '', name)
+        # 步骤2: 去除 ** 加粗标记 (来自markdown)和"超级组"/"循环"标记
+        core = core.replace('**', '').replace('超级组', '').replace('循环', '')
+        # 步骤3: 把 + 替换为空格
+        core = core.replace('+', ' ')
+        # 步骤4: 去除数字尾巴 ("2分钟"/"3秒"/"3×12"等)
+        core = re.sub(r'\d+\s*[°]?\s*(分钟|分|秒|组|次|圈|轮|x|X|秒)?\s*$', '', core)
+        # 步骤5: 压缩多余空格
+        core = re.sub(r'\s+', ' ', core).strip()
+        # 步骤6: 去掉残留的数字和乘号
+        core = re.sub(r'[\d×x\s]+$', '', core).strip()
+
+        # 优先级1: 用前 2-3 个关键词搜索
         words = core.split()
         for n_words in [3, 2, 1]:
             if len(words) >= n_words:
                 kw = ' '.join(words[:n_words])
                 results = self.lib.search(kw)
-                if results:
-                    return results[0]
-        # 直接搜完整名称
-        results = self.lib.search(name)
-        return results[0] if results else None
+                for r in results:
+                    if self.lib.has_gif(r.get('media_id', '')):
+                        return r
+
+        # 优先级2: 用完整核心名搜
+        if core:
+            results = self.lib.search(core)
+            for r in results:
+                if self.lib.has_gif(r.get('media_id', '')):
+                    return r
+
+        # 优先级3: 拆分 + 后的多个动作名, 分别尝试匹配
+        if '+' in name:
+            for part in re.split(r'\s*\+\s*', name):
+                part = part.strip().replace('**', '').replace('超级组', '')
+                ed = self.lib.get_by_name(part) or self._fuzzy_match_exercise(part)
+                if ed and self.lib.has_gif(ed.get('media_id', '')):
+                    return ed
+
+        return None
 
     def _show_exercise(self, ex: Dict):
         dlg = ExerciseDetailDialog(ex, self.lib, self)
@@ -2044,12 +2178,12 @@ class NutritionPage(QWidget):
         top.addWidget(title)
         top.addStretch()
 
-        # 周次
+        # 周次 (22周)
         self.combo_week = QComboBox()
         self.combo_week.setMinimumWidth(220)
         self.combo_week.setSizeAdjustPolicy(QComboBox.AdjustToMinimumContentsLengthWithIcon)
         week_labels = []
-        for w in range(1, 21):
+        for w in range(1, 23):
             p = NutritionParser.get_phase(w)
             phase_label = PHASE_INFO[p]['name']
             week_labels.append(f'第{w}周 [{phase_label}]')
@@ -2059,12 +2193,14 @@ class NutritionPage(QWidget):
         self.combo_week.currentIndexChanged.connect(self._on_week_changed)
         top.addWidget(self.combo_week)
 
-        # 日类型切换
+        # 日类型切换 (v2.0 新增中碳日)
         self.btn_training = self._make_type_btn('🏋 训练日', 'training', True)
         self.btn_rest = self._make_type_btn('😴 休息日', 'rest', False)
+        self.btn_medium = self._make_type_btn('🟡 中碳日', 'medium', False)
         self.btn_highcarb = self._make_type_btn('⚡ 高碳日', 'high_carb', False)
         top.addWidget(self.btn_training)
         top.addWidget(self.btn_rest)
+        top.addWidget(self.btn_medium)
         top.addWidget(self.btn_highcarb)
         outer.addLayout(top)
 
@@ -2326,17 +2462,18 @@ class NutritionPage(QWidget):
 
     def _on_week_changed(self, idx: int):
         self.current_week = idx + 1
-        # Phase 3 才显示高碳日按钮
+        # Phase 3 才显示中碳日/高碳日按钮
         phase = NutritionParser.get_phase(self.current_week)
         self.btn_highcarb.setVisible(phase >= 3)
-        if self.current_day_type == 'high_carb' and phase < 3:
+        self.btn_medium.setVisible(phase >= 3)
+        if self.current_day_type in ('high_carb', 'medium') and phase < 3:
             self.current_day_type = 'training'
             self.btn_training.setChecked(True)
         self._refresh_all()
 
     def _on_day_type_changed(self, day_type: str):
         self.current_day_type = day_type
-        for btn in [self.btn_training, self.btn_rest, self.btn_highcarb]:
+        for btn in [self.btn_training, self.btn_rest, self.btn_medium, self.btn_highcarb]:
             btn.setChecked(btn.property('day_type') == day_type)
         self._refresh_all()
 
@@ -2350,7 +2487,7 @@ class NutritionPage(QWidget):
         daily = NutritionParser.get_daily_totals(meals)
 
         # 阶段标签
-        day_type_name = {'training': '训练日', 'rest': '休息日', 'high_carb': '高碳日'}[self.current_day_type]
+        day_type_name = {'training': '训练日', 'rest': '休息日', 'medium': '中碳日', 'high_carb': '高碳日'}[self.current_day_type]
         self.phase_label.setText(
             f"📍 {info['name']} ({info['weeks']}) — {info['desc']} | 当前: {day_type_name} 营养方案"
         )
