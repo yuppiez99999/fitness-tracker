@@ -7,7 +7,7 @@
   1. 📊 体测仪表盘 — 12项体测指标 + 快速录入 + 历史记录
   2. 📈 趋势分析 — 7日EMA平滑曲线 + 目标达标日预测 + 体成分饼图
   3. 🏋️ 动作示范库 — 38个动作 GIF动画 + 中文步骤教学 + 肌群信息
-  4. 📅 训练计划 — 20周塑形冲刺 + 三阶段周期化 + 点击动作看示范
+  4. 📅 训练计划 — 22周宽背窄腰塑形 + 三阶段周期化 + 点击动作看示范
   5. 🍽 饮食与补剂 — 三阶段营养方案 + 五餐明细 + 补剂表 + 饮水指南
 
 技术栈: PySide6 + matplotlib + pandas + Pillow
@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('健身监控 v8.0 — 20周塑形冲刺 · 体测数据 + 动作示范 + 训练计划')
+        self.setWindowTitle('健身监控 v8.0 — 22周宽背窄腰塑形 · 体测数据 + 动作示范 + 训练计划')
         self.setMinimumSize(1200, 800)
         self.resize(1400, 900)
         self._apply_global_style()
@@ -114,7 +114,7 @@ class MainWindow(QMainWindow):
 
         # 页面4: 训练计划
         self.page_plan = TrainingPlanPage(self.training_plan, self.exercise_lib)
-        self.tabs.addTab(self.page_plan, '📅 训练计划(20周)')
+        self.tabs.addTab(self.page_plan, '📅 训练计划(22周)')
 
         # 页面5: 饮食与补剂
         self.page_nutrition = NutritionPage()

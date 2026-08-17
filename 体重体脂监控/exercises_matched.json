@@ -1188,5 +1188,54 @@
     ],
     "media_id": "ZfyAGhK",
     "matched": true
+  },
+  {
+    "id": "0047",
+    "name_cn": "上斜杠铃卧推",
+    "name_en": "barbell incline bench press",
+    "category": "chest",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "barbell",
+    "instructions_zh": "设置一个 45 度角的上斜凳。 躺在长凳上，双脚平放在地上。 正手握住杠铃，握距略宽于肩宽。 松开杠铃并将其缓慢降低至胸部，保持肘部呈 45 度角。 在底部停顿片刻，然后将杠铃推回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "设置一个 45 度角的上斜凳。",
+      "躺在长凳上，双脚平放在地上。",
+      "正手握住杠铃，握距略宽于肩宽。",
+      "松开杠铃并将其缓慢降低至胸部，保持肘部呈 45 度角。",
+      "在底部停顿片刻，然后将杠铃推回到起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "3TZduzM",
+    "matched": true
+  },
+  {
+    "id": "1460",
+    "name_cn": "哑铃弓步蹲",
+    "name_en": "walking lunge",
+    "category": "upper legs",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "双脚分开与肩同宽站立。 右腿向前迈出一步，将身体降低至弓步位置。 保持躯干直立，前膝与脚踝对齐。 右脚蹬地，左脚向前，左腿呈弓步姿势。 继续交替双腿向前行走，保持受控且稳定的步伐。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立。",
+      "右腿向前迈出一步，将身体降低至弓步位置。",
+      "保持躯干直立，前膝与脚踝对齐。",
+      "右脚蹬地，左脚向前，左腿呈弓步姿势。",
+      "继续交替双腿向前行走，保持受控且稳定的步伐。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "IZVHb27",
+    "matched": true
   }
 ]
