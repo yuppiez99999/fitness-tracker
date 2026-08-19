@@ -2,7 +2,7 @@
 
 基于市场主流健身软件（Keep / Fitbod / Hevy / Strong）特性优化 + **Lzheng-fitness 知识库深度集成**的个人体脂体重监控 + 健身计划软件。PySide6 重构版，提供体测管理、趋势分析、动作示范、训练计划、营养指导与 **AI 教练**六大模块。
 
-> **v9.0 关键升级**：深度集成 [Lzheng-fitness](https://github.com/yuppiez99999/Lzheng-fitness) 知识库（Schoenfeld/Helms/Aragon/Nuckols 蒸馏模块），新增 **AI 教练**页面，实现 P0-L3 分层评估、8-12 周动态力量周期化、训练复盘 + 渐进超负荷、停训接回三档方案、最低执行版本（30/20/10 分钟）五大增肌优化能力。
+> **v9.0 关键升级**：深度集成 [Lzheng-fitness](https://github.com/yuppiez99999/Lzheng-fitness) 知识库（Schoenfeld/Helms/Aragon/Nuckols 蒸馏模块），新增 **AI 教练**页面，实现 P0-L3 分层评估、8-12 周动态力量周期化、训练复盘 + 渐进超负荷、停训接回三档方案、最低执行版本（30/20/10 分钟）五大增肌优化能力。支持 PyInstaller 一键封装为独立 .exe，免安装 Python 直接运行。
 
 ## 功能模块
 
@@ -28,6 +28,7 @@
 ## 技术栈
 
 - PySide6 + matplotlib + pandas + numpy + Pillow
+- PyInstaller（封装为免安装 .exe）
 - 数据源：exercises-dataset（GitHub: yuppiez99999/exercises-dataset）
 - 知识库：Lzheng-fitness（Git 子模块，GitHub: yuppiez99999/Lzheng-fitness）
 
@@ -37,21 +38,32 @@
 - 建议使用虚拟环境运行，避免全局包冲突
 
 ```bash
+# 克隆仓库（含子模块）
+git clone --recurse-submodules https://github.com/yuppiez99999/fitness-tracker.git
+cd fitness-tracker
+
 # 创建虚拟环境
 python -m venv .venv
-
-# 激活虚拟环境
-# Windows PowerShell:
 .venv\Scripts\Activate.ps1
 
 # 安装依赖
 pip install PySide6 matplotlib pandas numpy Pillow
 
-# 运行
+# 直接运行
 python 体脂体重监控_完整版.py
 ```
 
 也可双击 `启动体脂体重监控.bat` 一键启动（Windows）。
+
+### 封装为独立 .exe
+
+```bash
+pip install pyinstaller
+python -m PyInstaller 健身监控.spec --noconfirm --clean
+# 产物: dist\健身监控v9.0\健身监控v9.0.exe
+```
+
+将 `dist\健身监控v9.0\` 文件夹复制到任意 Windows 电脑，双击 `健身监控v9.0.exe` 即可运行，无需安装 Python。
 
 ## 项目结构
 
@@ -60,6 +72,7 @@ python 体脂体重监控_完整版.py
 ├── 体脂体重监控_完整版.py           # 主程序入口（PySide6 GUI，6 个 Tab）
 ├── fitness_modules.py               # 核心模块（模型/页面/解析器/教程/AI教练页面）
 ├── ai_coach_engine.py               # AI 教练引擎（P0-L3/周期/复盘/接回/短版）
+├── 健身监控.spec                     # PyInstaller 打包配置
 ├── fitness_icon.ico                 # 应用图标
 ├── 启动体脂体重监控.bat             # Windows 一键启动脚本
 ├── Lzheng-fitness/                  # 知识库子模块（Schoenfeld/Helms 等 6 专家）
