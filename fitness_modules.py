@@ -2621,16 +2621,21 @@ class AICoachPage(QWidget):
 
     # ─── 子页1: 建档与分层评估 ───
     def _build_profile_tab(self):
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setStyleSheet(f"QScrollArea {{ border: none; }}")
+
         w = QWidget()
         form = QFormLayout(w)
         form.setSpacing(10)
+        form.setLabelAlignment(Qt.AlignRight)
 
         self.in_name = QLineEdit(self.profile.name)
         self.in_age = QSpinBox(); self.in_age.setRange(10, 80); self.in_age.setValue(self.profile.age or 30)
         self.in_height = QDoubleSpinBox(); self.in_height.setRange(100, 250); self.in_height.setValue(self.profile.height_cm or 175)
         self.in_weight = QDoubleSpinBox(); self.in_weight.setRange(30, 200); self.in_weight.setValue(self.profile.weight_kg or 67)
         self.in_bf = QDoubleSpinBox(); self.in_bf.setRange(3, 60); self.in_bf.setValue(self.profile.body_fat_pct or 17)
-        self.in_years = QDoubleSpinBox(); self.in_years.setRange(0, 30); self.in_years.setSingleStep(0.5); self.in_years.setValue(self.profile.training_years or 0)
+        self.in_years = QDoubleSpinBox(); self.in_years.setRange(0, 30); self.in_years.setSingleStep(0.5); self.in_years.setValue(self.profile.training_year or 0)
         self.in_sessions = QSpinBox(); self.in_sessions.setRange(1, 7); self.in_sessions.setValue(self.profile.weekly_sessions or 4)
         self.in_minutes = QSpinBox(); self.in_minutes.setRange(10, 180); self.in_minutes.setValue(self.profile.session_minutes or 60)
         self.in_goal = QComboBox(); self.in_goal.addItems(['增肌', '减脂', '力量', '综合']); self.in_goal.setCurrentText(self.profile.goal or '增肌')
@@ -2652,9 +2657,12 @@ class AICoachPage(QWidget):
 
         self.lbl_level_result = QTextEdit()
         self.lbl_level_result.setReadOnly(True)
-        self.lbl_level_result.setMaximumHeight(200)
+        self.lbl_level_result.setMinimumHeight(280)
+        self.lbl_level_result.setStyleSheet(f"QTextEdit {{ background-color: {COLORS['card']}; border: 1px solid {COLORS['border']}; border-radius: 6px; padding: 8px; }}")
         form.addRow('分层评估结果', self.lbl_level_result)
-        return w
+
+        scroll.setWidget(w)
+        return scroll
 
     def _save_profile(self):
         self.profile.name = self.in_name.text()
