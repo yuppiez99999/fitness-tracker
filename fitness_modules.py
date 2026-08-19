@@ -11,14 +11,13 @@ import numpy as np
 from datetime import datetime, timedelta
 from typing import Optional, List, Dict, Tuple, Any
 
-from PySide6.QtCore import Qt, QTimer, QSize, Signal
-from PySide6.QtGui import QPixmap, QFont, QColor, QIcon, QImage
+from PySide6.QtCore import Qt, QSize, Signal
+from PySide6.QtGui import QPixmap, QFont
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QPushButton,
     QTableWidget, QTableWidgetItem, QHeaderView, QTabWidget, QScrollArea,
     QDialog, QLineEdit, QFormLayout, QMessageBox, QFileDialog, QComboBox,
-    QProgressBar, QFrame, QSplitter, QListWidget, QListWidgetItem, QTextEdit,
-    QSpinBox, QDoubleSpinBox, QCheckBox, QGroupBox, QSizePolicy, QSlider
+    QFrame, QTextEdit, QSpinBox, QDoubleSpinBox, QSizePolicy
 )
 
 import matplotlib
@@ -26,7 +25,6 @@ matplotlib.use('QtAgg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.ticker import MaxNLocator
 
 # 中文字体
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei', 'DejaVu Sans']
@@ -905,7 +903,7 @@ class ExerciseDetailDialog(QDialog):
         step_scroll = QScrollArea()
         step_scroll.setWidgetResizable(True)
         step_scroll.setStyleSheet(
-            f"QScrollArea {{ border: none; background-color: transparent; }}"
+            "QScrollArea {{ border: none; background-color: transparent; }}"
         )
         step_widget = QWidget()
         step_layout = QVBoxLayout(step_widget)
@@ -1476,9 +1474,8 @@ class TrendChartPage(QWidget):
         self.ax.legend(fontsize=8, framealpha=0.3, facecolor=COLORS['card'])
 
     def _draw_composition(self, plot_df):
-        """体成分构成(最新 vs 首次)"""
+        """体成分构成(最新记录)"""
         latest = plot_df.iloc[-1]
-        first = plot_df.iloc[0]
         cur_fat = latest['体脂率(%)']
         cur_w = latest['体重(kg)']
         if pd.isna(cur_fat):
@@ -1720,19 +1717,15 @@ class TrainingPlanPage(QWidget):
         is_liss = 'liss' in title_lower
         is_rest = ('休息' in sched['title']) or ('rest' in title_lower)
         if is_hiit:
-            head_bg = f"qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 {COLORS['hiit_bg']}, stop:1 {COLORS['card']})"
             title_color = COLORS['hiit_fg']
             sub_text = '🔥 高强度间歇训练'
         elif is_liss:
-            head_bg = f"qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 {COLORS['liss_bg']}, stop:1 {COLORS['card']})"
             title_color = COLORS['liss_fg']
             sub_text = '🚶 低强度稳态有氧'
         elif is_rest:
-            head_bg = f"qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 {COLORS['card']}, stop:1 {COLORS['card']})"
             title_color = COLORS['rest_fg']
             sub_text = '💤 主动恢复日'
         else:
-            head_bg = COLORS['card']
             title_color = COLORS['primary']
             sub_text = sched.get('focus', '')
 
@@ -2495,13 +2488,10 @@ class NutritionPage(QWidget):
         # 宏量数字卡片
         macro_keys = [('kcal', 0), ('protein', 1), ('carbs', 2), ('fat', 3)]
         for key, _ in macro_keys:
-            target = macros[key]
-            actual = daily.get(key, 0) if key in daily else 0
             panel = self.macro_labels[key]
             val_label = panel.findChild(QLabel, 'macro_value')
-            cmp_label = panel.findChild(QLabel, 'macro_cmp')
             if val_label:
-                val_label.setText(str(target))
+                val_label.setText(str(macros[key]))
 
         self._update_macro_panel('kcal', macros['kcal'], daily.get('kcal', 0), 'kcal')
         self._update_macro_panel('protein', macros['protein'], daily.get('protein', 0), 'g')
@@ -2557,7 +2547,7 @@ class NutritionPage(QWidget):
         if val_label:
             val_label.setText(str(target))
         if cmp_label:
-            diff = actual - target
+
             if unit == 'kcal':
                 diff_str = f"五餐合计: {actual}kcal (求值{target}kcal)"
             else:
@@ -2571,12 +2561,11 @@ class NutritionPage(QWidget):
 
 try:
     from ai_coach_engine import (
-        AthleteProfile, assess_level, assess_overall_level, LEVEL_DESC,
-        StrengthCycle, generate_strength_cycle, export_cycle_to_markdown,
-        TrainingLog, ReviewResult, review_training, save_review, load_reviews,
-        ReturnPlan, generate_return_plan, generate_short_version,
-        save_profile, load_profile, save_cycle, WorkoutDay,
-        estimate_1rm, COACH_DIR,
+        AthleteProfile, assess_overall_level, LEVEL_DESC,
+        generate_strength_cycle, export_cycle_to_markdown,
+        TrainingLog, review_training, save_review, load_reviews,
+        generate_return_plan, generate_short_version,
+        save_profile, load_profile, save_cycle,
     )
     AI_COACH_AVAILABLE = True
 except Exception:
@@ -2623,7 +2612,7 @@ class AICoachPage(QWidget):
     def _build_profile_tab(self):
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
-        scroll.setStyleSheet(f"QScrollArea {{ border: none; }}")
+        scroll.setStyleSheet("QScrollArea {{ border: none; }}")
 
         w = QWidget()
         form = QFormLayout(w)

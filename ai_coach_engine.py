@@ -10,9 +10,8 @@ AI 教练核心引擎 v1.0 — 基于 Lzheng-fitness 知识库的本地增肌规
 
 import os
 import json
-import math
-from datetime import datetime, timedelta
-from typing import Optional, List, Dict, Tuple, Any
+from datetime import datetime
+from typing import Optional, List, Dict, Any
 from dataclasses import dataclass, field, asdict
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -513,7 +512,7 @@ def export_cycle_to_markdown(cycle: StrengthCycle) -> str:
             lines.append(f'| {s.set_type} | {s.weight}kg | {s.sets}×{s.reps} | {s.rpe_start}→{s.rpe_end} |')
         lines.extend([
             '',
-            f'**短版**:',
+            '短版:',
             f'- 30分钟: {d.short_version_30}',
             f'- 20分钟: {d.short_version_20}',
             f'- 10分钟: {d.short_version_10}',
