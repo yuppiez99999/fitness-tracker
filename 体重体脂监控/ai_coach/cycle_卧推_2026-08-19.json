@@ -1,0 +1,295 @@
+{
+  "movement": "卧推",
+  "target_1rm": 90,
+  "current_1rm": 80,
+  "weeks": 10,
+  "start_date": "2026-08-19",
+  "phase_distribution": {
+    "积累": 4,
+    "强度": 3,
+    "实现": 2,
+    "减量": 1
+  },
+  "days": [
+    {
+      "week": 1,
+      "phase": "积累",
+      "day_name": "第1周",
+      "movement": "卧推",
+      "notes": "积累阶段 — 建立可恢复训练量和动作质量",
+      "sets": [
+        {
+          "weight": 56.0,
+          "reps": 8,
+          "sets": 1,
+          "rpe_start": 6,
+          "rpe_end": 7,
+          "set_type": "顶组"
+        },
+        {
+          "weight": 50.5,
+          "reps": 10,
+          "sets": 3,
+          "rpe_start": 6,
+          "rpe_end": 7,
+          "set_type": "回退组"
+        }
+      ],
+      "short_30": "卧推 56.0kg 4×8 (保留顶组+1组回退)",
+      "short_20": "卧推 56.0kg 2×8 (仅顶组+1组)",
+      "short_10": "卧推 56.0kg 1×8 (仅顶组)"
+    },
+    {
+      "week": 2,
+      "phase": "积累",
+      "day_name": "第2周",
+      "movement": "卧推",
+      "notes": "积累阶段 — 建立可恢复训练量和动作质量",
+      "sets": [
+        {
+          "weight": 57.0,
+          "reps": 8,
+          "sets": 1,
+          "rpe_start": 6,
+          "rpe_end": 7,
+          "set_type": "顶组"
+        },
+        {
+          "weight": 51.5,
+          "reps": 10,
+          "sets": 3,
+          "rpe_start": 6,
+          "rpe_end": 7,
+          "set_type": "回退组"
+        }
+      ],
+      "short_30": "卧推 57.0kg 4×8 (保留顶组+1组回退)",
+      "short_20": "卧推 57.0kg 2×8 (仅顶组+1组)",
+      "short_10": "卧推 57.0kg 1×8 (仅顶组)"
+    },
+    {
+      "week": 3,
+      "phase": "积累",
+      "day_name": "第3周",
+      "movement": "卧推",
+      "notes": "积累阶段 — 建立可恢复训练量和动作质量",
+      "sets": [
+        {
+          "weight": 58.0,
+          "reps": 8,
+          "sets": 1,
+          "rpe_start": 6,
+          "rpe_end": 7,
+          "set_type": "顶组"
+        },
+        {
+          "weight": 52.0,
+          "reps": 10,
+          "sets": 3,
+          "rpe_start": 6,
+          "rpe_end": 7,
+          "set_type": "回退组"
+        }
+      ],
+      "short_30": "卧推 58.0kg 4×8 (保留顶组+1组回退)",
+      "short_20": "卧推 58.0kg 2×8 (仅顶组+1组)",
+      "short_10": "卧推 58.0kg 1×8 (仅顶组)"
+    },
+    {
+      "week": 4,
+      "phase": "积累",
+      "day_name": "第4周",
+      "movement": "卧推",
+      "notes": "积累阶段 — 建立可恢复训练量和动作质量",
+      "sets": [
+        {
+          "weight": 59.0,
+          "reps": 8,
+          "sets": 1,
+          "rpe_start": 6,
+          "rpe_end": 7,
+          "set_type": "顶组"
+        },
+        {
+          "weight": 53.0,
+          "reps": 10,
+          "sets": 3,
+          "rpe_start": 6,
+          "rpe_end": 7,
+          "set_type": "回退组"
+        }
+      ],
+      "short_30": "卧推 59.0kg 4×8 (保留顶组+1组回退)",
+      "short_20": "卧推 59.0kg 2×8 (仅顶组+1组)",
+      "short_10": "卧推 59.0kg 1×8 (仅顶组)"
+    },
+    {
+      "week": 5,
+      "phase": "强度",
+      "day_name": "第5周",
+      "movement": "卧推",
+      "notes": "强度阶段 — 提高较高负荷暴露，通常减少次数或部分训练量",
+      "sets": [
+        {
+          "weight": 68.5,
+          "reps": 5,
+          "sets": 1,
+          "rpe_start": 7,
+          "rpe_end": 8,
+          "set_type": "顶组"
+        },
+        {
+          "weight": 61.5,
+          "reps": 7,
+          "sets": 3,
+          "rpe_start": 7,
+          "rpe_end": 8,
+          "set_type": "回退组"
+        }
+      ],
+      "short_30": "卧推 68.5kg 4×5 (保留顶组+1组回退)",
+      "short_20": "卧推 68.5kg 2×5 (仅顶组+1组)",
+      "short_10": "卧推 68.5kg 1×5 (仅顶组)"
+    },
+    {
+      "week": 6,
+      "phase": "强度",
+      "day_name": "第6周",
+      "movement": "卧推",
+      "notes": "强度阶段 — 提高较高负荷暴露，通常减少次数或部分训练量",
+      "sets": [
+        {
+          "weight": 69.5,
+          "reps": 5,
+          "sets": 1,
+          "rpe_start": 7,
+          "rpe_end": 8,
+          "set_type": "顶组"
+        },
+        {
+          "weight": 62.5,
+          "reps": 7,
+          "sets": 3,
+          "rpe_start": 7,
+          "rpe_end": 8,
+          "set_type": "回退组"
+        }
+      ],
+      "short_30": "卧推 69.5kg 4×5 (保留顶组+1组回退)",
+      "short_20": "卧推 69.5kg 2×5 (仅顶组+1组)",
+      "short_10": "卧推 69.5kg 1×5 (仅顶组)"
+    },
+    {
+      "week": 7,
+      "phase": "强度",
+      "day_name": "第7周",
+      "movement": "卧推",
+      "notes": "强度阶段 — 提高较高负荷暴露，通常减少次数或部分训练量",
+      "sets": [
+        {
+          "weight": 70.5,
+          "reps": 5,
+          "sets": 1,
+          "rpe_start": 7,
+          "rpe_end": 8,
+          "set_type": "顶组"
+        },
+        {
+          "weight": 63.5,
+          "reps": 7,
+          "sets": 3,
+          "rpe_start": 7,
+          "rpe_end": 8,
+          "set_type": "回退组"
+        }
+      ],
+      "short_30": "卧推 70.5kg 4×5 (保留顶组+1组回退)",
+      "short_20": "卧推 70.5kg 2×5 (仅顶组+1组)",
+      "short_10": "卧推 70.5kg 1×5 (仅顶组)"
+    },
+    {
+      "week": 8,
+      "phase": "实现",
+      "day_name": "第8周",
+      "movement": "卧推",
+      "notes": "实现阶段 — 提高专项性，避免额外疲劳掩盖表现",
+      "sets": [
+        {
+          "weight": 78.5,
+          "reps": 3,
+          "sets": 1,
+          "rpe_start": 8,
+          "rpe_end": 9,
+          "set_type": "顶组"
+        },
+        {
+          "weight": 70.5,
+          "reps": 5,
+          "sets": 2,
+          "rpe_start": 8,
+          "rpe_end": 9,
+          "set_type": "回退组"
+        }
+      ],
+      "short_30": "卧推 78.5kg 3×3 (保留顶组+1组回退)",
+      "short_20": "卧推 78.5kg 2×3 (仅顶组+1组)",
+      "short_10": "卧推 78.5kg 1×3 (仅顶组)"
+    },
+    {
+      "week": 9,
+      "phase": "实现",
+      "day_name": "第9周",
+      "movement": "卧推",
+      "notes": "实现阶段 — 提高专项性，避免额外疲劳掩盖表现",
+      "sets": [
+        {
+          "weight": 79.5,
+          "reps": 3,
+          "sets": 1,
+          "rpe_start": 8,
+          "rpe_end": 9,
+          "set_type": "顶组"
+        },
+        {
+          "weight": 71.5,
+          "reps": 5,
+          "sets": 2,
+          "rpe_start": 8,
+          "rpe_end": 9,
+          "set_type": "回退组"
+        }
+      ],
+      "short_30": "卧推 79.5kg 3×3 (保留顶组+1组回退)",
+      "short_20": "卧推 79.5kg 2×3 (仅顶组+1组)",
+      "short_10": "卧推 79.5kg 1×3 (仅顶组)"
+    },
+    {
+      "week": 10,
+      "phase": "减量",
+      "day_name": "第10周",
+      "movement": "卧推",
+      "notes": "减量阶段 — 显著降低疲劳，再测试目标或建立下一周期基准",
+      "sets": [
+        {
+          "weight": 56.5,
+          "reps": 5,
+          "sets": 1,
+          "rpe_start": 5,
+          "rpe_end": 6,
+          "set_type": "顶组"
+        },
+        {
+          "weight": 51.0,
+          "reps": 7,
+          "sets": 2,
+          "rpe_start": 5,
+          "rpe_end": 6,
+          "set_type": "回退组"
+        }
+      ],
+      "short_30": "卧推 56.5kg 3×5 (保留顶组+1组回退)",
+      "short_20": "卧推 56.5kg 2×5 (仅顶组+1组)",
+      "short_10": "卧推 56.5kg 1×5 (仅顶组)"
+    }
+  ]
+}

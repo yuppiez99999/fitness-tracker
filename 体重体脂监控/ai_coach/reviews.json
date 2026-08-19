@@ -1,0 +1,28 @@
+[
+  {
+    "log": {
+      "date": "2026-08-19",
+      "movement": "卧推",
+      "weight": 60,
+      "reps": 8,
+      "sets": 4,
+      "rpe": 7.5,
+      "completed": true,
+      "notes": ""
+    },
+    "judgment": "合适",
+    "key_findings": [
+      "RPE 7.5 在合理区间 (7-9)",
+      "双重渐进: 加 1 次"
+    ],
+    "next_prescription": {
+      "movement": "卧推",
+      "weight": 60,
+      "reps": 9,
+      "sets": 4,
+      "rpe": 8.0
+    },
+    "progression_type": "加次",
+    "timestamp": "2026-08-19 22:51"
+  }
+]

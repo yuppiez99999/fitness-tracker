@@ -1,0 +1,18 @@
+{
+  "name": "测试",
+  "age": 37,
+  "height_cm": 175,
+  "weight_kg": 67.4,
+  "body_fat_pct": 16.9,
+  "training_years": 2,
+  "weekly_sessions": 4,
+  "session_minutes": 60,
+  "equipment": [
+    "杠铃",
+    "哑铃",
+    "器械"
+  ],
+  "goal": "增肌",
+  "limitations": [],
+  "movement_proficiency": {}
+}

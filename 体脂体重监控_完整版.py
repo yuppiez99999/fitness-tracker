@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fitness_modules import (
     BodyDataModel, ExerciseLibrary, TrainingPlanParser, NutritionParser,
     DashboardPage, TrendChartPage, ExerciseLibraryPage, TrainingPlanPage, NutritionPage,
-    COLORS,
+    AICoachPage, AI_COACH_AVAILABLE, COLORS,
 )
 
 
@@ -120,8 +120,13 @@ class MainWindow(QMainWindow):
         self.page_nutrition = NutritionPage()
         self.tabs.addTab(self.page_nutrition, '🍽 饮食与补剂')
 
+        # 页面6: AI 教练 (Lzheng-fitness 知识库集成)
+        if AI_COACH_AVAILABLE:
+            self.page_coach = AICoachPage()
+            self.tabs.addTab(self.page_coach, '🤖 AI 教练')
+
         # 状态栏
-        self.statusBar().showMessage('就绪 · 5个模块已加载')
+        self.statusBar().showMessage('就绪 · 5个模块已加载' + (' + AI 教练' if AI_COACH_AVAILABLE else ''))
 
     def _update_status(self):
         """更新顶部快速统计"""
