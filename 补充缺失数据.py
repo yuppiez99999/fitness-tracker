@@ -80,10 +80,10 @@ df = df.sort_values('日期').reset_index(drop=True)
 # 保存
 df.to_csv(DATA_FILE, index=False, encoding='utf-8')
 
-print(f"数据补充完成！")
-print(f"原记录数: 19 条")
+print("数据补充完成！")
+print("原记录数: 19 条")
 print(f"新增记录: {len(missing_data)} 条")
 print(f"总记录数: {len(df)} 条")
 print(f"\n数据时间范围: {df['日期'].iloc[0]} 至 {df['日期'].iloc[-1]}")
-print(f"\n最新10条数据:")
+print("\n最新10条数据:")
 print(df.tail(10))

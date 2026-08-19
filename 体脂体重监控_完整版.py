@@ -16,17 +16,16 @@
 
 import sys
 import os
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont, QIcon, QAction
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QTabWidget, QLabel, QVBoxLayout, QWidget,
-    QHBoxLayout, QPushButton, QMessageBox
+    QApplication, QMainWindow, QTabWidget, QLabel, QWidget,
+    QHBoxLayout
 )
 
 # 确保能导入同目录模块
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fitness_modules import (
-    BodyDataModel, ExerciseLibrary, TrainingPlanParser, NutritionParser,
+    BodyDataModel, ExerciseLibrary, TrainingPlanParser,
     DashboardPage, TrendChartPage, ExerciseLibraryPage, TrainingPlanPage, NutritionPage,
     AICoachPage, AI_COACH_AVAILABLE, COLORS,
 )
