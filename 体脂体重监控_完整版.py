@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-体脂体重监控 + 健身计划软件 v8.0 — PySide6 重构版
+体脂体重监控 + 健身计划软件 v9.0 — PySide6 重构版
 基于市场主流健身软件(Keep/Fitbod/Hevy/Strong)特性优化
+v9.0: 更新到居家平替计划 v3.0 (单杠+哑铃版) + 海豹徒手 + 囚徒健身体系
+v3.0.1: GUI解析版正式并入海豹徒手(Navy SEAL 六支柱+SEAL 500)与囚徒健身(CC 六艺十阶)两大补位体系
 
 功能模块:
   1. 📊 体测仪表盘 — 12项体测指标 + 快速录入 + 历史记录
   2. 📈 趋势分析 — 7日EMA平滑曲线 + 目标达标日预测 + 体成分饼图
   3. 🏋️ 动作示范库 — 38个动作 GIF动画 + 中文步骤教学 + 肌群信息
-  4. 📅 训练计划 — 22周宽背窄腰塑形 + 三阶段周期化 + 点击动作看示范
+  4. 📅 训练计划 — 22周居家平替塑形 + 三阶段周期化 + 点击动作看示范
   5. 🍽 饮食与补剂 — 三阶段营养方案 + 五餐明细 + 补剂表 + 饮水指南
 
 技术栈: PySide6 + matplotlib + pandas + Pillow
@@ -36,7 +38,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('健身监控 v8.0 — 22周宽背窄腰塑形 · 体测数据 + 动作示范 + 训练计划')
+        self.setWindowTitle('健身监控 v9.0 — 居家平替 v3.0 单杠+哑铃 · 海豹徒手+囚徒健身补位 · 体测数据 + 动作示范 + 训练计划')
         self.setMinimumSize(1200, 800)
         self.resize(1400, 900)
         self._apply_global_style()
@@ -77,7 +79,7 @@ class MainWindow(QMainWindow):
         hl = QHBoxLayout(header)
         hl.setContentsMargins(16, 8, 16, 8)
 
-        title = QLabel('💪 健身监控 v8.0')
+        title = QLabel('💪 健身监控 v9.0')
         title.setFont(QFont('Microsoft YaHei', 14, QFont.Bold))
         title.setStyleSheet(f"color: {COLORS['primary']};")
         hl.addWidget(title)
@@ -125,7 +127,7 @@ class MainWindow(QMainWindow):
             self.tabs.addTab(self.page_coach, '🤖 AI 教练')
 
         # 状态栏
-        self.statusBar().showMessage('就绪 · 5个模块已加载' + (' + AI 教练' if AI_COACH_AVAILABLE else ''))
+        self.statusBar().showMessage('就绪 · 5个模块已加载' + (' + AI 教练' if AI_COACH_AVAILABLE else '') + ' · 居家平替 v3.0 单杠+哑铃 · 海豹徒手+囚徒健身补位体系')
 
     def _update_status(self):
         """更新顶部快速统计"""
@@ -157,7 +159,7 @@ class MainWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    app.setApplicationName('健身监控 v7.0')
+    app.setApplicationName('健身监控 v9.0')
 
     # 全局字体
     font = QFont('Microsoft YaHei', 10)

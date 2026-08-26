@@ -12,8 +12,9 @@
 import json
 import os
 
-DATA_PATH = r"e:\各种PY程序\06_个人辅助工具\exercises-dataset\data\exercises.json"
-OUT_PATH = r"e:\各种PY程序\06_个人辅助工具\体重体脂监控\exercises_matched.json"
+_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(_BASE_DIR, "..", "exercises-dataset", "data", "exercises.json")
+OUT_PATH = os.path.join(_BASE_DIR, "exercises_matched.json")
 
 # 去重后的动作清单: (中文名, [英文关键词候选, 按优先级排序])
 # 关键词经过人工核对数据集,确保能匹配到最佳候选

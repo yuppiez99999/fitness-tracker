@@ -20,6 +20,23 @@ data/*.json
 *全量数据*.xlsx
 *变化记录*.xlsx
 
+# 微信读书个人阅读数据（含书目、笔记、本机路径）
+weread_2026h1/
+
+# 个人训练系统与 AI 教练个人数据（身体指标、训练记录、复盘）
+体重体脂监控/ai_coach/
+体重体脂监控/个人训练系统/
+体重体脂监控/个人训练系统-system-backups/
+体重体脂监控/报告/
+体重体脂监控/图表/
+体重体脂监控/体脂体重.txt
+
+# CodeArts 工具目录（IDE 辅助，非项目内容）
+.codeartsdoer/
+
+# 个人工作笔记（含本机路径与项目目录信息）
+github_trending_*.md
+
 # ── 2. Python 缓存与虚拟环境 ──────────────────────────
 __pycache__/
 *.py[cod]
@@ -61,5 +78,5 @@ fitness-tracker/
 
 # ── 9. PyInstaller 打包产物 ────────────────────────────
 build/
-dist/
+dist/*/_internal/
 *.spec.bak

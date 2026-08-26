@@ -29,8 +29,9 @@
 
 - PySide6 + matplotlib + pandas + numpy + Pillow
 - PyInstaller（封装为免安装 .exe）
-- 数据源：exercises-dataset（GitHub: yuppiez99999/exercises-dataset）
+- 数据源：exercises-dataset（Git 子模块，GitHub: yuppiez99999/exercises-dataset）
 - 知识库：Lzheng-fitness（Git 子模块，GitHub: yuppiez99999/Lzheng-fitness）
+- 舆情分析：BettaFish / MiroFish（Git 子模块，GitHub: yuppiez99999/MiroFish）
 
 ## 环境要求
 
@@ -79,22 +80,27 @@ python -m PyInstaller 健身监控.spec --noconfirm --clean
 ├── generate_report.py               # 报告生成工具
 ├── 补充缺失数据.py                   # 体测数据补全脚本
 ├── .venv/                           # 虚拟环境（不提交）
+├── BettaFish/                       # 舆情分析子模块（Git 子模块）
+├── exercises-dataset/               # 动作数据集子模块（Git 子模块）
+├── dist/                            # 封装产物（仅 exe 本体随仓库分发）
+│   └── 健身监控v9.0/
+│       └── 健身监控v9.0.exe          # PyInstaller 封装的可执行程序
 ├── 体重体脂监控/                     # 训练计划与资源
 │   ├── 8周增肌塑形计划.md
 │   ├── 12月底塑形冲刺计划_v2.0_宽背窄腰.md
 │   ├── 12月底塑形冲刺计划_v2.1_宽背窄腰_执行版.md   # 当前生效计划
-│   ├── ai_coach/                    # AI 教练数据（建档/周期/复盘）
+│   ├── ai_coach/                    # AI 教练数据（本地个人数据，不提交）
 │   ├── exercises_gif/               # 51 个动作示范 GIF
 │   ├── exercises_matched.json       # 动作与 GIF 映射
 │   ├── match_exercises.py           # 动作匹配脚本
-│   ├── 报告/                         # 体测报告 TXT
-│   └── 图表/                         # 趋势图 PNG
+│   ├── 报告/                         # 体测报告 TXT（本地个人数据，不提交）
+│   └── 图表/                         # 趋势图 PNG（本地个人数据，不提交）
 └── README.md
 ```
 
 ## 训练计划 v2.1 亮点
 
-基于身高 175cm / 体重 67.45kg / 体脂 16.9% 实测制定，目标 22 周内体脂降至 12.5–13.5%。
+基于个人实测数据制定的 22 周塑形计划（示例：体脂从 16.9% 降至 12.5–13.5%），可按自身情况调整热量与训练量。
 
 | 维度 | v2.0 | v2.1 优化 |
 |:-----|:-----|:----------|
@@ -124,8 +130,8 @@ Lzheng-fitness 知识库包含 6 个来源限定专家模块：
 ## 数据说明
 
 - 体测数据支持 12 项指标：日期、体重、体脂率、肌肉量、内脏脂肪等级、基础代谢率、体水分率、骨量、BMI、骨骼肌率、腰围、臀围
-- AI 教练数据存储在 `体重体脂监控/ai_coach/`（建档、周期 JSON、复盘记录、周期 MD）
-- 目标体重默认 67.0 kg，目标体脂率默认 16.5%
+- AI 教练数据存储在 `体重体脂监控/ai_coach/`（建档、周期 JSON、复盘记录、周期 MD），该目录为本地个人数据，不随仓库分发
+- 目标体重 / 目标体脂率可在建档时自定义
 - 变化值以"当前 - 初始"计算，降低会显示为负数
 
 ## 注意事项

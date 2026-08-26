@@ -17,7 +17,8 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QPushButton,
     QTableWidget, QTableWidgetItem, QHeaderView, QTabWidget, QScrollArea,
     QDialog, QLineEdit, QFormLayout, QMessageBox, QFileDialog, QComboBox,
-    QFrame, QTextEdit, QSpinBox, QDoubleSpinBox, QSizePolicy
+    QFrame, QTextEdit, QSpinBox, QDoubleSpinBox, QSizePolicy,
+    QGroupBox, QToolButton
 )
 
 import matplotlib
@@ -42,7 +43,7 @@ REPORT_DIR = os.path.join(DATA_DIR, '报告')
 DATA_FILE = os.path.join(DATA_DIR, '体脂体重.txt')
 EXERCISES_JSON = os.path.join(DATA_DIR, 'exercises_matched.json')
 GIF_DIR = os.path.join(DATA_DIR, 'exercises_gif')
-PLAN_MD = os.path.join(DATA_DIR, '12月底塑形冲刺计划_v2.1_宽背窄腰_执行版.md')
+PLAN_MD = os.path.join(DATA_DIR, '居家平替计划_v3.0_单杠哑铃版_GUI解析.md')
 
 for d in [DATA_DIR, CHART_DIR, REPORT_DIR, GIF_DIR]:
     os.makedirs(d, exist_ok=True)
@@ -155,23 +156,23 @@ BODY_COLUMNS = [
     '骨骼肌率(%)', '腰围(cm)', '臀围(cm)'
 ]
 
-# 训练计划结构(v2.0宽背窄腰版, 22周塑形冲刺, 三阶段周期化, 6练1休)
-# ★v2.0: 背/胸各一周2次(宽背+清晰胸肌), 固定6练1休(周日休息+真空腹日)
+# 训练计划结构(v3.0 居家平替版, 单杠+哑铃, 22周塑形冲刺, 三阶段周期化, 6练1休)
+# ★v3.0: 全部居家版动作, 单杠变式替代下拉/Pullover替代直臂下压, 弹力带补绳索
 TRAINING_SCHEDULE = [
-    {'day': '周一', 'title': '背（宽）', 'focus': '引体+高位下拉+单臂划船, 背阔宽度核心', 'icon': '🔙'},
-    {'day': '周二', 'title': '胸（上胸优先）', 'focus': '上斜卧推+平板卧推, 上胸饱满+整体厚度', 'icon': '💪'},
-    {'day': '周三', 'title': '腿（四头为主）', 'focus': '深蹲+前蹲+罗马尼亚硬拉, 大重量复合', 'icon': '🦵'},
-    {'day': '周四', 'title': '背（厚度）+ 二头', 'focus': '俯身杠铃划船+T杆+坐姿划船, 上背厚度', 'icon': '🏋️'},
-    {'day': '周五', 'title': '肩 + 腹', 'focus': '推举+侧平举+抗旋转, 中束宽度+肩腰比', 'icon': '🙆'},
-    {'day': '周六', 'title': '胸+腿泵感（HIIT）', 'focus': '高次泵感+代谢冲刺, 线条雕刻', 'icon': '🔥'},
-    {'day': '周日', 'title': '完全休息 + 真空腹', 'focus': '真空腹 3×30s, 窄腰核心', 'icon': '😴'},
+    {'day': '周一', 'title': '背（宽）居家', 'focus': '宽握引体+反握引体+单臂哑铃划船+哑铃Pullover, 背阔宽度', 'icon': '🔙'},
+    {'day': '周二', 'title': '胸+三头居家', 'focus': '上斜哑铃卧推+飞鸟+哑铃飞鸟+椅子臂屈伸, 上胸优先', 'icon': '💪'},
+    {'day': '周三', 'title': '腿居家', 'focus': 'Goblet深蹲+罗马尼亚硬拉+保加利亚分腿蹲, 哑铃复合', 'icon': '🦵'},
+    {'day': '周四', 'title': '背（厚）+二头居家', 'focus': '对握引体+胸支撑哑铃划船+俯身划船, 上背厚度', 'icon': '🏋️'},
+    {'day': '周五', 'title': '肩+核心居家', 'focus': '坐姿肩推+侧平举+弹力带面拉+俯身飞鸟, 中束+肩袖', 'icon': '🙆'},
+    {'day': '周六', 'title': '推+腿泵感居家', 'focus': '上斜哑铃+椅子臂屈伸+Goblet深蹲泵感+俯卧撑循环', 'icon': '🔥'},
+    {'day': '周日', 'title': '完全休息 + 真空腹', 'focus': '真空腹 30→60秒递进, 控盐日 <3g, 窄腰核心', 'icon': '😴'},
 ]
 
-# 三阶段映射 (v2.1: 22周 宽背窄腰 执行版)
+# 三阶段映射 (v3.0: 22周 居家平替版)
 PHASE_INFO = {
-    1: {'name': '代谢重建',  'weeks': 'W1-W6',   'desc': '高容量背训练+动作固化, 建立代谢压力适应, 热身组强制执行'},
-    2: {'name': '体成分重组','weeks': 'W7-W14',  'desc': '容量递进+1-2组/周(上限16组), 真空腹每日化(3×40s), 有氧递进HIIT 15→20+LISS 35→40min'},
-    3: {'name': '线条雕刻',  'weeks': 'W15-W22', 'desc': '碳水循环(高碳日背/腿 300g→中碳日胸/肩 200g→低碳日休息 130g), 泵感日+峰值减量'},
+    1: {'name': '基础建设',  'weeks': 'W1-W6',   'desc': '动作固化+引体变式适应, 蛋白165g/天, 训练日2300/休息日2100kcal, 真空腹30s起步'},
+    2: {'name': '体成分重组','weeks': 'W7-W14',  'desc': '容量递进+离心慢速补偿, 真空腹每日60s×5, LISS≤2次/周, 减载W8/W13(-40%)'},
+    3: {'name': '线条雕刻',  'weeks': 'W15-W22', 'desc': '碳水循环(高碳日280g→中碳日200g→低碳日150g→休息日130g), HIIT≤2次/周, 减载W17/W21'},
 }
 
 
@@ -184,8 +185,8 @@ class BodyDataModel:
 
     def __init__(self):
         self.df = self._load()
-        self.target_weight = 65.0  # 目标体重(kg) [v2.0宽背窄腰: 12月底64.5-65.5]
-        self.target_bodyfat = 13.0
+        self.target_weight = 65.0  # 目标体重(kg) [v3.0: 12月底64.5-65.5, 取中值65.0]
+        self.target_bodyfat = 12.5
 
     def _load(self) -> pd.DataFrame:
         """加载体测数据,兼容旧格式(3列)和新格式(12列)"""
@@ -407,7 +408,7 @@ class ExerciseLibrary:
 # ═══════════════════════════════════════════════════════════
 
 class TrainingPlanParser:
-    """从12月底塑形冲刺计划.md解析训练动作, 支持20周三阶段周期化"""
+    """从居家平替计划 v3.0 解析训练动作, 支持22周三阶段周期化"""
 
     DAY_NAMES = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
 
@@ -640,30 +641,116 @@ class TrainingPlanParser:
         if notes:
             self._phase_notes[phase] = notes
 
+    # ──────────────── 补位体系 (v3.0 第九章/第十章) ────────────────
+    def get_supplement_systems(self) -> Dict[str, Dict]:
+        """解析居家平替计划 v3.0 第九章(海豹徒手) + 第十章(囚徒健身) 两大补位体系。
+
+        返回:
+            {
+              'seal':   {'title', 'position', 'moves':[{'name','target','tip'}], 'test_loop':'', 'embed':[...]},
+              'cc':     {'title', 'position', 'arts':[{'art','s1','s5','s10','day'}], 'embed':[...]},
+            }
+        若文档不存在或缺少相关章节, 返回空结构(调用方需做 fail-open 降级)。
+        """
+        seal = {'title': '', 'position': '', 'moves': [], 'test_loop': '', 'embed': []}
+        cc = {'title': '', 'position': '', 'arts': [], 'embed': []}
+        if not self.raw_text:
+            return {'seal': seal, 'cc': cc}
+
+        lines = self.raw_text.split('\n')
+        cur_section = 0   # 0=无 / 9=海豹 / 10=囚徒
+        in_table = False
+        table_header = []
+
+        for line in lines:
+            s = line.strip()
+            if s.startswith('## 九'):
+                cur_section = 9; in_table = False; continue
+            if s.startswith('## 十'):
+                cur_section = 10; in_table = False; continue
+            if s.startswith('## 十一'):
+                cur_section = 0; break
+            if cur_section == 0:
+                continue
+
+            # 定位/哲学/嵌入段落
+            # 定位/哲学/嵌入段落
+            if cur_section == 9:
+                if s.startswith('> **定位**'):
+                    seal['position'] = s.lstrip('> ').replace('**定位**', '').strip().lstrip(':').strip()
+                elif s.startswith('> **训练哲学**'):
+                    pass
+                elif s.startswith('### 9.2'):
+                    # 标准 SEAL 500 循环说明
+                    pass
+                elif '累计' in s and '轮' in s:
+                    seal['test_loop'] = s.strip('`').strip()
+            elif cur_section == 10:
+                if s.startswith('> **定位**'):
+                    cc['position'] = s.lstrip('> ').replace('**定位**', '').strip().lstrip(':').strip()
+
+            # 表格解析
+            if s.startswith('|') and '---' not in s:
+                cells = [c.strip() for c in line.split('|')[1:-1]]
+                if not cells:
+                    continue
+                # 表头识别
+                if cur_section == 9 and cells[0] == '动作':
+                    table_header = cells; in_table = True; continue
+                if cur_section == 10 and cells[0] == '艺':
+                    table_header = cells; in_table = True; continue
+                if not table_header:
+                    continue
+                if cur_section == 9:
+                    # 六支柱表: 动作 | 目标 | 标准要点
+                    if len(cells) >= 3:
+                        seal['moves'].append({
+                            'name': cells[0], 'target': cells[1], 'tip': cells[2],
+                        })
+                elif cur_section == 10:
+                    # 六艺十阶表: 艺 | 阶1 | 阶5 | 阶10 | 主计划对应日
+                    if len(cells) >= 5:
+                        cc['arts'].append({
+                            'art': cells[0], 's1': cells[1], 's5': cells[2],
+                            's10': cells[3], 'day': cells[4],
+                        })
+            else:
+                if s and not s.startswith('|'):
+                    in_table = False
+
+            # 嵌入示例(项目符号列表)
+            if s.startswith('- '):
+                if cur_section == 9 and ('应急' in s or '晨间' in s or '收尾' in s or '替代' in s):
+                    seal['embed'].append(s.lstrip('- ').strip())
+                elif cur_section == 10 and ('重量到顶' in s or '背厚度' in s or '桥' in s or '倒立' in s):
+                    cc['embed'].append(s.lstrip('- ').strip())
+
+        return {'seal': seal, 'cc': cc}
+
 
 # ═══════════════════════════════════════════════════════════
 # 营养方案 — 解析12月底塑形冲刺计划第二章
 # ═══════════════════════════════════════════════════════════
 
 class NutritionParser:
-    """从计划文档提取三阶段营养方案 + 补剂 + 饮水"""
+    """从居家平替计划 v3.0 提取三阶段营养方案 + 补剂 + 饮水"""
 
-    # 三阶段热量与宏量数据(v2.1宽背窄腰执行版, 热量提升+碳水循环优化)
+    # 三阶段热量与宏量数据(v3.0居家平替版, 蛋白165g/天恒定)
     PHASE_MACROS = {
-        1: {  # 代谢重建期 (v2.1: 2300/2100, 缺口~200-300kcal)
-            'training':   {'kcal': 2300, 'protein': 170, 'carbs': 260, 'fat': 60, 'protein_pct': 30},
-            'rest':       {'kcal': 2100, 'protein': 165, 'carbs': 210, 'fat': 60, 'protein_pct': 31},
+        1: {  # 基础建设期 (v3.0: 2300/2100, 蛋白165g)
+            'training':   {'kcal': 2300, 'protein': 165, 'carbs': 240, 'fat': 60, 'protein_pct': 29},
+            'rest':       {'kcal': 2100, 'protein': 160, 'carbs': 190, 'fat': 58, 'protein_pct': 30},
         },
-        2: {  # 体成分重组期 (v2.1: 2200/2000, 缺口~200-300kcal)
-            'training':   {'kcal': 2200, 'protein': 170, 'carbs': 240, 'fat': 55, 'protein_pct': 31},
-            'rest':       {'kcal': 2000, 'protein': 165, 'carbs': 190, 'fat': 55, 'protein_pct': 33},
+        2: {  # 体成分重组期 (v3.0: 2200/2000, 蛋白165g)
+            'training':   {'kcal': 2200, 'protein': 165, 'carbs': 240, 'fat': 55, 'protein_pct': 30},
+            'rest':       {'kcal': 2000, 'protein': 160, 'carbs': 190, 'fat': 55, 'protein_pct': 32},
         },
-        3: {  # 线条雕刻期 (碳水循环: 高碳日背/腿350g, 中碳日胸/肩240g, 低碳日泵感+休息150g)
-            'training':   {'kcal': 2200, 'protein': 170, 'carbs': 240, 'fat': 55, 'protein_pct': 31},  # 中碳日 fallback
-            'high_carb':  {'kcal': 2500, 'protein': 170, 'carbs': 350, 'fat': 60, 'protein_pct': 27},
-            'medium':     {'kcal': 2200, 'protein': 170, 'carbs': 240, 'fat': 55, 'protein_pct': 31},
-            'low_carb':   {'kcal': 1900, 'protein': 165, 'carbs': 150, 'fat': 50, 'protein_pct': 35},
-            'rest':       {'kcal': 1900, 'protein': 165, 'carbs': 150, 'fat': 50, 'protein_pct': 35},
+        3: {  # 线条雕刻期 (碳水循环: 高碳280g, 中碳200g, 低碳150g, 休息130g)
+            'training':   {'kcal': 2200, 'protein': 165, 'carbs': 200, 'fat': 55, 'protein_pct': 30},  # 中碳日 fallback
+            'high_carb':  {'kcal': 2500, 'protein': 165, 'carbs': 280, 'fat': 60, 'protein_pct': 26},
+            'medium':     {'kcal': 2200, 'protein': 165, 'carbs': 200, 'fat': 55, 'protein_pct': 30},
+            'low_carb':   {'kcal': 1900, 'protein': 160, 'carbs': 150, 'fat': 50, 'protein_pct': 34},
+            'rest':       {'kcal': 1900, 'protein': 160, 'carbs': 130, 'fat': 50, 'protein_pct': 34},
         },
     }
 
@@ -734,12 +821,12 @@ class NutritionParser:
         ('加工食品',      '完全避免',     '★香肠腊肉酱料一律不碰'),
     ]
 
-    # Phase 3 高碳日说明 (v2.1: 高碳日350g碳水专为大肌群背/腿日)
+    # Phase 3 高碳日说明 (v3.0: 高碳日280g碳水专为大肌群背/腿日)
     HIGH_CARB_INFO = (
-        '高碳日安排(碳水350g): 周四背日 + 周三腿日\n'
-        '调整: 早餐燕麦→60g / 训练前+香蕉1根+燕麦20g / '
-        '训练中+含30g麦芽糊精运动饮料 / 训练后+葡萄糖粉15g+额外香蕉 / 晚餐+红薯100g\n'
-        '中碳日(碳水240g): 周一背日 + 周二上胸日 + 周五肩日 · 低碳日(碳水150g): 周六胸腿泵感 + 周日休息'
+        '高碳日安排(碳水280g): 背日(周一/周四) + 腿日(周三)\n'
+        '中碳日(碳水200g): 胸/肩日(周二/周五) · '
+        '低碳日(碳水150g): 泵感日(周六) · 休息日(周日): 130g\n'
+        '蛋白恒定165g/天, 碳水循环驱动减脂+保肌'
     )
 
     @classmethod
@@ -1619,7 +1706,7 @@ class ExerciseLibraryPage(QWidget):
 # ═══════════════════════════════════════════════════════════
 
 class TrainingPlanPage(QWidget):
-    """训练计划 — 20周塑形冲刺, 周历视图 + 阶段切换 + 每日动作列表"""
+    """训练计划 — 22周居家平替塑形, 周历视图 + 阶段切换 + 每日动作列表"""
 
     def __init__(self, plan: TrainingPlanParser, lib: ExerciseLibrary):
         super().__init__()
@@ -1627,6 +1714,8 @@ class TrainingPlanPage(QWidget):
         self.lib = lib
         self.current_week = 1
         self.daily_exercises = plan.get_daily_exercises(self.current_week)
+        # v3.0: 解析海豹徒手 + 囚徒健身两大补位体系(fail-open, 缺章节也为空结构)
+        self.supplement = plan.get_supplement_systems()
         self._build_ui()
 
     def _build_ui(self):
@@ -1635,7 +1724,7 @@ class TrainingPlanPage(QWidget):
 
         # 顶部
         top = QHBoxLayout()
-        title = QLabel('📅 22周塑形冲刺 — 宽背窄腰 · 三阶段周期化')
+        title = QLabel('📅 22周居家平替塑形 — 单杠+哑铃 · 三阶段周期化')
         title.setFont(QFont('Microsoft YaHei', 16, QFont.Bold))
         title.setStyleSheet(f"color: {COLORS['primary']};")
         top.addWidget(title)
@@ -1667,6 +1756,9 @@ class TrainingPlanPage(QWidget):
         note.setStyleSheet(f"color: {COLORS['subtext']}; padding: 4px;")
         layout.addWidget(note)
 
+        # v3.0 补位体系 (海豹徒手 + 囚徒健身) 折叠区
+        self._build_supplement_box(layout)
+
         # 7天卡片网格
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
@@ -1685,6 +1777,149 @@ class TrainingPlanPage(QWidget):
         layout.addWidget(scroll, stretch=1)
 
         self._refresh_days()
+
+    def _build_supplement_box(self, layout: QVBoxLayout):
+        """v3.0 补位体系折叠区 — 海豹徒手 + 囚徒健身两大补位体系速览"""
+        seal = self.supplement.get('seal', {})
+        cc = self.supplement.get('cc', {})
+        has_seal = bool(seal.get('moves') or seal.get('position'))
+        has_cc = bool(cc.get('arts') or cc.get('position'))
+        if not (has_seal or has_cc):
+            # fail-open: 文档缺章节时不渲染折叠区, 不打断主线
+            return
+
+        box = QGroupBox('🪢 补位体系 · 海豹徒手 (Navy SEAL) + 囚徒健身 (CC)')
+        box.setStyleSheet(f"""
+            QGroupBox {{ background-color: {COLORS['card']}; border: 1px solid {COLORS['border']};
+                        border-radius: 8px; margin-top: 6px; color: {COLORS['primary']};
+                        font-weight: bold; padding-top: 8px; }}
+            QGroupBox::title {{ subcontrol-origin: margin; left: 10px; padding: 0 4px; }}
+        """)
+        box_layout = QVBoxLayout(box)
+        box_layout.setContentsMargins(12, 14, 12, 12)
+        box_layout.setSpacing(8)
+
+        # 折叠按钮(标题右侧箭头)
+        toggle = QToolButton(box)
+        toggle.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        toggle.setText('▼')
+        toggle.setFixedSize(22, 22)
+        toggle.setStyleSheet(
+            f"QToolButton {{ background-color: {COLORS['bg']}; color: {COLORS['primary']}; "
+            f"border: 1px solid {COLORS['border']}; border-radius: 4px; font-weight: bold; }}"
+        )
+        toggle.setCursor(Qt.PointingHandCursor)
+        content = QWidget()
+        content_layout = QVBoxLayout(content)
+        content_layout.setContentsMargins(0, 4, 0, 0)
+        content_layout.setSpacing(10)
+
+        def _toggle():
+            visible = content.isVisible()
+            content.setVisible(not visible)
+            toggle.setText('▶' if visible else '▼')
+
+        toggle.clicked.connect(_toggle)
+
+        # 把 toggle 放到 groupbox 标题右侧(用绝对定位)
+        def _position_toggle():
+            toggle.move(box.width() - 34, 10)
+
+        box.resizeEvent = lambda e: (_position_toggle(), type(box).resizeEvent(box, e))
+
+        if has_seal:
+            box_layout.addWidget(self._make_supplement_card(
+                '🪖 海豹徒手 (Navy SEAL Bodyweight)',
+                seal.get('position', ''),
+                seal.get('moves', []),
+                seal.get('test_loop', ''),
+                seal.get('embed', []),
+                '六支柱循环: 推 / 起 / 引 / 蹲 / 弓步 / 平板',
+            ))
+        if has_cc:
+            box_layout.addWidget(self._make_supplement_card(
+                '🔗 囚徒健身 (Convict Conditioning)',
+                cc.get('position', ''),
+                [],
+                '',
+                cc.get('embed', []),
+                None,
+                arts=cc.get('arts', []),
+            ))
+
+        box_layout.addWidget(content, stretch=1)
+        layout.addWidget(box)
+
+    def _make_supplement_card(self, title: str, position: str, moves: List[Dict],
+                              test_loop: str, embed: List[str], pillars: str = None,
+                              arts: List[Dict] = None) -> QWidget:
+        """渲染单个补位体系卡片(海豹徒手 or 囚徒健身)"""
+        card = QWidget()
+        cl = QVBoxLayout(card)
+        cl.setContentsMargins(10, 10, 10, 10)
+        cl.setSpacing(6)
+        card.setStyleSheet(f"background-color: {COLORS['bg']}; border-radius: 8px; "
+                           f"border: 1px solid {COLORS['border']};")
+
+        h = QLabel(title)
+        h.setFont(QFont('Microsoft YaHei', 13, QFont.Bold))
+        h.setStyleSheet(f"color: {COLORS['accent']}; background: transparent;")
+        cl.addWidget(h)
+
+        if position:
+            pos = QLabel(position)
+            pos.setWordWrap(True)
+            pos.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 10px; background: transparent;")
+            cl.addWidget(pos)
+
+        if pillars:
+            pl = QLabel(pillars)
+            pl.setWordWrap(True)
+            pl.setStyleSheet(f"color: {COLORS['success']}; font-size: 11px; background: transparent;")
+            cl.addWidget(pl)
+
+        # 动作 / 六艺列表
+        if moves:
+            grid = QGridLayout()
+            grid.setSpacing(4)
+            grid.setColumnStretch(0, 1); grid.setColumnStretch(1, 1)
+            grid.setColumnStretch(2, 2)
+            for i, m in enumerate(moves):
+                r = i // 2; c = (i % 2) * 3
+                nm = QLabel(f"• {m.get('name', '')}")
+                nm.setStyleSheet(f"color: {COLORS['text']}; font-size: 11px; background: transparent;")
+                nm.setWordWrap(True)
+                tg = QLabel(m.get('target', ''))
+                tg.setStyleSheet(f"color: {COLORS['primary']}; font-size: 10px; background: transparent;")
+                tg.setWordWrap(True)
+                tp = QLabel(m.get('tip', '')[:40])
+                tp.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px; background: transparent;")
+                tp.setWordWrap(True)
+                grid.addWidget(nm, r, c); grid.addWidget(tg, r, c + 1); grid.addWidget(tp, r, c + 2)
+            cl.addLayout(grid)
+
+        if arts:
+            for a in arts:
+                row = QLabel(f"• {a.get('art', '')} — 阶1:{a.get('s1', '')} → 阶5:{a.get('s5', '')} → 阶10:{a.get('s10', '')}"
+                             f"  〔{a.get('day', '')}〕")
+                row.setWordWrap(True)
+                row.setStyleSheet(f"color: {COLORS['text']}; font-size: 10px; background: transparent;")
+                cl.addWidget(row)
+
+        if test_loop:
+            tl = QLabel(f"🎯 SEAL 500 验收: {test_loop}")
+            tl.setWordWrap(True)
+            tl.setStyleSheet(f"color: {COLORS['warning']}; font-size: 10px; background: transparent;")
+            cl.addWidget(tl)
+
+        if embed:
+            for e in embed:
+                eb = QLabel(f"↳ {e}")
+                eb.setWordWrap(True)
+                eb.setStyleSheet(f"color: {COLORS['subtext']}; font-size: 9px; background: transparent;")
+                cl.addWidget(eb)
+
+        return card
 
     def _on_week_changed(self, idx: int):
         self.current_week = idx + 1
@@ -1796,7 +2031,7 @@ class TrainingPlanPage(QWidget):
         cl.addWidget(sep)
 
         if is_rest or not exercises:
-            hint = QLabel('😴 完全休息日\n睡眠>8h | 泡脚 | 按摩\n当日蛋白目标155-160g')
+            hint = QLabel('😴 完全休息日\n晨空腹称重 + 真空腹5×60s\n30min拉伸 + 1h低强度散步\n控盐日(钠<3g) · 蔬菜为主\n睡眠8h+ · 蛋白160g')
             hint.setStyleSheet(f"color: {COLORS['success']}; padding: 8px;")
             hint.setWordWrap(True)
             cl.addWidget(hint)

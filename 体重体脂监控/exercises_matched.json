@@ -1237,5 +1237,334 @@
     ],
     "media_id": "IZVHb27",
     "matched": true
+  },
+  {
+    "id": "0375",
+    "name_cn": "哑铃仰卧直臂上拉 Pullover",
+    "name_en": "dumbbell pullover",
+    "category": "chest",
+    "target": "pectorals",
+    "muscle_group": "latissimus dorsi",
+    "secondary_muscles": [
+      "latissimus dorsi",
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "instructions_zh": "平躺在长凳上，头放在一端，双脚放在地板上。 双手握住哑铃，将手臂伸直至胸部上方。 保持肘部轻微弯曲，慢慢地将哑铃放到脑后，直到感觉胸部和肩膀有拉伸感。 暂停片刻，然后将哑铃举回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "平躺在长凳上，头放在一端，双脚放在地板上",
+      "双手握住哑铃，将手臂伸直至胸部上方",
+      "保持肘部轻微弯曲，慢慢地将哑铃放到脑后，直到感觉胸部和肩膀有拉伸感",
+      "暂停片刻，然后将哑铃举回到起始位置",
+      "重复所需的重复次数"
+    ],
+    "media_id": "9XjtHvS",
+    "matched": true
+  },
+  {
+    "id": "0308",
+    "name_cn": "哑铃飞鸟（平板）",
+    "name_en": "dumbbell fly",
+    "category": "chest",
+    "target": "pectorals",
+    "muscle_group": "shoulders",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "instructions_zh": "平躺在长凳上，双手各握一个哑铃，手掌相对。 将手臂伸直越过胸部，肘部稍微弯曲。 保持肘部轻微弯曲，将手臂以宽弧线向两侧放低，直到感觉到胸部有拉伸感。 暂停片刻，然后反转动作，将哑铃拉回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "平躺在长凳上，双手各握一个哑铃，手掌相对",
+      "将手臂伸直越过胸部，肘部稍微弯曲",
+      "保持肘部轻微弯曲，将手臂以宽弧线向两侧放低，直到感觉到胸部有拉伸感",
+      "暂停片刻，然后反转动作，将哑铃拉回到起始位置",
+      "重复所需的重复次数"
+    ],
+    "media_id": "yz9nUhF",
+    "matched": true
+  },
+  {
+    "id": "0812",
+    "name_cn": "椅子臂屈伸",
+    "name_en": "triceps dip (bench leg)",
+    "category": "upper arms",
+    "target": "triceps",
+    "muscle_group": "chest",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "坐在长凳边缘，双手抓住边缘，手指指向前方。 双脚向前走，将臀部滑离长凳，然后伸直手臂。 弯曲肘部，将身体放低至地面，保持背部靠近长凳。 推动手掌以伸直手臂并返回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "坐在长凳边缘，双手抓住边缘，手指指向前方",
+      "双脚向前走，将臀部滑离长凳，然后伸直手臂",
+      "弯曲肘部，将身体放低至地面，保持背部靠近长凳",
+      "推动手掌以伸直手臂并返回到起始位置",
+      "重复所需的重复次数"
+    ],
+    "media_id": "VuoerH0",
+    "matched": true
+  },
+  {
+    "id": "0812",
+    "name_cn": "椅子臂屈伸（负重）",
+    "name_en": "triceps dip (bench leg)",
+    "category": "upper arms",
+    "target": "triceps",
+    "muscle_group": "chest",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "坐在长凳边缘，双手抓住边缘，手指指向前方。 双脚向前走，将臀部滑离长凳，然后伸直手臂。 弯曲肘部，将身体放低至地面，保持背部靠近长凳。 推动手掌以伸直手臂并返回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "坐在长凳边缘，双手抓住边缘，手指指向前方",
+      "双脚向前走，将臀部滑离长凳，然后伸直手臂",
+      "弯曲肘部，将身体放低至地面，保持背部靠近长凳",
+      "推动手掌以伸直手臂并返回到起始位置",
+      "重复所需的重复次数"
+    ],
+    "media_id": "VuoerH0",
+    "matched": true
+  },
+  {
+    "id": "1760",
+    "name_cn": "哑铃深蹲 Goblet Squat",
+    "name_en": "dumbbell goblet squat",
+    "category": "upper legs",
+    "target": "quads",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings",
+      "calves"
+    ],
+    "equipment": "dumbbell",
+    "instructions_zh": "双脚分开与肩同宽站立，双手握住哑铃垂直放在胸前。 保持胸部挺直，核心收紧，通过向后推臀部并弯曲膝盖，将身体降低至蹲姿。 继续降低，直到大腿与地面平行，或者尽可能低。 在底部停顿片刻，然后推动脚后跟回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立，双手握住哑铃垂直放在胸前",
+      "保持胸部挺直，核心收紧，通过向后推臀部并弯曲膝盖，将身体降低至蹲姿",
+      "继续降低，直到大腿与地面平行，或者尽可能低",
+      "在底部停顿片刻，然后推动脚后跟回到起始位置",
+      "重复所需的重复次数"
+    ],
+    "media_id": "yn8yg1r",
+    "matched": true
+  },
+  {
+    "id": "1760",
+    "name_cn": "哑铃 Goblet 深蹲高次慢速",
+    "name_en": "dumbbell goblet squat",
+    "category": "upper legs",
+    "target": "quads",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings",
+      "calves"
+    ],
+    "equipment": "dumbbell",
+    "instructions_zh": "双脚分开与肩同宽站立，双手握住哑铃垂直放在胸前。 保持胸部挺直，核心收紧，通过向后推臀部并弯曲膝盖，将身体降低至蹲姿。 继续降低，直到大腿与地面平行，或者尽可能低。 在底部停顿片刻，然后推动脚后跟回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立，双手握住哑铃垂直放在胸前",
+      "保持胸部挺直，核心收紧，通过向后推臀部并弯曲膝盖，将身体降低至蹲姿",
+      "继续降低，直到大腿与地面平行，或者尽可能低",
+      "在底部停顿片刻，然后推动脚后跟回到起始位置",
+      "重复所需的重复次数"
+    ],
+    "media_id": "yn8yg1r",
+    "matched": true
+  },
+  {
+    "id": "0696",
+    "name_cn": "哑铃夹腿俯卧弯举",
+    "name_en": "self assisted inverse leg curl (on floor)",
+    "category": "upper legs",
+    "target": "hamstrings",
+    "muscle_group": "glutes",
+    "secondary_muscles": [
+      "glutes",
+      "calves"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "平躺，双腿伸展，双臂放在身体两侧。 弯曲膝盖，将双脚平放在地面上，距离与臀部同宽。 将臀部抬离地面，锻炼臀肌和腿筋。 慢慢地将双腿向臀部弯曲，保持臀部抬起。 在顶部停顿片刻，然后慢慢将双腿伸展回起始位置。 将臀部放回地面。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "平躺，双腿伸展，双臂放在身体两侧",
+      "弯曲膝盖，将双脚平放在地面上，距离与臀部同宽",
+      "将臀部抬离地面，锻炼臀肌和腿筋",
+      "慢慢地将双腿向臀部弯曲，保持臀部抬起",
+      "在顶部停顿片刻，然后慢慢将双腿伸展回起始位置",
+      "将臀部放回地面",
+      "重复所需的重复次数"
+    ],
+    "media_id": "E4PwJqI",
+    "matched": true
+  },
+  {
+    "id": "0411",
+    "name_cn": "单腿深蹲",
+    "name_en": "dumbbell single leg squat",
+    "category": "upper legs",
+    "target": "glutes",
+    "muscle_group": "quadriceps",
+    "secondary_muscles": [
+      "quadriceps",
+      "hamstrings",
+      "calves"
+    ],
+    "equipment": "dumbbell",
+    "instructions_zh": "双脚分开与肩同宽站立，每只手各握一个哑铃。 向前伸展一条腿，并在整个练习过程中保持其离开地面。 弯曲站立的腿并降低身体，就像坐回椅子上一样。 保持挺胸、背部挺直。 在底部停顿片刻，然后用脚跟推动回到起始位置。 重复所需的重复次数，然后换腿。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立，每只手各握一个哑铃",
+      "向前伸展一条腿，并在整个练习过程中保持其离开地面",
+      "弯曲站立的腿并降低身体，就像坐回椅子上一样",
+      "保持挺胸、背部挺直",
+      "在底部停顿片刻，然后用脚跟推动回到起始位置",
+      "重复所需的重复次数，然后换腿"
+    ],
+    "media_id": "H6ybluc",
+    "matched": true
+  },
+  {
+    "id": "0293",
+    "name_cn": "胸支撑哑铃划船",
+    "name_en": "dumbbell bent over row",
+    "category": "back",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "instructions_zh": "双脚分开与肩同宽站立，膝盖稍微弯曲，双手各握一个哑铃，手掌朝向身体。 臀部向前弯曲，保持背部挺直，核心肌群参与。 让你的手臂垂直垂向地板，肘部稍微弯曲。 将哑铃拉向胸部，将肩胛骨挤压在一起。 在顶部停顿片刻，然后慢慢将哑铃放回起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立，膝盖稍微弯曲，双手各握一个哑铃，手掌朝向身体",
+      "臀部向前弯曲，保持背部挺直，核心肌群参与",
+      "让你的手臂垂直垂向地板，肘部稍微弯曲",
+      "将哑铃拉向胸部，将肩胛骨挤压在一起",
+      "在顶部停顿片刻，然后慢慢将哑铃放回起始位置",
+      "重复所需的重复次数"
+    ],
+    "media_id": "BJ0Hz5L",
+    "matched": true
+  },
+  {
+    "id": "0293",
+    "name_cn": "哑铃俯身划船（双手窄握）",
+    "name_en": "dumbbell bent over row",
+    "category": "back",
+    "target": "upper back",
+    "muscle_group": "biceps",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "instructions_zh": "双脚分开与肩同宽站立，膝盖稍微弯曲，双手各握一个哑铃，手掌朝向身体。 臀部向前弯曲，保持背部挺直，核心肌群参与。 让你的手臂垂直垂向地板，肘部稍微弯曲。 将哑铃拉向胸部，将肩胛骨挤压在一起。 在顶部停顿片刻，然后慢慢将哑铃放回起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立，膝盖稍微弯曲，双手各握一个哑铃，手掌朝向身体",
+      "臀部向前弯曲，保持背部挺直，核心肌群参与",
+      "让你的手臂垂直垂向地板，肘部稍微弯曲",
+      "将哑铃拉向胸部，将肩胛骨挤压在一起",
+      "在顶部停顿片刻，然后慢慢将哑铃放回起始位置",
+      "重复所需的重复次数"
+    ],
+    "media_id": "BJ0Hz5L",
+    "matched": true
+  },
+  {
+    "id": "1022",
+    "name_cn": "弹力带面拉",
+    "name_en": "band standing rear delt row",
+    "category": "shoulders",
+    "target": "delts",
+    "muscle_group": "trapezius",
+    "secondary_muscles": [
+      "trapezius",
+      "rhomboids",
+      "biceps"
+    ],
+    "equipment": "band",
+    "instructions_zh": "双脚分开与肩同宽站立，将弹力带放在脚下。 双手握住弹力带手柄，手掌相对，双臂向前伸展。 稍微弯曲膝盖，髋部向前转动，保持背部挺直。 将弹力带拉向胸部，将肩胛骨挤压在一起。 在最高点停顿片刻，然后慢慢释放张力，回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立，将弹力带放在脚下",
+      "双手握住弹力带手柄，手掌相对，双臂向前伸展",
+      "稍微弯曲膝盖，髋部向前转动，保持背部挺直",
+      "将弹力带拉向胸部，将肩胛骨挤压在一起",
+      "在最高点停顿片刻，然后慢慢释放张力，回到起始位置",
+      "重复所需的重复次数"
+    ],
+    "media_id": "tc5dYrf",
+    "matched": true
+  },
+  {
+    "id": "0662",
+    "name_cn": "俯卧撑",
+    "name_en": "push-up",
+    "category": "chest",
+    "target": "pectorals",
+    "muscle_group": "triceps",
+    "secondary_muscles": [
+      "triceps",
+      "deltoids",
+      "core"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "从高位平板支撑开始，双手分开略宽于肩宽，双脚并拢。 弯曲肘部，调动核心力量，将身体压向地面，保持身体呈一条直线。 当你的胸部刚好高于地面时，暂停片刻，然后伸直手臂，将自己推回起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "从高位平板支撑开始，双手分开略宽于肩宽，双脚并拢",
+      "弯曲肘部，调动核心力量，将身体压向地面，保持身体呈一条直线",
+      "当你的胸部刚好高于地面时，暂停片刻，然后伸直手臂，将自己推回起始位置",
+      "重复所需的重复次数"
+    ],
+    "media_id": "I4hDWkc",
+    "matched": true
+  },
+  {
+    "id": "1459",
+    "name_cn": "哑铃罗马尼亚硬拉",
+    "name_en": "dumbbell romanian deadlift",
+    "category": "upper legs",
+    "target": "glutes",
+    "muscle_group": "hamstrings",
+    "secondary_muscles": [
+      "hamstrings",
+      "lower back"
+    ],
+    "equipment": "dumbbell",
+    "instructions_zh": "双脚分开与肩同宽站立，双手各握一个哑铃，正握。 保持背部挺直，核心收紧，以臀部为铰链，将哑铃向地面降低，让膝盖稍微弯曲。 降低哑铃，直到感觉到腿筋拉伸，然后推动脚后跟并收紧臀肌，回到起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "双脚分开与肩同宽站立，双手各握一个哑铃，正握。",
+      "保持背部挺直，核心收紧，以臀部为铰链，将哑铃向地面降低，让膝盖稍微弯曲。",
+      "降低哑铃，直到感觉到腿筋拉伸，然后推动脚后跟并收紧臀肌，回到起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "rR0LJzx",
+    "matched": true
+  },
+  {
+    "id": "0472",
+    "name_cn": "单杠悬挂举腿",
+    "name_en": "hanging leg raise",
+    "category": "waist",
+    "target": "abs",
+    "muscle_group": "hip flexors",
+    "secondary_muscles": [
+      "hip flexors"
+    ],
+    "equipment": "body weight",
+    "instructions_zh": "悬挂在引体向上杆上，双臂完全伸展，手掌背向自己。 启动你的核心并将双腿抬起到你面前，保持伸直。 继续抬起，直到双腿与地面平行或达到您可以舒适地达到的高度。 在顶部暂停片刻，然后慢慢将双腿放回起始位置。 重复所需的重复次数。",
+    "instruction_steps_zh": [
+      "悬挂在引体向上杆上，双臂完全伸展，手掌背向自己。",
+      "启动你的核心并将双腿抬起到你面前，保持伸直。",
+      "继续抬起，直到双腿与地面平行或达到您可以舒适地达到的高度。",
+      "在顶部暂停片刻，然后慢慢将双腿放回起始位置。",
+      "重复所需的重复次数。"
+    ],
+    "media_id": "I3tsCnC",
+    "matched": true
   }
 ]

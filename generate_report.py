@@ -41,8 +41,8 @@ for col in ['体重(kg)', '体脂率(%)']:
         stats[f'{key}变化'] = data.iloc[-1] - data.iloc[0]
 
 # 计算进度
-weight_progress = min(100, max(0, (stats['初始体重'] - stats['最新体重']) / (stats['初始体重'] - 67) * 100))
-bodyfat_progress = min(100, max(0, (stats['初始体脂率'] - stats['最新体脂率']) / (stats['初始体脂率'] - 17) * 100))
+weight_progress = min(100, max(0, (stats['初始体重'] - stats['最新体重']) / (stats['初始体重'] - 65) * 100))
+bodyfat_progress = min(100, max(0, (stats['初始体脂率'] - stats['最新体脂率']) / (stats['初始体脂率'] - 12.5) * 100))
 
 # 生成报告
 report = f"""
@@ -61,8 +61,8 @@ report = f"""
 初始体重: {stats['初始体重']:.2f} kg
 最新体重: {stats['最新体重']:.2f} kg
 体重变化: {stats['体重变化']:+.2f} kg
-目标体重: 67.00 kg
-距离目标: {stats['最新体重'] - 67:.2f} kg
+目标体重: 65.00 kg
+距离目标: {stats['最新体重'] - 65:.2f} kg
 体重进度: {weight_progress:.1f}%
 
 ================================================================================
@@ -71,8 +71,8 @@ report = f"""
 初始体脂: {stats['初始体脂率']:.2f}%
 最新体脂: {stats['最新体脂率']:.2f}%
 体脂变化: {stats['体脂率变化']:+.2f}%
-目标体脂: 17.00%
-距离目标: {stats['最新体脂率'] - 17:.2f}%
+目标体脂: 12.50%
+距离目标: {stats['最新体脂率'] - 12.5:.2f}%
 体脂进度: {bodyfat_progress:.1f}%
 
 ================================================================================
@@ -100,7 +100,7 @@ fig.suptitle('5周减脂数据趋势图', fontsize=18, fontweight='bold', y=0.98
 
 # 体重
 ax1.plot(df['日期'], df['体重(kg)'], 'b-o', linewidth=2, markersize=4, label='体重')
-ax1.axhline(y=67, color='r', linestyle='--', alpha=0.7, label='目标67kg')
+ax1.axhline(y=65, color='r', linestyle='--', alpha=0.7, label='目标65kg')
 ax1.set_ylabel('体重 (kg)', fontsize=12)
 ax1.set_title('体重变化趋势', fontsize=14, fontweight='bold')
 ax1.legend()
@@ -108,7 +108,7 @@ ax1.grid(True, alpha=0.3)
 
 # 体脂率
 ax2.plot(df['日期'], df['体脂率(%)'], 'r-o', linewidth=2, markersize=4, label='体脂率')
-ax2.axhline(y=17, color='green', linestyle='--', alpha=0.7, label='目标17%')
+ax2.axhline(y=12.5, color='green', linestyle='--', alpha=0.7, label='目标12.5%')
 ax2.set_ylabel('体脂率 (%)', fontsize=12)
 ax2.set_title('体脂率变化趋势', fontsize=14, fontweight='bold')
 ax2.legend()
