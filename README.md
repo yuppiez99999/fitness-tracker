@@ -100,7 +100,7 @@ python -m PyInstaller 健身监控.spec --noconfirm --clean
 
 ## 训练计划 v2.1 亮点
 
-基于个人实测数据制定的 22 周塑形计划（示例：体脂从 16.9% 降至 12.5–13.5%），可按自身情况调整热量与训练量。
+基于示例数据制定的 22 周塑形计划（示例起始：体重 68.0 kg / 体脂 17.0%，目标体脂 12.5–13.5%），可按自身情况调整热量与训练量。
 
 | 维度 | v2.0 | v2.1 优化 |
 |:-----|:-----|:----------|
@@ -127,6 +127,30 @@ Lzheng-fitness 知识库包含 6 个来源限定专家模块：
 | Dan John | 基础训练 | 目标脱节时回到基础 |
 | Brukner & Khan | 临床运动 | 安全筛查、疼痛分流 |
 
+## Lzheng-fitness 知识库（Git 子模块）
+
+> 详细说明见子模块 `Lzheng-fitness/README.md`。本仓库以 Git 子模块方式集成，克隆时请用 `--recurse-submodules`。
+
+可独立下载、离线运行的个人训练 Agent Skills。v2 将计划、专项周期、训练复盘、停训接回、系统总控与健身工作台组合为一个可迁移的本地训练闭环。公开包不含任何个人训练数据、账号信息或绝对路径。
+
+| Skill | 用途 |
+| --- | --- |
+| `lzheng-fitness-plan` | 训练建档、安全筛查、完整计划与 HTML |
+| `lzheng-training-return` | 停训、漏练或条件变化后的接回 |
+| `lzheng-strength-cycle-planner` | 单个力量动作的 8—12 周周期 |
+| `lzheng-strength-training-review` | 单次、滚动、基准与周训练复盘 |
+| `lzheng-training-expert-library` | 六个来源限定专家模块、选择协议和验证状态 |
+| `lzheng-training-system` | 新电脑初始化、迁移、诊断、升级保护和整套校验 |
+| `lzheng-fitness-workbench-builder` | 从计划、复盘和可选动态数据生成响应式离线工作台 |
+
+安装（需 Python 3.10+，无需第三方包）：
+
+```bash
+python Lzheng-fitness/tools/install.py --platform codex --all
+```
+
+安装完成后，在新对话中说"**开始建立我的健身系统。**"即可由 AI 引导完成建档、动作重量校准、正式计划与工作台。发布前可用 `python Lzheng-fitness/tools/validate_bundle.py` 验证（检查元数据、链接、隐私残留与脚本语法）。本项目提供一般训练规划与记录支持，不是医疗诊断或康复建议。
+
 ## 数据说明
 
 - 体测数据支持 12 项指标：日期、体重、体脂率、肌肉量、内脏脂肪等级、基础代谢率、体水分率、骨量、BMI、骨骼肌率、腰围、臀围
@@ -139,5 +163,5 @@ Lzheng-fitness 知识库包含 6 个来源限定专家模块：
 - 本项目为个人健身工具，数据存储在本地
 - 敏感个人信息文件已排除在版本控制之外
 - 虚拟环境目录 `.venv` 不提交到仓库
-- 训练计划基于个人实测数据制定，参考前请结合自身体检与训练基础
+- 训练计划文档中的身体数据均为通用示例，使用前请替换为个人体测值
 - AI 教练提供一般训练规划支持，不作医疗诊断或康复建议
