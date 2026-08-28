@@ -35,6 +35,9 @@ weread_2026h1/
 # CodeArts 工具目录（IDE 辅助，非项目内容）
 .codeartsdoer/
 
+# CodeBuddy 工作记忆与 IDE 辅助目录（非项目内容，含会话数据）
+.codebuddy/
+
 # 个人工作笔记（含本机路径与项目目录信息）
 github_trending_*.md
 
