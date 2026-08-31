@@ -586,8 +586,6 @@ class TrainingPlanPage(QWidget):
         note.setStyleSheet(f"color: {COLORS['subtext']}; padding: 4px;")
         layout.addWidget(note)
 
-        # v3.0 补位体系 (海豹徒手 + 囚徒健身) 折叠区
-        self._build_supplement_box(layout)
 
         # 7天卡片网格
         scroll = QScrollArea()
