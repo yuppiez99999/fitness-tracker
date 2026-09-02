@@ -1,5 +1,8 @@
 # 健身监控 v9.0
 
+![License](https://img.shields.io/badge/license-PolyForm%20NC%201.0.0-blue)
+![Use](https://img.shields.io/badge/use-非商业%20%2B%20署名-required)
+
 基于市场主流健身软件（Keep / Fitbod / Hevy / Strong）特性优化 + **Lzheng-fitness 知识库深度集成**的个人体脂体重监控 + 健身计划软件。PySide6 重构版，提供体测管理、趋势分析、动作示范、训练计划、营养指导与 **AI 教练**六大模块。
 
 > **v9.0 关键升级**：深度集成 [Lzheng-fitness](https://github.com/yuppiez99999/Lzheng-fitness) 知识库（Schoenfeld/Helms/Aragon/Nuckols 蒸馏模块），新增 **AI 教练**页面，实现 P0-L3 分层评估、8-12 周动态力量周期化、训练复盘 + 渐进超负荷、停训接回三档方案、最低执行版本（30/20/10 分钟）五大增肌优化能力。支持 PyInstaller 一键封装为独立 .exe，免安装 Python 直接运行。
@@ -164,3 +167,100 @@ python Lzheng-fitness/tools/install.py --platform codex --all
 - 虚拟环境目录 `.venv` 不提交到仓库
 - 训练计划文档中的身体数据均为通用示例，使用前请替换为个人体测值
 - AI 教练提供一般训练规划支持，不作医疗诊断或康复建议
+
+## 许可证
+
+本仓库采用 **PolyForm Noncommercial License 1.0.0**，核心要求为 **非商业用途 + 必须署著作名**。完整法律文本见 [`LICENSE`](./LICENSE)。
+
+### 授权范围（允许）
+
+| 用途 | 是否允许 | 说明 |
+|:-----|:---------|:-----|
+| 个人健身记录、体测追踪 | ✅ | 本软件的原始设计目的 |
+| 个人学习、研究、实验 | ✅ | 不含任何预期商业应用 |
+| 兴趣项目、业余爱好、私人娱乐 | ✅ | PolyForm NC 明确列入 Personal Uses |
+| 修改、二次开发、自用分支 | ✅ | 须保留署名与本许可证条款 |
+| 慈善机构、教育机构、公共研究机构、政府机构使用 | ✅ | 无论资金来源均允许 |
+| 公开分发源码或构建产物 | ✅ | 须附带本许可证全文与署名行 |
+| 学术论文引用、教学示例 | ✅ | 须署名 |
+
+### 禁止范围（不允许）
+
+| 用途 | 是否允许 | 说明 |
+|:-----|:---------|:-----|
+| 任何直接或间接收费的商业产品或服务 | ❌ | 包括付费 App、SaaS、内嵌收费模块 |
+| 企业内部商业运营、员工健身福利商业化产品 | ❌ | 商业实体内部使用须另行授权 |
+| 二次开发后以商业方式发行或销售 | ❌ | 衍生作品继承非商业约束 |
+| 用于训练商业 AI 模型或数据集 | ❌ | 衡生数据集同样受非商业约束 |
+| 移除、隐藏或篡改署名行 `Required Notice` | ❌ | 违反 Notices 条款，许可证立即终止 |
+| 重新许可（sublicense）或转让本许可证 | ❌ | PolyForm NC 明确禁止 |
+
+> **商业授权**：如需将本软件用于商业用途，请通过 [GitHub Issues](https://github.com/yuppiez99999/fitness-tracker/issues) 联系作者另行签订商业许可协议。
+
+### 署名要求（必须）
+
+按 PolyForm NC 1.0.0 的 **Notices** 条款，分发本软件任意部分时必须同时附带：
+
+1. **本许可证全文或其 URL**：`https://polyformproject.org/licenses/noncommercial/1.0.0`
+2. **署名行（Required Notice）**，原样保留不得修改：
+   ```
+   Required Notice: Copyright (c) 2026 yuppiez99999 (https://github.com/yuppiez99999)
+   ```
+3. 若本软件附带了其他 `Required Notice:` 开头的纯文本行，须一并原样传递。
+
+署名不得移除、隐藏、缩印或改写。在 About 对话框、README、启动画面、关于页等显著位置展示即视为满足"获得副本者同时获得署名"的要求。
+
+### 非商业用途定义
+
+PolyForm NC 1.0.0 中的"非商业"采用正向定义，**任何非商业目的均为许可目的**，具体包括：
+
+- **个人使用**：研究、实验、为公共知识服务的测试、个人学习、私人娱乐、兴趣项目、业余追求、宗教活动，且无任何预期商业应用
+- **非商业组织使用**：慈善组织、教育机构、公共研究机构、公共安全或健康机构、环境保护机构、政府机构，无论资金来源
+- **合理使用（Fair Use）**：法律赋予的合理使用权利不受本条款限制
+
+商业与否以"用途目的"为准，而非"使用者身份"。商业公司员工为个人健身记录使用本软件属非商业；个人开发者将本软件打包收费分发则属商业。
+
+### 子模块许可证边界
+
+本仓库含三个 Git 子模块，**它们各自保留原许可证**，主仓库 PolyForm NC 不覆盖子模块内部：
+
+| 子模块 | 许可证 | 商业用途 | 署名要求 |
+|:-------|:-------|:---------|:---------|
+| [`Lzheng-fitness/`](./Lzheng-fitness/) | MIT | 允许 | 保留版权声明 |
+| [`exercises-dataset/`](./exercises-dataset/) | 见子模块仓库 | 见子模块 LICENSE | 见子模块 LICENSE |
+| [`BettaFish/`](./BettaFish/) | 见子模块仓库 | 见子模块 LICENSE | 见子模块 LICENSE |
+
+**组合分发注意**：当主仓库代码与子模块代码一同分发时，主仓库部分受 PolyForm NC 约束（非商业 + 署名），子模块部分受各自原许可约束。若下游用途同时涉及两部分，须同时满足所有适用许可的最严格条款；任一子模块许可不放宽主仓库的非商业约束。
+
+### 与原 MIT 许可的差异
+
+本仓库 v9.0 之前采用 MIT 许可（允许商业用途、署名要求较弱）。自 v9.0 起切换至 PolyForm NC 1.0.0，主要变化：
+
+| 维度 | 原 MIT | 现 PolyForm NC 1.0.0 |
+|:-----|:-------|:---------------------|
+| 商业用途 | 允许 | **禁止** |
+| 署名要求 | 保留版权声明 | **强制 Required Notice 传递** |
+| 子许可（sublicense） | 允许 | 禁止 |
+| 专利授权 | 显式授予 | 显式授予（含专利防御条款） |
+| 违规补救 | 无 | 32 天内纠正可续期 |
+| 担保 | 无 | 无 |
+
+历史版本（v8.x 及之前）在 MIT 下分发的副本仍受 MIT 约束，不溯及既往。
+
+### 引用建议
+
+学术论文或公开材料引用本软件时，建议格式：
+
+```bibtex
+@software{fitness_tracker_v9,
+  author       = {yuppiez99999},
+  title        = {健身监控 v9.0：个人体脂体重监控与 AI 教练},
+  year         = {2026},
+  url          = {https://github.com/yuppiez99999/fitness-tracker},
+  license      = {PolyForm Noncommercial 1.0.0}
+}
+```
+
+### 许可证文本来源
+
+本许可证官方文本来自 [PolyForm Project](https://polyformproject.org/licenses/noncommercial/1.0.0)，© PolyForm Project Inc.。本仓库 `LICENSE` 文件为该官方文本的逐字副本，附加上述 Required Notice 署名行。
