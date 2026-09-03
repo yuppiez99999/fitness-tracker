@@ -1,24 +1,49 @@
+<div align="center">
+
+<img src="fitness_icon.ico" alt="健身监控 Logo" width="120">
+
 # 健身监控 v9.0
 
-![License](https://img.shields.io/badge/license-PolyForm%20NC%201.0.0-blue)
-![Use](https://img.shields.io/badge/use-非商业%20%2B%20署名-required)
+**个人体脂体重监控 + 健身计划 + AI 教练 · PySide6 桌面应用**
 
-基于市场主流健身软件（Keep / Fitbod / Hevy / Strong）特性优化 + **Lzheng-fitness 知识库深度集成**的个人体脂体重监控 + 健身计划软件。PySide6 重构版，提供体测管理、趋势分析、动作示范、训练计划、营养指导与 **AI 教练**六大模块。
+*基于 Keep / Fitbod / Hevy / Strong 特性优化，深度集成 [Lzheng-fitness](https://github.com/yuppiez99999/Lzheng-fitness) 训练知识库*
 
-> **v9.0 关键升级**：深度集成 [Lzheng-fitness](https://github.com/yuppiez99999/Lzheng-fitness) 知识库（Schoenfeld/Helms/Aragon/Nuckols 蒸馏模块），新增 **AI 教练**页面，实现 P0-L3 分层评估、8-12 周动态力量周期化、训练复盘 + 渐进超负荷、停训接回三档方案、最低执行版本（30/20/10 分钟）五大增肌优化能力。支持 PyInstaller 一键封装为独立 .exe，免安装 Python 直接运行。
+[![Version](https://img.shields.io/badge/version-v9.0-ff6b35?style=flat-square&logo=github)](https://github.com/yuppiez99999/fitness-tracker/releases)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows-0078D6?style=flat-square&logo=windows)](#-快速开始)
+[![GUI](https://img.shields.io/badge/GUI-PySide6-41CD52?style=flat-square&logo=qt&logoColor=white)](https://doc.qt.io/qtforpython/)
+[![License](https://img.shields.io/badge/License-PolyForm%20NC%201.0.0-blue?style=flat-square)](#-许可证)
+[![Use](https://img.shields.io/badge/用途-非商业%20·%20须署名-red?style=flat-square)](#-许可证)
+[![Stars](https://img.shields.io/github/stars/yuppiez99999/fitness-tracker?style=flat-square&logo=github)](https://github.com/yuppiez99999/fitness-tracker/stargazers)
+[![Issues](https://img.shields.io/github/issues/yuppiez99999/fitness-tracker?style=flat-square&logo=github)](https://github.com/yuppiez99999/fitness-tracker/issues)
 
-## 功能模块
+**[功能亮点](#-功能亮点) · [AI 教练](#-ai-教练-v90-新增) · [快速开始](#-快速开始) · [架构](#-技术架构) · [知识库](#-lzheng-fitness-知识库) · [许可证](#-许可证)**
 
-- **📊 体测仪表盘** — 12 项体测指标 + 快速录入 + 历史记录
-- **📈 趋势分析** — 7 日 EMA 平滑曲线 + 目标达标日预测 + 体成分饼图
-- **🏋️ 动作示范库** — 51 个动作 GIF 动画 + 中文步骤教学 + 肌群信息
-- **📅 训练计划** — 22 周宽背窄腰塑形 v2.1（三阶段周期化，6 练 1 休）+ 点击动作看示范
-- **🍽 饮食与补剂** — 三阶段营养方案 + 五餐明细 + 补剂表 + 饮水指南
-- **� AI 教练** — 基于 Lzheng-fitness 知识库的增肌规划系统（5 个子功能）
+---
 
-## AI 教练模块（v9.0 新增）
+</div>
 
-集成 Lzheng-fitness 的 6 位顶级训练专家知识（Alan Aragon、Brad Schoenfeld、Brukner & Khan、Dan John、Eric Helms、Greg Nuckols），纯 Python 实现，离线运行无需 AI 对话。
+> ### v9.0 关键升级
+> 深度集成 Lzheng-fitness 知识库（Schoenfeld / Helms / Aragon / Nuckols 蒸馏模块），新增 **AI 教练**页面：
+>
+> **P0-L3 分层评估** · **8-12 周动态力量周期化** · **训练复盘 + 渐进超负荷** · **停训接回三档方案** · **最低执行版本（30/20/10 分钟）**
+>
+> 支持 PyInstaller 一键封装为独立 .exe，免安装 Python 直接运行。
+
+## ✨ 功能亮点
+
+| 模块 | 功能 |
+|:---|:---|
+| 📊 **体测仪表盘** | 12 项体测指标 · 快速录入 · 历史记录 |
+| 📈 **趋势分析** | 7 日 EMA 平滑曲线 · 目标达标日预测 · 体成分饼图 |
+| 🏋️ **动作示范库** | 51 个动作 GIF 动画 · 中文步骤教学 · 肌群信息 |
+| 📅 **训练计划** | 22 周宽背窄腰塑形 v2.1（三阶段周期化，6 练 1 休）· 点击动作看示范 |
+| 🍽 **饮食与补剂** | 三阶段营养方案 · 五餐明细 · 补剂表 · 饮水指南 |
+| 🤖 **AI 教练** | 基于 Lzheng-fitness 知识库的增肌规划系统（5 个子功能） |
+
+## 🤖 AI 教练 (v9.0 新增)
+
+集成 Lzheng-fitness 的 6 位顶级训练专家知识（Alan Aragon、Brad Schoenfeld、Brukner & Khan、Dan John、Eric Helms、Greg Nuckols），**纯 Python 实现，离线运行，无需 AI 对话**。
 
 | 子功能 | 说明 |
 |:------|:-----|
@@ -28,15 +53,31 @@
 | ↩️ 停训接回 | 三档接回方案（正常/降级/最低）+ 未来 7 天安排 |
 | ⏱ 短版训练 | 30/20/10 分钟最低执行版本，保留主线，不补课不加倍 |
 
-## 技术栈
+```mermaid
+flowchart LR
+    A[📋 建档与分层<br>P0-L3 评估] --> B[📅 力量周期<br>8-12 周动态生成]
+    B --> C[🏋️ 执行训练]
+    C --> D{📝 训练复盘}
+    D -->|正常| C
+    D -->|漏练/停训| E[↩️ 停训接回<br>三档方案]
+    D -->|时间不足| F[⏱ 短版训练<br>30/20/10 分钟]
+    E --> C
+    F --> C
+    D -->|平台期| G[🧠 专家知识库<br>六位专家模块路由]
+    G --> B
+```
 
-- PySide6 + matplotlib + pandas + numpy + Pillow
-- PyInstaller（封装为免安装 .exe）
-- 数据源：exercises-dataset（Git 子模块，GitHub: yuppiez99999/exercises-dataset）
-- 知识库：Lzheng-fitness（Git 子模块，GitHub: yuppiez99999/Lzheng-fitness）
-- 舆情分析：BettaFish / MiroFish（Git 子模块，GitHub: yuppiez99999/MiroFish）
+## 🚀 快速开始
 
-## 环境要求
+### 方式一 · 免安装运行（推荐）
+
+直接下载已封装的独立程序，无需安装 Python：
+
+1. 前往 [Releases](https://github.com/yuppiez99999/fitness-tracker/releases) 或克隆仓库获取 `dist\健身监控v9.0\` 目录
+2. 复制到任意 Windows 电脑
+3. 双击 `健身监控v9.0.exe` 即可运行
+
+### 方式二 · 源码运行
 
 - Python 3.8+
 - 建议使用虚拟环境运行，避免全局包冲突
@@ -67,9 +108,98 @@ python -m PyInstaller 健身监控.spec --noconfirm --clean
 # 产物: dist\健身监控v9.0\健身监控v9.0.exe
 ```
 
-将 `dist\健身监控v9.0\` 文件夹复制到任意 Windows 电脑，双击 `健身监控v9.0.exe` 即可运行，无需安装 Python。
+## 🏗️ 技术架构
 
-## 项目结构
+```mermaid
+flowchart TB
+    subgraph GUI["🖥 PySide6 桌面应用（6 Tab）"]
+        A1[📊 体测仪表盘] --- A2[📈 趋势分析]
+        A3[🏋️ 动作示范库] --- A4[📅 训练计划]
+        A5[🍽 饮食与补剂] --- A6[🤖 AI 教练]
+    end
+    subgraph Core["⚙️ 核心模块"]
+        B1[fitness_pkg<br>模型/页面/解析器]
+        B2[ai_coach_engine<br>P0-L3/周期/复盘/接回/短版]
+    end
+    subgraph Data["💾 数据层"]
+        C1[本地体测数据<br>12 项指标]
+        C2[exercises-dataset<br>51 动作 GIF]
+        C3[Lzheng-fitness<br>六专家知识库]
+    end
+    GUI --> Core --> Data
+```
+
+| 类别 | 技术 |
+|:-----|:-----|
+| GUI 框架 | PySide6 |
+| 数据/绘图 | matplotlib · pandas · numpy · Pillow |
+| 打包分发 | PyInstaller |
+| 数据源 | [exercises-dataset](https://github.com/yuppiez99999/exercises-dataset)（Git 子模块） |
+| 知识库 | [Lzheng-fitness](https://github.com/yuppiez99999/Lzheng-fitness)（Git 子模块） |
+| 舆情分析 | [BettaFish / MiroFish](https://github.com/yuppiez99999/MiroFish)（Git 子模块） |
+
+## 🧠 AI 教练知识来源
+
+Lzheng-fitness 知识库包含 6 个来源限定专家模块：
+
+| 专家 | 领域 | 应用场景 |
+|:-----|:-----|:---------|
+| Brad Schoenfeld | 肌肥大科学 | 训练量、频率、RIR 设置 |
+| Eric Helms | 训练金字塔 | 周期结构、阶段过渡 |
+| Alan Aragon | 营养策略 | 热量缺口、宏量配比 |
+| Greg Nuckols | 力量停滞 | 突破平台期、变量实验 |
+| Dan John | 基础训练 | 目标脱节时回到基础 |
+| Brukner & Khan | 临床运动 | 安全筛查、疼痛分流 |
+
+## 📚 Lzheng-fitness 知识库
+
+> 详细说明见子模块 `Lzheng-fitness/README.md`。本仓库以 Git 子模块方式集成，克隆时请用 `--recurse-submodules`。
+
+可独立下载、离线运行的个人训练 Agent Skills。v2 将计划、专项周期、训练复盘、停训接回、系统总控与健身工作台组合为一个可迁移的本地训练闭环。公开包不含任何个人训练数据、账号信息或绝对路径。
+
+| Skill | 用途 |
+| --- | --- |
+| `lzheng-fitness-plan` | 训练建档、安全筛查、完整计划与 HTML |
+| `lzheng-training-return` | 停训、漏练或条件变化后的接回 |
+| `lzheng-strength-cycle-planner` | 单个力量动作的 8—12 周周期 |
+| `lzheng-strength-training-review` | 单次、滚动、基准与周训练复盘 |
+| `lzheng-training-expert-library` | 六个来源限定专家模块、选择协议和验证状态 |
+| `lzheng-training-system` | 新电脑初始化、迁移、诊断、升级保护和整套校验 |
+| `lzheng-fitness-workbench-builder` | 从计划、复盘和可选动态数据生成响应式离线工作台 |
+
+安装（需 Python 3.10+，无需第三方包）：
+
+```bash
+python Lzheng-fitness/tools/install.py --platform codex --all
+```
+
+安装完成后，在新对话中说"**开始建立我的健身系统。**"即可由 AI 引导完成建档、动作重量校准、正式计划与工作台。发布前可用 `python Lzheng-fitness/tools/validate_bundle.py` 验证（检查元数据、链接、隐私残留与脚本语法）。
+
+## 📋 训练计划模板亮点
+
+<details open>
+<summary><b>22 周宽背窄腰塑形计划（通用模板，点击收起）</b></summary>
+
+所有身体数据均为占位示例，使用前请按个人体测值替换，热量与训练量可按自身 TDEE 调整。
+
+| 维度 | 模板基线 | 模板优化 |
+|:-----|:---------|:---------|
+| 热量结构 | 单一缺口 | 训练日 / 休息日差异化热量 |
+| 背周总量 | 30 组 | 18–22 组（周一 10 + 周四 8–12） |
+| 俯身划船 | 周四主项 | T 杠划船 / 胸支撑划船（护腰） |
+| 阿诺德推举 | 肩日主项 | 坐姿哑铃肩推（护肩袖） |
+| 空腹有氧 | Phase 2 启动 | Phase 1 完全不做，Phase 2 最多 2 次 |
+| 补剂 | 堆叠 9 种 | 精简至 5 必需 + 3 建议 |
+| 真空腹 | 60 秒 ×5 | 30→45→60 秒递进 |
+
+**训练日程（6 练 1 休）**：背（宽）→ 胸（上胸优先）→ 腿（四头为主）→ 背（划船）→ 肩 + 臂 → 全身 HIIT + 冲刺 → 完全休息。
+
+</details>
+
+## 📁 项目结构
+
+<details>
+<summary><b>展开目录树</b></summary>
 
 ```
 06_个人辅助工具/
@@ -99,60 +229,12 @@ python -m PyInstaller 健身监控.spec --noconfirm --clean
 └── README.md
 ```
 
-## 训练计划模板亮点
+</details>
 
-22 周宽背窄腰塑形计划为通用模板，所有身体数据均为占位示例，使用前请按个人体测值替换，热量与训练量可按自身 TDEE 调整。
+## 📊 数据说明
 
-| 维度 | 模板基线 | 模板优化 |
-|:-----|:---------|:---------|
-| 热量结构 | 单一缺口 | 训练日 / 休息日差异化热量 |
-| 背周总量 | 30 组 | 18–22 组（周一 10 + 周四 8–12） |
-| 俯身划船 | 周四主项 | T 杠划船 / 胸支撑划船（护腰） |
-| 阿诺德推举 | 肩日主项 | 坐姿哑铃肩推（护肩袖） |
-| 空腹有氧 | Phase 2 启动 | Phase 1 完全不做，Phase 2 最多 2 次 |
-| 补剂 | 堆叠 9 种 | 精简至 5 必需 + 3 建议 |
-| 真空腹 | 60 秒 ×5 | 30→45→60 秒递进 |
-
-训练日程（6 练 1 休）：背（宽）→ 胸（上胸优先）→ 腿（四头为主）→ 背（划船）→ 肩 + 臂 → 全身 HIIT + 冲刺 → 完全休息。
-
-## AI 教练知识来源
-
-Lzheng-fitness 知识库包含 6 个来源限定专家模块：
-
-| 专家 | 领域 | 应用场景 |
-|:-----|:-----|:---------|
-| Brad Schoenfeld | 肌肥大科学 | 训练量、频率、RIR 设置 |
-| Eric Helms | 训练金字塔 | 周期结构、阶段过渡 |
-| Alan Aragon | 营养策略 | 热量缺口、宏量配比 |
-| Greg Nuckols | 力量停滞 | 突破平台期、变量实验 |
-| Dan John | 基础训练 | 目标脱节时回到基础 |
-| Brukner & Khan | 临床运动 | 安全筛查、疼痛分流 |
-
-## Lzheng-fitness 知识库（Git 子模块）
-
-> 详细说明见子模块 `Lzheng-fitness/README.md`。本仓库以 Git 子模块方式集成，克隆时请用 `--recurse-submodules`。
-
-可独立下载、离线运行的个人训练 Agent Skills。v2 将计划、专项周期、训练复盘、停训接回、系统总控与健身工作台组合为一个可迁移的本地训练闭环。公开包不含任何个人训练数据、账号信息或绝对路径。
-
-| Skill | 用途 |
-| --- | --- |
-| `lzheng-fitness-plan` | 训练建档、安全筛查、完整计划与 HTML |
-| `lzheng-training-return` | 停训、漏练或条件变化后的接回 |
-| `lzheng-strength-cycle-planner` | 单个力量动作的 8—12 周周期 |
-| `lzheng-strength-training-review` | 单次、滚动、基准与周训练复盘 |
-| `lzheng-training-expert-library` | 六个来源限定专家模块、选择协议和验证状态 |
-| `lzheng-training-system` | 新电脑初始化、迁移、诊断、升级保护和整套校验 |
-| `lzheng-fitness-workbench-builder` | 从计划、复盘和可选动态数据生成响应式离线工作台 |
-
-安装（需 Python 3.10+，无需第三方包）：
-
-```bash
-python Lzheng-fitness/tools/install.py --platform codex --all
-```
-
-安装完成后，在新对话中说"**开始建立我的健身系统。**"即可由 AI 引导完成建档、动作重量校准、正式计划与工作台。发布前可用 `python Lzheng-fitness/tools/validate_bundle.py` 验证（检查元数据、链接、隐私残留与脚本语法）。本项目提供一般训练规划与记录支持，不是医疗诊断或康复建议。
-
-## 数据说明
+<details>
+<summary><b>展开数据指标与存储说明</b></summary>
 
 - 体测数据支持 12 项指标：日期、体重、体脂率、肌肉量、内脏脂肪等级、基础代谢率、体水分率、骨量、BMI、骨骼肌率、腰围、臀围
 - AI 教练数据存储在 `体重体脂监控/ai_coach/`（建档、周期 JSON、复盘记录、周期 MD），该目录为本地个人数据，不随仓库分发
@@ -160,7 +242,9 @@ python Lzheng-fitness/tools/install.py --platform codex --all
 - 目标体重 / 目标体脂率可在建档时自定义
 - 变化值以"当前 - 初始"计算，降低会显示为负数
 
-## 注意事项
+</details>
+
+## ⚠️ 注意事项
 
 - 本项目为个人健身工具，数据存储在本地
 - 敏感个人信息（体测记录、训练计划、AI 教练数据）已排除在版本控制与 Git 历史之外
@@ -168,9 +252,30 @@ python Lzheng-fitness/tools/install.py --platform codex --all
 - 训练计划文档中的身体数据均为通用示例，使用前请替换为个人体测值
 - AI 教练提供一般训练规划支持，不作医疗诊断或康复建议
 
-## 许可证
+## 📄 许可证
 
-本仓库采用 **PolyForm Noncommercial License 1.0.0**，核心要求为 **非商业用途 + 必须署著作名**。完整法律文本见 [`LICENSE`](./LICENSE)。
+<div align="center">
+
+**PolyForm Noncommercial License 1.0.0**
+
+**非商业用途 · 必须署著作名**
+
+</div>
+
+| | |
+|:---|:---|
+| ✅ **允许** | 个人使用 · 学习研究 · 兴趣项目 · 修改自用 · 非商业组织使用 · 学术引用 |
+| ❌ **禁止** | 商业产品/服务 · 企业商业运营 · 付费分发 · 商业 AI 训练 · 移除署名 · 再许可 |
+| ✍️ **署名** | 分发时必须原样保留以下署名行与许可证全文/URL |
+
+```text
+Required Notice: Copyright (c) 2026 yuppiez99999 (https://github.com/yuppiez99999)
+```
+
+完整法律文本见 [`LICENSE`](./LICENSE)，完整条款说明见下方折叠：
+
+<details>
+<summary><b>📖 查看完整许可证条款（授权范围 / 非商业定义 / 子模块边界 / MIT 差异 / 引用格式）</b></summary>
 
 ### 授权范围（允许）
 
@@ -264,3 +369,17 @@ PolyForm NC 1.0.0 中的"非商业"采用正向定义，**任何非商业目的�
 ### 许可证文本来源
 
 本许可证官方文本来自 [PolyForm Project](https://polyformproject.org/licenses/noncommercial/1.0.0)，© PolyForm Project Inc.。本仓库 `LICENSE` 文件为该官方文本的逐字副本，附加上述 Required Notice 署名行。
+
+</details>
+
+---
+
+<div align="center">
+
+**⭐ 如果这个项目对你有帮助，欢迎点一个 Star！**
+
+[![Star History Chart](https://api.star-history.com/svg?repos=yuppiez99999/fitness-tracker&type=Date)](https://star-history.com/#yuppiez99999/fitness-tracker&Date)
+
+<img src="https://img.shields.io/badge/Required%20Notice-Copyright%20%28c%29%202026%20yuppiez99999-blue?style=flat-square" alt="Required Notice">
+
+</div>
