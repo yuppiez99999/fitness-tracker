@@ -4,7 +4,7 @@
 
 # 健身监控 v9.0
 
-**个人体脂体重监控 + 健身计划 + AI 教练 · PySide6 桌面应用**
+**个人体脂体重监控 + 健身计划 + AI 教练**
 
 *基于 Keep / Fitbod / Hevy / Strong 特性优化，深度集成 [Lzheng-fitness](https://github.com/yuppiez99999/Lzheng-fitness) 训练知识库*
 
@@ -17,7 +17,7 @@
 [![Stars](https://img.shields.io/github/stars/yuppiez99999/fitness-tracker?style=flat-square&logo=github)](https://github.com/yuppiez99999/fitness-tracker/stargazers)
 [![Issues](https://img.shields.io/github/issues/yuppiez99999/fitness-tracker?style=flat-square&logo=github)](https://github.com/yuppiez99999/fitness-tracker/issues)
 
-**[功能亮点](#-功能亮点) · [AI 教练](#-ai-教练-v90-新增) · [快速开始](#-快速开始) · [架构](#-技术架构) · [知识库](#-lzheng-fitness-知识库) · [许可证](#-许可证)**
+**[功能亮点](#-功能亮点) · [界面预览](#-界面预览) · [AI 教练](#-ai-教练-v90-新增) · [快速开始](#-快速开始) · [架构](#-技术架构) · [知识库](#-lzheng-fitness-知识库) · [许可证](#-许可证)**
 
 ---
 
@@ -30,6 +30,8 @@
 >
 > 支持 PyInstaller 一键封装为独立 .exe，免安装 Python 直接运行。
 
+---
+
 ## ✨ 功能亮点
 
 | 模块 | 功能 |
@@ -40,6 +42,53 @@
 | 📅 **训练计划** | 22 周宽背窄腰塑形 v2.1（三阶段周期化，6 练 1 休）· 点击动作看示范 |
 | 🍽 **饮食与补剂** | 三阶段营养方案 · 五餐明细 · 补剂表 · 饮水指南 |
 | 🤖 **AI 教练** | 基于 Lzheng-fitness 知识库的增肌规划系统（5 个子功能） |
+
+---
+
+## 🖼️ 界面预览
+
+### 🏋️ 动作示范库
+<p align="center">
+  <img src="assets/screenshots/01_exercise_library.png" alt="动作示范库" width="95%">
+</p>
+
+> 66 个动作的网格卡片布局，支持按动作名 / 肌群 / 器材搜索，点击卡片即可查看 GIF 示范与详细步骤教学。
+
+---
+
+### 📅 训练计划（22 周周期化）
+
+<p align="center">
+  <img src="assets/screenshots/02_training_plan_1.png" alt="训练计划 周一至周三" width="95%">
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/03_training_plan_2.png" alt="训练计划 周四至周日" width="95%">
+</p>
+
+> 6 练 1 休的完整周期安排：背（宽）→ 胸 + 三头 → 腿 → 背（厚）+ 二头 → 肩 + 核心 → 推 + 腿泵感 → 完全休息。每日动作带 GIF 预览、组数次数标注与替代方案说明。
+
+---
+
+### 🍽 饮食与补剂方案
+
+<p align="center">
+  <img src="assets/screenshots/04_nutrition.png" alt="饮食与补剂" width="95%">
+</p>
+
+> 训练日 / 休息日差异化热量结构，实时追踪蛋白质、碳水、脂肪三大宏量。五餐明细含精确克数与热量标注，补剂方案按训练前后时段智能推荐。
+
+---
+
+### 🤖 AI 教练
+
+<p align="center">
+  <img src="assets/screenshots/05_ai_coach.png" alt="AI 教练" width="95%">
+</p>
+
+> 基于 Lzheng-fitness 六位专家知识库的纯本地智能规划。建档后自动评估 P0-L3 训练阶段，生成个性化力量周期、训练复盘与停训接回方案。
+
+---
 
 ## 🤖 AI 教练 (v9.0 新增)
 
@@ -66,6 +115,8 @@ flowchart LR
     D -->|平台期| G[🧠 专家知识库<br>六位专家模块路由]
     G --> B
 ```
+
+---
 
 ## 🚀 快速开始
 
@@ -108,6 +159,8 @@ python -m PyInstaller 健身监控.spec --noconfirm --clean
 # 产物: dist\健身监控v9.0\健身监控v9.0.exe
 ```
 
+---
+
 ## 🏗️ 技术架构
 
 ```mermaid
@@ -138,6 +191,8 @@ flowchart TB
 | 知识库 | [Lzheng-fitness](https://github.com/yuppiez99999/Lzheng-fitness)（Git 子模块） |
 | 舆情分析 | [BettaFish / MiroFish](https://github.com/yuppiez99999/MiroFish)（Git 子模块） |
 
+---
+
 ## 🧠 AI 教练知识来源
 
 Lzheng-fitness 知识库包含 6 个来源限定专家模块：
@@ -150,6 +205,8 @@ Lzheng-fitness 知识库包含 6 个来源限定专家模块：
 | Greg Nuckols | 力量停滞 | 突破平台期、变量实验 |
 | Dan John | 基础训练 | 目标脱节时回到基础 |
 | Brukner & Khan | 临床运动 | 安全筛查、疼痛分流 |
+
+---
 
 ## 📚 Lzheng-fitness 知识库
 
@@ -175,6 +232,8 @@ python Lzheng-fitness/tools/install.py --platform codex --all
 
 安装完成后，在新对话中说"**开始建立我的健身系统。**"即可由 AI 引导完成建档、动作重量校准、正式计划与工作台。发布前可用 `python Lzheng-fitness/tools/validate_bundle.py` 验证（检查元数据、链接、隐私残留与脚本语法）。
 
+---
+
 ## 📋 训练计划模板亮点
 
 <details open>
@@ -195,6 +254,8 @@ python Lzheng-fitness/tools/install.py --platform codex --all
 **训练日程（6 练 1 休）**：背（宽）→ 胸（上胸优先）→ 腿（四头为主）→ 背（划船）→ 肩 + 臂 → 全身 HIIT + 冲刺 → 完全休息。
 
 </details>
+
+---
 
 ## 📁 项目结构
 
@@ -231,6 +292,8 @@ python Lzheng-fitness/tools/install.py --platform codex --all
 
 </details>
 
+---
+
 ## 📊 数据说明
 
 <details>
@@ -244,6 +307,8 @@ python Lzheng-fitness/tools/install.py --platform codex --all
 
 </details>
 
+---
+
 ## ⚠️ 注意事项
 
 - 本项目为个人健身工具，数据存储在本地
@@ -251,6 +316,8 @@ python Lzheng-fitness/tools/install.py --platform codex --all
 - 虚拟环境目录 `.venv` 不提交到仓库
 - 训练计划文档中的身体数据均为通用示例，使用前请替换为个人体测值
 - AI 教练提供一般训练规划支持，不作医疗诊断或康复建议
+
+---
 
 ## 📄 许可证
 
