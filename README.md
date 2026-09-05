@@ -159,6 +159,30 @@ python -m PyInstaller 健身监控.spec --noconfirm --clean
 # 产物: dist\健身监控v9.0\健身监控v9.0.exe
 ```
 
+### 🛠️ 代码质量工程化（集成自 GitHub 开源工具）
+
+主代码（`fitness_pkg/`、`ai_coach_engine.py` 等）集成三条开源质量链，提交即自动把关：
+
+| 工具 | GitHub 仓库 | 作用 |
+|:-----|:------------|:-----|
+| **ruff** | [astral-sh/ruff](https://github.com/astral-sh/ruff) | 极速 Python lint + formatter（替代 flake8/black/isort） |
+| **pre-commit** | [pre-commit/pre-commit](https://github.com/pre-commit/pre-commit) | git 提交钩子，自动跑通用检查 + ruff |
+| **pytest** | [pytest-dev/pytest](https://github.com/pytest-dev/pytest) | 60 项单元/构造冒烟测试（数据层/解析器/AI 引擎） |
+
+```bash
+# 一次性安装钩子（此后每次 git commit 自动检查）
+.\.venv\Scripts\python.exe -m pre_commit install
+
+# 手动跑全部检查
+.\.venv\Scripts\python.exe -m ruff check .        # lint
+.\.venv\Scripts\python.exe -m ruff format .        # 统一格式
+.\.venv\Scripts\python.exe -m pytest tests         # 测试
+.\.venv\Scripts\python.exe -m pre_commit run --all-files
+```
+
+质量基线：**目标 Python 3.8 兼容**（`pyproject.toml` → `[tool.ruff] target-version`），
+个人/归档脚本（`补全数据.py`、`体脂体重监控全系列脚本/` 等）已排除在门禁外。
+
 ---
 
 ## 🏗️ 技术架构
@@ -187,6 +211,7 @@ flowchart TB
 | GUI 框架 | PySide6 |
 | 数据/绘图 | matplotlib · pandas · numpy · Pillow |
 | 打包分发 | PyInstaller |
+| 代码质量 | ruff · pre-commit · pytest（详见「代码质量工程化」） |
 | 数据源 | [exercises-dataset](https://github.com/yuppiez99999/exercises-dataset)（Git 子模块） |
 | 知识库 | [Lzheng-fitness](https://github.com/yuppiez99999/Lzheng-fitness)（Git 子模块） |
 | 舆情分析 | [BettaFish / MiroFish](https://github.com/yuppiez99999/MiroFish)（Git 子模块） |
