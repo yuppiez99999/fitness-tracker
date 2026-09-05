@@ -204,7 +204,16 @@ flowchart TB
         C3[Lzheng-fitness<br>六专家知识库]
     end
     GUI --> Core --> Data
-```
+ ```
+
+### 📐 架构总览（archify 生成）
+
+<p align="center">
+  <img src="docs/fitness-arch.visual-check.1440x900.light.png" alt="健身监控 v9.0 架构总览" width="95%">
+</p>
+
+> 14 节点架构图：主入口 → 侧边栏壳层 → 6 个功能页面 → 4 个业务逻辑模块 → 本地数据 / AI 模型。
+> 完整交互式架构图（支持主题切换 / 平移缩放 / 关系追踪）见 [`docs/fitness-arch.html`](docs/fitness-arch.html)（下载后本地打开）。
 
 | 类别 | 技术 |
 |:-----|:-----|
